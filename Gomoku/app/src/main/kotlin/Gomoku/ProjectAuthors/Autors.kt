@@ -20,7 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.gomoku.ui.theme.AuthorsTheme
+
+import isel.pdm.jokes.ui.theme.AuthorsTheme
 
 
 fun getAuthors():String {
@@ -37,32 +38,32 @@ fun DisplayAuthors() {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
-         ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                   verticalArrangement = Arrangement.Bottom,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
 
                 ) {
-                    if(authors.value.isNotBlank()){
-                        Text(text = authors.value, modifier = Modifier.testTag(AuthorTestTag))
+                if(authors.value.isNotBlank()){
+                    Text(text = authors.value, modifier = Modifier.testTag(AuthorTestTag))
+                }
+                Button(onClick = {
+                    if(authors.value== ""){
+                        authors.value = getAuthors()
                     }
-                    Button(onClick = {
-                        if(authors.value== ""){
-                            authors.value = getAuthors()
-                        }
-                        else{
-                            authors.value = ""
-                        }
-                    }, modifier = Modifier.testTag(FetchButtonTestTag)) {
-                        Text(text = "Credits")
+                    else{
+                        authors.value = ""
                     }
-
+                }, modifier = Modifier.testTag(FetchButtonTestTag)) {
+                    Text(text = "Credits")
                 }
 
             }
 
-    }
+        }
 
     }
+
+}
 
 
