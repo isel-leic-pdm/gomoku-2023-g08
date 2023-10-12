@@ -22,12 +22,21 @@ import androidx.compose.ui.unit.dp
 import com.example.gomoku.R
 import Gomoku.Main.boardSize
 import Gomoku.Main.cellSize
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import pt.isel.tds.gomoku.model.BOARD_DIM
 import pt.isel.tds.gomoku.model.Board
 import pt.isel.tds.gomoku.model.BoardWin
 import pt.isel.tds.gomoku.model.Cell
 import pt.isel.tds.gomoku.model.Player
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BoardView(vm: ViewModel, board: Board?, onclick: (Cell) -> Unit ) {
     if(board == null){
@@ -90,13 +99,6 @@ fun BoardView(vm: ViewModel, board: Board?, onclick: (Cell) -> Unit ) {
 }
 
 @Composable
-private fun ShowWinner(board: BoardWin) {
-    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "winner!! : ${board.winner} ", color = Color.Green)
-    }
-}
-
-@Composable
 fun CellView(player: Player?,
              modifier: Modifier = Modifier
                  .size(cellSize)
@@ -115,6 +117,39 @@ fun CellView(player: Player?,
             DrawPiece(player, modifier = modifier)
         }
     }
+}
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+private fun ShowWinner(board: BoardWin) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .background(chooseColor(board.winner))
+                .border(5.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Winner: ${board.winner}",
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            )
+        }
+    }
+}
+@Composable
+fun chooseColor(winner: Player): Color {
+   if(winner == Player.RED)
+       return Color.Red
+    else
+       return Color.Yellow
 }
 
 

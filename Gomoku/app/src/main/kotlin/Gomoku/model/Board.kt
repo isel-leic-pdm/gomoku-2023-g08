@@ -38,120 +38,74 @@ fun Board.play(cell: Cell): Board = when(this) {
             moves.size == MAX_MOVES-> BoardDraw(moves)
             else -> {
                 BoardRun(newMoves, turn = turn.other())
-
             }
-
         }
-
-
     }
-
-
-
     else ->  error("Game is over")
 }
+
+
 private fun BoardRun.isWin(moves: Moves): Boolean {
     val lastMove = moves.entries.lastOrNull() ?: return false
     val (lastCell, player) = lastMove
 
-    // Check horizontal
-    var count = 1
-    for (col in (lastCell.colIndex + 1) until BOARD_DIM) {
-        val cell = Cell(lastCell.rowIndex, col)
-        if (moves[cell] == player) {
-            count++
-            if (count == 5) return true
-        } else {
-            break
-        }
-    }
-    for (col in (lastCell.colIndex - 1) downTo 0) {
-        val cell = Cell(lastCell.rowIndex, col)
-        if (moves[cell] == player) {
-            count++
-            if (count == 5) return true
-        } else {
-            break
-        }
-    }
+    val directions = listOf(
+        Pair(1, 0),  // horizontal
+        Pair(0, 1),  // vertical
+        Pair(1, 1),  // diagonal (top-left to bottom-right)
+        Pair(1, -1)  // diagonal (top-right to bottom-left)
+    )
 
-    // Check vertical -certo
-    count = 1
-    for (row in (lastCell.rowIndex + 1) until BOARD_DIM) {
-        val cell = Cell(row, lastCell.colIndex)
-        if (moves[cell] == player) {
-            count++
-            if (count == 5) return true
-        } else {
-            break
-        }
-    }
-    for (row in (lastCell.rowIndex - 1) downTo 0) {
-        val cell = Cell(row, lastCell.colIndex)
-        if (moves[cell] == player) {
-            count++
-            if (count == 5) return true
-        } else {
-            break
-        }
-    }
+    for ((dx, dy) in directions) {
+        var count = 1
 
-    // Check diagonal (top-left to bottom-right)
-    count = 1
-    for (i in 1 until BOARD_DIM) {
-        val row = lastCell.rowIndex - i
-        val col = lastCell.colIndex - i
-        if (row < 0 || col < 0) break
-        val cell = Cell(row, col)
-        if (moves[cell] == player) {
-            count++
-            if (count == 5) return true
-        } else {
-            break
-        }
-    }
-    for (i in 1 until BOARD_DIM) {
-        val row = lastCell.rowIndex + i
-        val col = lastCell.colIndex + i
-        if (row >= BOARD_DIM || col >= BOARD_DIM) break
-        val cell = Cell(row, col)
-        if (moves[cell] == player) {
-            count++
-            if (count == 5) return true
-        } else {
-            break
-        }
-    }
+        // Check one direction
+        for (i in 1 until 5) {
+            val row = lastCell.rowIndex + i * dx
+            val col = lastCell.colIndex + i * dy
 
-    // Check diagonal (top-right to bottom-left)
-    count = 1
-    for (i in 1 until BOARD_DIM) {
-        val row = lastCell.rowIndex - i
-        val col = lastCell.colIndex + i
-        if (row < 0 || col >= BOARD_DIM) break
-        val cell = Cell(row, col)
-        if (moves[cell] == player) {
-            count++
-            if (count == 5) return true
-        } else {
-            break
+            if (row < 0 || col < 0 || row >= BOARD_DIM || col >= BOARD_DIM) {
+                break
+            }
+
+            val cell = Cell(row, col)
+
+            if (moves[cell] == player) {
+                count++
+                if (count == 5) {
+                    return true
+                }
+            } else {
+                break
+            }
         }
-    }
-    for (i in 1 until BOARD_DIM) {
-        val row = lastCell.rowIndex + i
-        val col = lastCell.colIndex - i
-        if (row >= BOARD_DIM || col < 0) break
-        val cell = Cell(row, col)
-        if (moves[cell] == player) {
-            count++
-            if (count == 5) return true
-        } else {
-            break
+
+        // Check the opposite direction
+        for (i in 1 until 5) {
+            val row = lastCell.rowIndex - i * dx
+            val col = lastCell.colIndex - i * dy
+
+            if (row < 0 || col < 0 || row >= BOARD_DIM || col >= BOARD_DIM) {
+                break
+            }
+
+            val cell = Cell(row, col)
+
+            if (moves[cell] == player) {
+                count++
+                if (count == 5) {
+                    return true
+                }
+            } else {
+                break
+            }
         }
     }
 
     return false
 }
+
+
 
 private fun BoardRun.winner(moves: Moves) =
    if(moves.values.count { it == turn } == 5){

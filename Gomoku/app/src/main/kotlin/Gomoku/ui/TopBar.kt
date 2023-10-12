@@ -1,9 +1,11 @@
 package Gomoku.ui
 
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.gomoku.R
 import androidx.compose.material3.Icon
+import androidx.compose.ui.unit.dp
 
 import isel.pdm.jokes.ui.theme.JokesTheme
 
@@ -42,17 +45,12 @@ fun TopBar(navigation: NavigationHandlers = NavigationHandlers()) {
         title = { Text(text = stringResource(id = R.string.app_name)) },
         navigationIcon = {
             if (navigation.onBackRequested != null) {
-                IconButton(
-                    onClick = navigation.onBackRequested,
-                    modifier = Modifier.testTag(NavigateBackTestTag)
-                ) {/*
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = stringResource(id = R.string.top_bar_go_back)
-                    )
-                */
-                }
+
+                   Button(onClick = navigation.onBackRequested, ) {
+                       Text(text = "<-")
+                   }
             }
+
         },
         actions = {
             if (navigation.onInfoRequested != null) {
