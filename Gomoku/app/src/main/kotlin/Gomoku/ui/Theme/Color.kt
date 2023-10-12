@@ -1,4 +1,4 @@
-package com.example.gomoku.ui.theme
+package isel.pdm.jokes.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

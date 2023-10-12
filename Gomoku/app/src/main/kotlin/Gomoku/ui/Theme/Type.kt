@@ -1,4 +1,4 @@
-package com.example.gomoku.ui.theme
+package isel.pdm.jokes.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
