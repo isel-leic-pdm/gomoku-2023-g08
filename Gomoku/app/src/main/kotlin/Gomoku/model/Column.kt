@@ -3,7 +3,7 @@ package pt.isel.tds.gomoku.model
 
 import java.lang.IllegalArgumentException
 
-
+/*
 class Column private constructor(val char: Char){
     val symbol = char
     val index = char - 'A'
@@ -31,3 +31,5 @@ fun Char.toColumn():Column = run{
     require(this in 'A'..'A'+ BOARD_DIM){throw IllegalArgumentException("Invalid column $this")}
     Column.values[this - 'A']
 }
+
+ */

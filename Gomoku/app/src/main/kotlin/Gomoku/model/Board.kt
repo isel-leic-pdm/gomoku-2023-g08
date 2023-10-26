@@ -1,14 +1,14 @@
 package pt.isel.tds.gomoku.model
-
-import Gomoku.model.Game
+/*
 import android.util.Log
 
-
-const val BOARD_DIM =15
+// RED = X
+// YELLOW = Y
+const val BOARD_DIM =5
 const val MAX_MOVES = BOARD_DIM * BOARD_DIM
 
-enum class Player { RED, YELLOW;
-    fun other() = if (this==RED) YELLOW else RED
+enum class Player { Player_X, PLayer_Y, EMPTY;
+    fun other() = if (this==Player_X) PLayer_Y else Player_X
 }
 
 // Type to represents all the moves in the game.
@@ -17,6 +17,7 @@ val totalMoves = emptyMap<Cell, Player>()
 
 
 sealed class Board(val moves: Moves,val  turn : Player) {
+    fun get(l: Row, c: Column) = moves[Cell(l, c)] ?: Player.EMPTY
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Board) return false
@@ -27,10 +28,11 @@ sealed class Board(val moves: Moves,val  turn : Player) {
 }
 open class BoardRun(moves: Moves, turn: Player): Board(moves, turn)
 class BoardWin(moves: Moves, val winner: Player): Board(moves, winner)
-class BoardDraw(moves: Moves) : Board(moves, Player.RED)
+class BoardDraw(moves: Moves) : Board(moves, Player.Player_X)
 
 fun Board.play(cell: Cell): Board = when(this) {
     is BoardRun -> {
+        Log.v("Board", "Board.play called with cell: $cell")
         check(moves[cell] == null) { "Position $cell is not empty" }
         val newMoves = moves + (cell to turn)
         when {
@@ -113,6 +115,8 @@ private fun BoardRun.winner(moves: Moves) =
    }
     else turn.other()
 
+
+ */
 
 
 

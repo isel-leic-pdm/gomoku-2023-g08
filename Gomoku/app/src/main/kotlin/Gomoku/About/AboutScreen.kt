@@ -16,10 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,7 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.gomoku.R
-import isel.pdm.jokes.ui.theme.JokesTheme
+import isel.pdm.jokes.ui.theme.GameTheme
 
 import kotlin.math.min
 
@@ -63,7 +60,7 @@ fun AboutScreen(
     onOpenUrlRequested: (Uri) -> Unit = { },
     socials: List<SocialInfo>
 ) {
-    JokesTheme {
+    GameTheme {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()

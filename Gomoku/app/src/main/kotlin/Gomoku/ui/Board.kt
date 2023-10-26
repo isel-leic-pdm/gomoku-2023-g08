@@ -1,6 +1,11 @@
 package Gomoku.ui
 
-import Gomoku.model.ViewModel
+import Gomoku.DomainModel.BOARD_DIM
+import Gomoku.DomainModel.Board
+import Gomoku.DomainModel.Cell
+import Gomoku.DomainModel.Player
+import Gomoku.DomainModel.moves
+import Gomoku.Games.GameScreenViewModel
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,8 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.gomoku.R
-import Gomoku.Main.boardSize
-import Gomoku.Main.cellSize
+import Gomoku.Games.boardSize
+import Gomoku.Games.cellSize
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
@@ -29,16 +34,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import pt.isel.tds.gomoku.model.BOARD_DIM
-import pt.isel.tds.gomoku.model.Board
-import pt.isel.tds.gomoku.model.BoardWin
-import pt.isel.tds.gomoku.model.Cell
-import pt.isel.tds.gomoku.model.Player
+
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BoardView(vm: ViewModel, board: Board?, onclick: (Cell) -> Unit ) {
+fun BoardView(vm: GameScreenViewModel, board: Board?, onclick: (Cell) -> Unit,  ) {
     if(board == null){
     Log.v( "BoardView", "BoardView called with board: $board")
         Column(
@@ -93,7 +94,7 @@ fun BoardView(vm: ViewModel, board: Board?, onclick: (Cell) -> Unit ) {
                 }
             }
         }
-        if(board is BoardWin) ShowWinner(board)
+        if(board.isWin(moves =board.moves )) ShowWinner(board)
 
     }
 }
@@ -120,7 +121,7 @@ fun CellView(player: Player?,
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun ShowWinner(board: BoardWin) {
+private fun ShowWinner(board: Board) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -129,7 +130,7 @@ private fun ShowWinner(board: BoardWin) {
         Box(
             modifier = Modifier
                 .size(200.dp)
-                .background(chooseColor(board.winner))
+                .background(chooseColor(board.winner!!))
                 .border(5.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
             contentAlignment = Alignment.Center
         ) {
@@ -146,7 +147,7 @@ private fun ShowWinner(board: BoardWin) {
 }
 @Composable
 fun chooseColor(winner: Player): Color {
-   if(winner == Player.RED)
+   if(winner == Player.PLAYER_X)
        return Color.Red
     else
        return Color.Yellow
@@ -157,7 +158,7 @@ fun chooseColor(winner: Player): Color {
 @Composable
 fun DrawPiece(player: Player?, modifier: Modifier ){
     Log.d("DrawPiece", "DrawPiece called for player: $player")
-    if(player == Player.YELLOW ){
+    if(player == Player.PLAYER_O){
         Box (
             modifier = Modifier
                 .fillMaxSize()

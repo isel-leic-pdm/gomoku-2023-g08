@@ -1,5 +1,5 @@
 package pt.isel.tds.gomoku.model
-
+/*
 
 
 
@@ -30,3 +30,5 @@ fun Int.toRow(): Row = run{
     require(this in 1 .. BOARD_DIM){throw IllegalArgumentException("Invalid row $this")}
     Row.values[this - 1]
 }
+
+ */

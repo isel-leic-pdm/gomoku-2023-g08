@@ -36,7 +36,7 @@ fun DisplayAuthors() {
 
     AuthorsTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+
             color = MaterialTheme.colorScheme.background,
         ) {
             Column(

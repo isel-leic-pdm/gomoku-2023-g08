@@ -1,13 +1,8 @@
 package Gomoku.ui
 
 
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -17,10 +12,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.gomoku.R
-import androidx.compose.material3.Icon
-import androidx.compose.ui.unit.dp
 
-import isel.pdm.jokes.ui.theme.JokesTheme
+import isel.pdm.jokes.ui.theme.GameTheme
 
 /**
  * Used to aggregate [TopBar] navigation handlers. If a handler is null, the corresponding
@@ -74,7 +67,7 @@ fun TopBar(navigation: NavigationHandlers = NavigationHandlers()) {
 @Preview
 @Composable
 private fun TopBarPreviewInfoAndHistory() {
-    JokesTheme {
+    GameTheme {
         TopBar(
             navigation = NavigationHandlers(onInfoRequested = { })
         )
@@ -84,7 +77,7 @@ private fun TopBarPreviewInfoAndHistory() {
 @Preview
 @Composable
 private fun TopBarPreviewBackAndInfo() {
-    JokesTheme {
+    GameTheme {
         TopBar(navigation = NavigationHandlers(onBackRequested = { }, onInfoRequested = { }))
     }
 }
@@ -92,7 +85,7 @@ private fun TopBarPreviewBackAndInfo() {
 @Preview
 @Composable
 private fun TopBarPreviewBack() {
-    JokesTheme {
+    GameTheme {
         TopBar(navigation = NavigationHandlers(onBackRequested = { }))
     }
 }
