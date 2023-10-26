@@ -55,7 +55,9 @@ fun InitialScreen(
             modifier = Modifier
                 .size(200.dp, 100.dp) // Define o tamanho do botão
                 .padding(16.dp), // Adiciona um espaçamento ao redor do botão
-            onClick = onInfoRequested
+            onClick = {
+                UserActivity.navigateTo(activity)
+            }
         ) {
             Text("Create User")
         }
@@ -97,32 +99,14 @@ fun InitialScreen(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true, showSystemUi = true,
-    device = "spec:width=1080px,height=2340px,dpi=440"
-)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun appInitial() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         InitialScreen(activity = LocalContext.current as ComponentActivity)
-    }
-
-}
-
-/*
-        Row( modifier = Modifier.testTag("BoardRow"), verticalAlignment = Alignment.CenterVertically) {
-               vm.newGame(servicegame = serviceGame)
-                BoardView(vm, vm.game?.board, onclick = { vm.play(it) })
-            }
-
-        }
-
-    Column(horizontalAlignment = Alignment.End, modifier = Modifier) {
-        Text("GameScreen")
-        GameScreenViewModel()
+            //ComponentActivity() )
     }
 }
-
- */
 
 
 

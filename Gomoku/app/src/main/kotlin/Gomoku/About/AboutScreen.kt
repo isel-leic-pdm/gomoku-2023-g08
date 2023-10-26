@@ -180,30 +180,5 @@ private fun Social(@DrawableRes id: Int, onClick: () -> Unit) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun InfoScreenPreview() {
-    /*
-    val socialsPreview = listOf(
-        SocialInfo(
-            link = Uri.parse("https://www.linkedin.com/in/palbp/"),
-            imageId = R.drawable.ic_linkedin
-        ),
-        SocialInfo(
-            link = Uri.parse("https://www.twitch.tv/paulo_pereira"),
-            imageId = R.drawable.ic_twitch
-        ),
-        SocialInfo(
-            link = Uri.parse("https://www.youtube.com/@ProfPauloPereira"),
-            imageId = R.drawable.ic_youtube
-        ),
-        SocialInfo(
-            link = Uri.parse("https://discord.com/users/387733375064080396"),
-            imageId = R.drawable.ic_discord
-        ),
-        SocialInfo(
-            link = Uri.parse("https://palbp.github.io/"),
-            imageId = R.drawable.ic_home
-        )
-    )
 
-     */
-    //  AboutScreen(socials = socialsPreview)
 }
