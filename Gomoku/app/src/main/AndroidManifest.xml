@@ -28,6 +28,14 @@
             android:name="Gomoku.About.AboutActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
+        <activity
+            android:name="Gomoku.InitalScreen.StartActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Gomoku" />
+        <activity android:name="Gomoku.User.UserActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Gomoku" />
+
 
     </application>
 

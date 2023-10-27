@@ -2,7 +2,11 @@ package Gomoku.Games
 
 import Gomoku.About.AboutActivity
 import Gomoku.DomainModel.BOARD_DIM
-import Gomoku.GamesApplication
+import Gomoku.DomainModel.Board
+import Gomoku.DomainModel.Cell
+import Gomoku.DomainModel.Player
+import Gomoku.Application
+import Gomoku.ui.BoardView
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +30,8 @@ const val TAG = "GOMOKU_APP_TAG"
 class GameActivity : ComponentActivity() {
 
     private val viewModel by viewModels<GameScreenViewModel>()
-    private val app by lazy { application as GamesApplication }
+    private val app by lazy { application as Application }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +65,17 @@ class GameActivity : ComponentActivity() {
 fun app() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         GameScreen()
+    }
+
+}
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun board() {
+    val moves = mapOf<Cell, Player>()
+    val board = Board(moves,  turn = Player.PLAYER_O)
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        BoardView(GameScreenViewModel(),board, onclick = {  })
     }
 
 }

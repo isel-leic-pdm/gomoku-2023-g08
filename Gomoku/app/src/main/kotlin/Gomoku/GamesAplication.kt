@@ -1,14 +1,16 @@
 package Gomoku
 
 
-import Gomoku.Http.GamesController
+import Gomoku.Http.GamesAct
+import Gomoku.Http.UsersAct
 import Gomoku.Services.GamesService
+import Gomoku.Services.UsersService
 import android.app.Application
 import com.google.gson.Gson
 
 import okhttp3.OkHttpClient
 
-class GamesApplication : Application() {
+class Application : Application() {
 
     val httpClient: OkHttpClient =
         OkHttpClient.Builder()
@@ -16,6 +18,8 @@ class GamesApplication : Application() {
 
     val gson: Gson = Gson()
 
-    val gamesService: GamesService = GamesController(httpClient, gson)
+
+    val gamesService: GamesService = GamesAct(httpClient, gson)
+    val usersService: UsersService = UsersAct(httpClient, gson)
 
 }

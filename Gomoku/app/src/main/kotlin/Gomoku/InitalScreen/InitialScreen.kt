@@ -1,14 +1,6 @@
-package Gomoku.Games
+package Gomoku.InitalScreen
 
-import Gomoku.About.AboutActivity
-import Gomoku.ErrorAlert
-import Gomoku.State.Idle
-import Gomoku.State.LoadState
-import Gomoku.State.Loaded
-import Gomoku.ui.BoardView
-import android.content.Context
 import android.os.Build
-import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,25 +15,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun InitialScreen(
-    activity: ComponentActivity,
-    game: LoadState = Idle,
-    onInfoRequested: () -> Unit = { },
-    onFetch: () -> Unit = { }
+    onCreateUserReq: () -> Unit = { },
+    onLoginReq: () -> Unit = { },
+    onCreateGameReq: () -> Unit = { },
+    onReplayGameReq: () -> Unit = { },
+    onRankingReq: () -> Unit = { },
+    onAboutreq: () -> Unit = { }
 ) {
-    val vm = remember { GameScreenViewModel() }
+
     Row {
-        Text(text = "Gomoku",
-            modifier = Modifier.padding(16.dp),
-            fontSize = 30.sp)
+        Text(text = "Gomoku", modifier = Modifier.padding(16.dp),)
     }
 
     Column(
@@ -55,15 +43,23 @@ fun InitialScreen(
             modifier = Modifier
                 .size(200.dp, 100.dp) // Define o tamanho do botão
                 .padding(16.dp), // Adiciona um espaçamento ao redor do botão
-            onClick = onInfoRequested
+            onClick = onCreateUserReq
         ) {
             Text("Create User")
         }
         Button(
             modifier = Modifier
+                .size(200.dp, 100.dp) // Define o tamanho do botão
+                .padding(16.dp), // Adiciona um espaçamento ao redor do botão
+            onClick = onLoginReq
+        ) {
+            Text("Login User")
+        }
+        Button(
+            modifier = Modifier
                 .size(200.dp, 100.dp)
                 .padding(16.dp),
-            onClick = onInfoRequested
+            onClick = onCreateGameReq
         ) {
             Text("New Game")
         }
@@ -71,7 +67,7 @@ fun InitialScreen(
             modifier = Modifier
                 .size(200.dp, 100.dp)
                 .padding(16.dp),
-            onClick = onInfoRequested
+            onClick = onReplayGameReq
         ) {
             Text("Replay Game")
         }
@@ -79,7 +75,7 @@ fun InitialScreen(
             modifier = Modifier
                 .size(200.dp, 100.dp)
                 .padding(16.dp),
-            onClick = onInfoRequested
+            onClick = onRankingReq
         ) {
             Text("Ranking")
         }
@@ -87,15 +83,13 @@ fun InitialScreen(
             modifier = Modifier
                 .size(200.dp, 100.dp)
                 .padding(16.dp),
-            onClick = {
-                AboutActivity.navigateTo(activity)
-            }
+            onClick = onAboutreq
         ) {
             Text("About")
         }
     }
 }
-
+/*
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true,
     device = "spec:width=1080px,height=2340px,dpi=440"
@@ -103,26 +97,9 @@ fun InitialScreen(
 @Composable
 fun appInitial() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        InitialScreen(activity = LocalContext.current as ComponentActivity)
+        InitialScreen()
     }
 
+
 }
-
-/*
-        Row( modifier = Modifier.testTag("BoardRow"), verticalAlignment = Alignment.CenterVertically) {
-               vm.newGame(servicegame = serviceGame)
-                BoardView(vm, vm.game?.board, onclick = { vm.play(it) })
-            }
-
-        }
-
-    Column(horizontalAlignment = Alignment.End, modifier = Modifier) {
-        Text("GameScreen")
-        GameScreenViewModel()
-    }
-}
-
  */
-
-
-

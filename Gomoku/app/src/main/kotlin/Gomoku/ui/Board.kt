@@ -41,11 +41,10 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun BoardView(vm: GameScreenViewModel, board: Board?, onclick: (Cell) -> Unit,  ) {
     if(board == null){
-    Log.v( "BoardView", "BoardView called with board: $board")
         Column(
             modifier = Modifier
                 .size(boardSize)
-                .background(Color.Black),
+                .background(Color.Black).border(5.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             repeat(BOARD_DIM) { row ->
@@ -68,7 +67,7 @@ fun BoardView(vm: GameScreenViewModel, board: Board?, onclick: (Cell) -> Unit,  
         Column(
             modifier = Modifier
                 .size(boardSize)
-                .background(Color.Black),
+                .background(Color.Black).border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             repeat(BOARD_DIM) { row ->
@@ -76,8 +75,6 @@ fun BoardView(vm: GameScreenViewModel, board: Board?, onclick: (Cell) -> Unit,  
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Log.v( "BoardView1", "BoardView called with board: $board")
-                    Log.v( "BoardView2", "BoardView called with board: ${board.turn}")
                     repeat(BOARD_DIM) { col ->
                         val pos = Cell(row, col)
                         if(board.moves[pos] != null) {

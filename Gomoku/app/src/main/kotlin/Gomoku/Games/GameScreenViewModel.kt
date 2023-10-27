@@ -1,9 +1,9 @@
 package Gomoku.Games
 import Gomoku.Services.GamesService
-import Gomoku.State.Idle
-import Gomoku.State.LoadState
-import Gomoku.State.Loaded
-import Gomoku.State.Loading
+import Gomoku.State.IdleGame
+import Gomoku.State.LoadStateGame
+import Gomoku.State.LoadedGame
+import Gomoku.State.LoadingGame
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,20 +14,39 @@ import kotlinx.coroutines.launch
 
 
 class GameScreenViewModel() : ViewModel() {
-    var game by mutableStateOf<LoadState>(Idle)
+    var game by mutableStateOf<LoadStateGame>(IdleGame)
         private set
-
-
-    fun fetchGame(servicegame: GamesService) {
+/*
+    fun fetchGame(servicegame: GamesService): Any {
         viewModelScope.launch {
             game = Loading
             game = Loaded(
+                try {
+                    servicegame.fetchGame()
+                    Log.v("GameScreenViewModel", "GameScreenViewModel.fetchGame called")
+                } catch (e: IllegalStateException) {
+                    println(e)
+                } as Result<Game>
+                    )
+        }
+        return game
+    }
+
+ */
+
+
+    fun fetchGame(servicegame: GamesService): Unit {
+        viewModelScope.launch {
+            game = LoadingGame
+            game = LoadedGame(
                 runCatching {
                     servicegame.fetchGame()
                 }
             )
         }
     }
+
+
         /*
     fun play(cell: Cell){
         viewModelScope.launch {

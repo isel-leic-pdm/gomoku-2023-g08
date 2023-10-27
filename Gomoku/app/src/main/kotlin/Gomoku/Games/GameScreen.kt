@@ -2,11 +2,12 @@ package Gomoku.Games
 
 
 import Gomoku.ErrorAlert
-import Gomoku.State.Idle
-import Gomoku.State.LoadState
-import Gomoku.State.Loaded
+import Gomoku.State.IdleGame
+import Gomoku.State.LoadStateGame
+import Gomoku.State.LoadedGame
 import Gomoku.ui.BoardView
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -21,8 +22,9 @@ import androidx.compose.ui.platform.testTag
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun GameScreen(game:LoadState = Idle, onInfoRequested: () -> Unit = { }, onFetch: () -> Unit = { }) {
+fun GameScreen(game:LoadStateGame = IdleGame, onInfoRequested: () -> Unit = { }, onFetch: () -> Unit = { }) {
     val vm = remember { GameScreenViewModel() }
+    Log.v("GameScreen", "GameScreen called")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -39,15 +41,17 @@ fun GameScreen(game:LoadState = Idle, onInfoRequested: () -> Unit = { }, onFetch
             modifier = Modifier.testTag("MatchMakingButton"),
             onClick = onFetch
         ) {
+
             Text("MatchMakingButton")
         }
-        if(game is Loaded) {
+        if(game is LoadedGame) {
             game.result.getOrNull()?.let {it ->
                 BoardView(vm, it.board, onclick = {  })
             }
-        }
-
-        if (game is Loaded && game.result.isFailure) {
+       }
+      //  PlayerView(vm)
+      //  Turn()
+        if (game is LoadedGame && game.result.isFailure) {
             ErrorAlert(
                 title = "Error",
                 message = 1,

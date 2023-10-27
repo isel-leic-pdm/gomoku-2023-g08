@@ -7,6 +7,7 @@ import Gomoku.DomainModel.variantes
 import Gomoku.Services.FetchGameException
 
 import Gomoku.Services.GamesService
+import android.util.Log
 
 import com.google.gson.Gson
 
@@ -19,10 +20,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class GamesController(
+class GamesAct(
     private val client: OkHttpClient,
     private val gson: Gson
 ) : GamesService {
+
 
     private val request by lazy {
         Request.Builder()
@@ -32,6 +34,7 @@ class GamesController(
     }
 
     override suspend fun fetchGame(): Game {
+        Log.v("GamesController", "fetchGame() called")
         return suspendCoroutine {
             client.newCall(request).enqueue(object : okhttp3.Callback {
                 override fun onFailure(call: okhttp3.Call, e: IOException) {
