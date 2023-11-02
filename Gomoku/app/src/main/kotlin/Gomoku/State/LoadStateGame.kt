@@ -16,3 +16,10 @@ sealed class LoadStateUser
  object IdleUser : LoadStateUser()
  object LoadingUser : LoadStateUser()
 data class LoadedUser(val result: Result<Users>) : LoadStateUser()
+
+
+sealed class LoadStateUserRank
+
+object IdleUserRank : LoadStateUserRank()
+object LoadingUserRank : LoadStateUserRank()
+data class LoadedUserRank(val result: Result<List<Users>>) : LoadStateUserRank()

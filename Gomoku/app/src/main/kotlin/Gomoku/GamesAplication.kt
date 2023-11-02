@@ -3,6 +3,7 @@ package Gomoku
 
 import Gomoku.Http.GamesAct
 import Gomoku.Http.UsersAct
+import Gomoku.Rankings.RankingAct
 import Gomoku.Services.GamesService
 import Gomoku.Services.UsersService
 import android.app.Application
@@ -21,5 +22,6 @@ class Application : Application() {
 
     val gamesService: GamesService = GamesAct(httpClient, gson)
     val usersService: UsersService = UsersAct(httpClient, gson)
+    val rankingService= RankingAct(httpClient, gson)
 
 }

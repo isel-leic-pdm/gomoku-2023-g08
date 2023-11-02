@@ -5,6 +5,7 @@ import Gomoku.About.AboutActivity
 import Gomoku.Games.GameScreenViewModel
 import Gomoku.Games.TAG
 import Gomoku.Application
+import Gomoku.Rankings.RankingActivity
 import Gomoku.User.UserActivity
 import android.content.Intent
 import android.os.Build
@@ -37,6 +38,9 @@ class StartActivity : ComponentActivity() {
                 },
                 onAboutreq = {
                     AboutActivity.navigateTo(this)
+                },
+                onRankingReq = {
+                    RankingActivity.navigateTo(this)
                 },
                 /*
                 onLoginReq = {

@@ -35,6 +35,9 @@
         <activity android:name="Gomoku.User.UserActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
+        <activity android:name="Gomoku.Rankings.RankingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Gomoku" />
 
 
     </application>
