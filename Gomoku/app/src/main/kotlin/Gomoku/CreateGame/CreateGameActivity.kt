@@ -1,6 +1,6 @@
-package Gomoku.Rankings
+package Gomoku.CreateGame
 
-import Gomoku.About.SocialInfo
+import Gomoku.NewGame.CreateGameScreen
 import Gomoku.app.GomokuApplication
 
 
@@ -14,29 +14,31 @@ import androidx.activity.viewModels
 
 
 
-class RankingActivity : ComponentActivity() {
+class CreateGameActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication }
-    val viewModelRank by viewModels<RankingViewModel>()
+    val createGameActivity by viewModels<WaitingRoomViewModel>()
 
     companion object {
         fun navigateTo(origin: ComponentActivity) {
-            val intent = Intent(origin, RankingActivity::class.java)
+            val intent = Intent(origin, CreateGameActivity::class.java)
             origin.startActivity(intent)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v(TAG, "AboutActivity.onCreate() called")
-
+        Log.v(TAG, "CREATE.onCreate() called")
         setContent {
-            RankingScreen(
-                onBackRequested = { finish() },
-               onFetchRankingRequest = { viewModelRank.getRanking(app.rankingService)},
-                rank = viewModelRank.rank,
+            CreateGameScreen(
+              onBackRequested = { finish() },
+                onFetchCreateGameRequest = { id, variante, openingRule -> createGameActivity.createGame(app.createGameService, id, variante, openingRule) },
             )
+            Log.v("aaaa", "CreateGameActivity.onCreate() called ${createGameActivity.id}, ${createGameActivity.waitGame}, ${createGameActivity.openingRule}, ${createGameActivity.variante}")
+
         }
     }
+
+
 
 
 
@@ -55,9 +57,3 @@ class RankingActivity : ComponentActivity() {
         Log.v(TAG, "AboutActivity.onDestroy() called")
     }
 }
-
-private val socialLinks = emptyList<SocialInfo>()
-
-
-private const val AUTHOR_EMAIL = "paulo.pereira@isel.pt"
-private const val EMAIL_SUBJECT = "About the Jokes App"

@@ -1,4 +1,4 @@
-package Gomoku.Rankings
+package Gomoku.CreateGame
 
 
 
@@ -22,16 +22,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-data class UsersRankOutput(
-    val username: String,
-    val wins: Int,
-    val rank : Int,
-    val jogos: Int
-)
-class RankingViewModel() : ViewModel() {
 
-    var rank by mutableStateOf<LoadStateUserRank>(IdleUserRank)
-        private set
+class RankingViewModel() : ViewModel() {
     var ranking by mutableStateOf<LoadStateUserRank>(IdleUserRank)
         private set
    fun getRanking(serviceuser: RankingService): Unit {

@@ -1,16 +1,20 @@
 package Gomoku.Services
 
 import Gomoku.DomainModel.Users
-import Gomoku.Http.UsersAct
-import com.google.gson.Gson
-import okhttp3.OkHttpClient
+import Gomoku.DomainModel.UsersFake
 
 
 interface UsersService {
 
     suspend fun createuser(username: String, password: String, usersService: UsersService): Users
-    suspend fun loginuser(): Users
+    suspend fun loginuser(username: String,password: String): Users
 }
+interface UsersServiceFake {
+
+    suspend fun createuser(username: String, password: String, usersService: UsersService): UsersFake
+    suspend fun loginuser(): UsersFake
+}
+
 
 class FetchUserException(message: String, cause: Throwable? = null)
     : Exception(message, cause)

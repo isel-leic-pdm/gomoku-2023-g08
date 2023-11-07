@@ -4,7 +4,9 @@ import Gomoku.About.AboutActivity
 
 import Gomoku.Games.GameScreenViewModel
 import Gomoku.Games.TAG
-import Gomoku.Application
+
+import Gomoku.CreateGame.CreateGameActivity
+import Gomoku.Login.LoginActivity
 import Gomoku.Rankings.RankingActivity
 import Gomoku.User.UserActivity
 import android.content.Intent
@@ -18,7 +20,7 @@ import androidx.annotation.RequiresApi
 
 class StartActivity : ComponentActivity() {
     private val viewModel by viewModels<GameScreenViewModel>()
-    private val app by lazy { application as Application }
+   // private val app by lazy { application as Application }
     companion object {
         fun navigateTo(activity: ComponentActivity) {
             val intent = Intent(activity, StartActivity::class.java)
@@ -39,16 +41,19 @@ class StartActivity : ComponentActivity() {
                 onAboutreq = {
                     AboutActivity.navigateTo(this)
                 },
+                onCreateGameReq = {
+                    CreateGameActivity.navigateTo(this)
+                                  },
+
                 onRankingReq = {
                     RankingActivity.navigateTo(this)
                 },
-                /*
+
                 onLoginReq = {
-                    LoginUserActivity.navigateTo(this)
+                    LoginActivity.navigateTo(this)
                 },
-                onCreateGameReq = {
-                    CreateGameActivity.navigateTo(this)
-                },
+                
+                /*
                 onReplayGameReq = {
                     ReplayGameActivity.navigateTo(this)
                 },

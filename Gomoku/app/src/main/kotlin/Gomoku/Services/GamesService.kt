@@ -10,4 +10,7 @@ interface GamesService {
 
 class FetchGameException(message: String, cause: Throwable? = null)
     : Exception(message, cause)
+class FetchUser1Exception(message: String, cause: Throwable? = null)
+    : Exception(message, cause)
+
 

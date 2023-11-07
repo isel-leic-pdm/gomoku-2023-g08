@@ -21,10 +21,7 @@ class UsersViewModel() : ViewModel() {
 
     var user by mutableStateOf<LoadStateUser>(IdleUser)
         private set
-    var password : String =""
-    var username : String =""
-
-    fun createUser(username : String, password: String, usersService: UsersService): Unit {
+    fun createUser(username: String, password: String, usersService: UsersService): Unit {
         viewModelScope.launch {
             user = LoadingUser
             user = LoadedUser(
@@ -34,16 +31,17 @@ class UsersViewModel() : ViewModel() {
                 }
             ) }
 }
-    fun loginuser(serviceuser: UsersService): Unit {
+    fun loginuser(username: String, password: String, usersService: UsersService): Unit {
         viewModelScope.launch {
             user = LoadingUser
             user = LoadedUser(
                 runCatching {
-                    serviceuser.loginuser()
+                    usersService.loginuser(username,password)
                 }
             )
         }
     }
+
 
     }
 

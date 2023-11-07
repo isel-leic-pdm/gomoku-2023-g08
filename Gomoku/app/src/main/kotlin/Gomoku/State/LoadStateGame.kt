@@ -1,7 +1,9 @@
 package Gomoku.State
 
 import Gomoku.DomainModel.Game
+import Gomoku.DomainModel.Models.WaitingRoom
 import Gomoku.DomainModel.Users
+import Gomoku.Rankings.UsersRankOutput
 
 
 sealed class LoadStateGame
@@ -22,4 +24,13 @@ sealed class LoadStateUserRank
 
 object IdleUserRank : LoadStateUserRank()
 object LoadingUserRank : LoadStateUserRank()
-data class LoadedUserRank(val result: Result<List<Users>>) : LoadStateUserRank()
+data class LoadedUserRank(val result: Result<List<UsersRankOutput>>) : LoadStateUserRank()
+
+
+sealed class LoadStateGameWaiting
+
+object IdleGameWaiting : LoadStateGameWaiting()
+object LoadingGameWait : LoadStateGameWaiting()
+data class LoadedGameWait(val result: Result<WaitingRoom>) : LoadStateGameWaiting()
+
+

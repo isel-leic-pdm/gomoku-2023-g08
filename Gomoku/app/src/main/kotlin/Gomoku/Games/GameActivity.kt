@@ -5,7 +5,8 @@ import Gomoku.DomainModel.BOARD_DIM
 import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Cell
 import Gomoku.DomainModel.Player
-import Gomoku.Application
+import Gomoku.app.GomokuApplication
+
 import Gomoku.ui.BoardView
 import android.os.Build
 import android.os.Bundle
@@ -30,7 +31,7 @@ const val TAG = "GOMOKU_APP_TAG"
 class GameActivity : ComponentActivity() {
 
     private val viewModel by viewModels<GameScreenViewModel>()
-    private val app by lazy { application as Application }
+    private val app by lazy { application as GomokuApplication }
 
 
     @RequiresApi(Build.VERSION_CODES.O)

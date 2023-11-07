@@ -1,5 +1,6 @@
 package Gomoku.User
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,15 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserScreen(
     onBackRequested: () -> Unit = { },
-    onfetchUsersRequested: () -> Unit = {  },
+    onfetchUsersRequested: (String, String) -> Unit = { _, _ ->  },
 ) {
-    val usersViewModel = UsersViewModel()
+
     val nameInput = remember { mutableStateOf("") }
     val passInput = remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -44,13 +47,13 @@ fun UserScreen(
         Text("Username")
         TextField(
             value = nameInput.value,
-            onValueChange = { nameInput.value = it },
+            onValueChange = { nameInput.value = it
+                                          },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         )
-
-        Text("Password")
+       Text("Password")
         TextField(
             value = passInput.value,
             onValueChange = { passInput.value = it },
@@ -59,15 +62,10 @@ fun UserScreen(
                 .padding(16.dp)
         )
 
+
         Button(
             onClick = {
-                // Handle submit button click
-                usersViewModel.username = nameInput.value
-                usersViewModel.password = passInput.value
-                onfetchUsersRequested()
-
-
-                // Do something with username and password
+                onfetchUsersRequested(nameInput.value, passInput.value)
             },
             modifier = Modifier.padding(16.dp)
         ) {

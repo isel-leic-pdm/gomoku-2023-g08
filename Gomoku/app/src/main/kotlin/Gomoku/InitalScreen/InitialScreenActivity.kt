@@ -3,8 +3,9 @@ package Gomoku.InitalScreen
 import Gomoku.About.AboutActivity
 import Gomoku.DomainModel.BOARD_DIM
 import Gomoku.Games.GameScreenViewModel
-import Gomoku.Application
+
 import Gomoku.User.UserActivity
+import Gomoku.app.GomokuApplication
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +27,7 @@ const val TAG1 = "GOMOKU_APP_TAG"
 class InitialScreenActivity : ComponentActivity() {
 
     private val viewModel by viewModels<GameScreenViewModel>()
-    private val app by lazy { application as Application }
+    private val app by lazy { application as GomokuApplication }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {

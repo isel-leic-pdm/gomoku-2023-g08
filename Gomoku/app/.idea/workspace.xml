@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dc9df0f8-d7ef-4fff-9d3a-72032ec1a939" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/CreateGame/CreateGameActivity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/CreateGame/CreateGameScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/CreateGame/RankingViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/DomainModel/Users.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/DomainModel/Users.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Games/GameActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Games/GameActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/GamesAplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/app/GomokuApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Http/GamesAct.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/CreateGame/CreateGameAct.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Http/UsersAct.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/InitalScreen/InitialScreenActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/InitalScreen/InitialScreenActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/InitalScreen/StartActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/InitalScreen/StartActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Rankings/RankingAct.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Rankings/RankingAct.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Rankings/RankingActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Rankings/RankingActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Rankings/RankingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Rankings/RankingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Rankings/RankingViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Rankings/RankingViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Services/GamesService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Services/GamesService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Services/RankingService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Services/RankingService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Services/UsersService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/Services/UsersService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/State/LoadStateGame.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/State/LoadStateGame.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/User/UserActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/User/UserActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/User/UserScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/User/UserScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Gomoku/User/UsersViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Gomoku/User/UsersViewModel.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="2Xo6pRYBy8IEuIUuywXMTdGBon9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "android.gradle.sync.needed": "true",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "C:/ISEL/3ano-1semestre/PDM/GOMOKU-GITHUB"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dc9df0f8-d7ef-4fff-9d3a-72032ec1a939" name="Changes" comment="" />
+      <created>1699283268465</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1699283268465</updated>
+    </task>
+    <servers />
+  </component>
+</project>

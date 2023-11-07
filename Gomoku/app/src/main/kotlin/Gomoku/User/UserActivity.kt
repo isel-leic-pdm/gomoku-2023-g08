@@ -1,6 +1,7 @@
 package Gomoku.User
 
-import Gomoku.Application
+
+import Gomoku.app.GomokuApplication
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +12,7 @@ import androidx.activity.viewModels
 
 
 class UserActivity : ComponentActivity() {
-    val app by lazy { application as Application }
+    val app by lazy { application as GomokuApplication}
     val viewModel by viewModels<UsersViewModel>()
 
 
@@ -29,8 +30,12 @@ class UserActivity : ComponentActivity() {
         setContent {
             Log.v("USERS", "AboutActivity.onCreate() called")
             UserScreen(onBackRequested = { finish() },
-                onfetchUsersRequested = { viewModel.createUser(viewModel.username, viewModel.password, app.usersService)},
-                )
+                onfetchUsersRequested = { username, password ->
+                    viewModel.createUser(username,password,app.usersService)
+
+
+                }
+            )
         }
     }
 

@@ -1,6 +1,10 @@
 package Gomoku.Login
 
-import Gomoku.Application
+
+
+
+import Gomoku.User.UsersViewModel
+import Gomoku.app.GomokuApplication
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -11,8 +15,8 @@ import androidx.activity.viewModels
 
 
 class LoginActivity : ComponentActivity() {
-    val app by lazy { application as Application }
-    val viewModel by viewModels<LoginViewModel>()
+    val app by lazy { application as GomokuApplication }
+    val viewModel by viewModels<UsersViewModel>()
 
 
     companion object {
@@ -29,8 +33,8 @@ class LoginActivity : ComponentActivity() {
         setContent {
             Log.v("USERS", "AboutActivity.onCreate() called")
             LoginScreen(onBackRequested = { finish() },
-                onfetchUsersRequested = { viewModel.loginuser(app.usersService)},
-                )
+                loginFetch = { username, password -> viewModel.loginuser(username, password,app.usersService) }
+            )
         }
     }
 
@@ -46,6 +50,3 @@ class LoginActivity : ComponentActivity() {
 
 
 }
-
-
-

@@ -1,20 +1,20 @@
-package Gomoku.Http
+package Gomoku.User
 
 import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Game
 import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.variantes
-import Gomoku.Services.FetchGameException
 
+import Gomoku.Services.FetchGameException
 import Gomoku.Services.GamesService
 import android.util.Log
-
 import com.google.gson.Gson
-
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import okio.IOException
-
 import java.net.URL
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -24,6 +24,17 @@ class GamesAct(
     private val client: OkHttpClient,
     private val gson: Gson
 ) : GamesService {
+    private data class GameDto(
+        val board: Board,
+        val playerA: Int,
+        val playerB: Int,
+        val variante: variantes,
+        val openingRule: openingrule,
+        val winner: Int,
+        val turn: Int,
+    ) {
+        fun toGame() = Game(board, playerA, playerB, variante, openingRule, winner, turn, url = URL("https://localhost:8080/games/matchMaking"))
+    }
 
 
     private val request by lazy {
@@ -36,12 +47,12 @@ class GamesAct(
     override suspend fun fetchGame(): Game {
         Log.v("GamesController", "fetchGame() called")
         return suspendCoroutine {
-            client.newCall(request).enqueue(object : okhttp3.Callback {
-                override fun onFailure(call: okhttp3.Call, e: IOException) {
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
                     it.resumeWithException(FetchGameException("Failed to fetch Game", e))
                 }
 
-                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                override fun onResponse(call: Call, response: Response) {
                     val body = response.body
                     if (!response.isSuccessful || body == null)
                         it.resumeWithException(FetchGameException("Failed to fetch Game: ${response.code}"))
@@ -52,21 +63,3 @@ class GamesAct(
         }
     }
 }
-
-
-
-
-private data class GameDto(
-    val board: Board,
-    val playerA: Int,
-    val playerB: Int,
-    val variante: variantes,
-    val openingRule: openingrule,
-    val winner: Int,
-    val turn: Int,
-) {
-    fun toGame() = Game(board, playerA, playerB, variante, openingRule, winner, turn, url = URL("https://localhost:8080/games/matchMaking"))
-}
-
-
-

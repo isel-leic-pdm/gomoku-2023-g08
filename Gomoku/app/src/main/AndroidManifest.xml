@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
+        android:name="Gomoku.app.GomokuApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -35,7 +36,14 @@
         <activity android:name="Gomoku.User.UserActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
+        <activity android:name="Gomoku.Login.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Gomoku" />
+
         <activity android:name="Gomoku.Rankings.RankingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Gomoku" />
+        <activity android:name="Gomoku.CreateGame.CreateGameActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
 
