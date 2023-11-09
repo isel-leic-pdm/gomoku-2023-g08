@@ -28,39 +28,7 @@ data class UsersRankOutput(
     val username: String,
     val wins: Int,
     val rank : Int,
-    val jogos: Int
-): Parcelable  {
-    // Escreva o construtor primário
-
-    // Métodos para criar um objeto Parcelable
-    constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readInt()
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(username)
-        parcel.writeInt(wins)
-        parcel.writeInt(rank)
-        parcel.writeInt(jogos)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<UsersRankOutput> {
-        override fun createFromParcel(parcel: Parcel): UsersRankOutput {
-            return UsersRankOutput(parcel)
-        }
-
-        override fun newArray(size: Int): Array<UsersRankOutput?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+    val jogos: Int)
 class RankingViewModel() : ViewModel() {
 
     var rank by mutableStateOf<LoadStateUserRank>(IdleUserRank)

@@ -55,7 +55,6 @@ class RankingAct(
                                 val usersRankOutputList = mutableListOf<UsersRankOutput>()
 
                                 for (property in properties) {
-
                                     for(p in property) {
                                         val username = property["username"] as String
                                         val wins = (property["vitorias"] as Double).toInt() // Ajuste para obter o inteiro
