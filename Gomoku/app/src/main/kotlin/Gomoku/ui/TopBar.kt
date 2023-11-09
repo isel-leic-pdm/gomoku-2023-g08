@@ -39,7 +39,8 @@ fun TopBar(navigation: NavigationHandlers = NavigationHandlers()) {
         navigationIcon = {
             if (navigation.onBackRequested != null) {
 
-                   Button(onClick = navigation.onBackRequested, ) {
+                   Button(onClick = navigation.onBackRequested, modifier = Modifier.testTag(
+                       NavigateBackTestTag) ) {
                        Text(text = "<-")
                    }
             }

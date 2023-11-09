@@ -23,20 +23,40 @@ class WaitingRoomViewModel() : ViewModel() {
         private set
     var id by mutableStateOf<LoadStateUser>(IdleUser)
         private set
-    var openingRule : String =""
-    var variante : String =""
-    fun createGame(service: CreateGameService, id: Int, openingRule: openingrule, variantes: variantes): WaitingRoom? {
+    var openingRule: String = ""
+    var variante: String = ""
+    fun createGame(
+        service: CreateGameService,
+        id: Int,
+        openingRule: openingrule,
+        variantes: variantes
+    ): WaitingRoom? {
         Log.v("bbb", "CreateGameActivity.onCreate() called ${id}, ${openingRule}, ${variantes}")
         viewModelScope.launch {
             waitGame = LoadingGameWait
             waitGame = LoadedGameWait(
                 runCatching {
-                service.fetchCreateGame(id, openingRule, variantes)
+                    service.fetchCreateGame(id, openingRule, variantes)
                 }
             )
         }
 
-return null
-       }
+        return null
+    }
 
+    fun getGame(service: CreateGameService) {
+        /*
+        viewModelScope.launch {
+            waitGame = LoadingGameWait
+            waitGame = LoadedGameWait(
+                runCatching {
+                    service.fetchGame()
+                }
+            )
+        }
+    }
+
+         */
+
+    }
 }

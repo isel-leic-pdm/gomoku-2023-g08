@@ -27,7 +27,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CreateGameScreen(
     onBackRequested: () -> Unit = { },
-    onFetchCreateGameRequest: (Int, openingrule, variantes) -> Unit = { _, _, _ -> }
+    onFetchCreateGameRequest: (Int, openingrule, variantes) -> Unit = { _, _, _ -> },
+    onFetch : () -> Unit = { }
 ) {
 
 val gameViewModel = WaitingRoomViewModel()
@@ -83,9 +84,6 @@ val gameViewModel = WaitingRoomViewModel()
                 gameViewModel.openingRule = openingRuleInput.value
 
                 onFetchCreateGameRequest(idInput.value.toInt(), gameViewModel.openingRule.toOpeningRule(), gameViewModel.variante.toVariante())
-                Log.v("int: ", "${idInput.value.toInt()}")
-                Log.v("variante: ", "${gameViewModel.variante}")
-                Log.v("openingRule: ", "${gameViewModel.openingRule}")
 
                 // Do something with username and password
             },
@@ -93,5 +91,16 @@ val gameViewModel = WaitingRoomViewModel()
         ) {
             Text("Create Game")
         }
+    }
+}
+@Composable
+fun WaitingLobbyScreen() {
+    Log.v("WaitingLobbyScreen", "WaitingLobbyScreen called")
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceAround,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Waiting Lobby")
     }
 }

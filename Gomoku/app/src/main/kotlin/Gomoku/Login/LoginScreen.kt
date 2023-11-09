@@ -18,8 +18,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
+val LoginButtonTestTag = "LoginButton"
+val LoginButtonBackTestTag = "LoginButtonBack"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
@@ -39,7 +42,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
-            Button(onClick = onBackRequested) {
+            Button(onClick = onBackRequested, modifier = Modifier.testTag(LoginButtonBackTestTag)) {
                 Text("Back")
             }
         }
@@ -69,7 +72,7 @@ fun LoginScreen(
 
 
             },
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp).testTag(LoginButtonTestTag)
         ) {
             Text("Login")
         }

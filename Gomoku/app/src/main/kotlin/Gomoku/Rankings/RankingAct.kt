@@ -2,9 +2,13 @@ package Gomoku.Rankings
 
 
 import Gomoku.DomainModel.Users
+import Gomoku.InitalScreen.InitialScreen
 import Gomoku.Services.FetchGameException
 import Gomoku.Services.RankingService
 import Gomoku.app.LINK
+import android.content.Intent
+import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 
 
 import com.google.gson.Gson
@@ -29,22 +33,56 @@ class RankingAct(
             .build()
     }
     override suspend fun fetchRanking(): MutableList<UsersRankOutput> {
-        return suspendCoroutine {
+        return suspendCoroutine { continuation ->
             client.newCall(request).enqueue(object : okhttp3.Callback {
                 override fun onFailure(call: okhttp3.Call, e: IOException) {
-                    it.resumeWithException(FetchGameException("Failed to create", e))
+                    continuation.resumeWithException(FetchGameException("Failed to create", e))
                 }
 
                 override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                     val body = response.body
-                    if (!response.isSuccessful || body == null)
-                        it.resumeWithException(FetchGameException("Failed to create user : ${response.code}"))
-                    else
-                        it.resume(mutableListOf(gson.fromJson(body.string(), UserRankDto::class.java).toUser()))
+                    if (!response.isSuccessful || body == null) {
+                        continuation.resumeWithException(FetchGameException("Failed to create user: ${response.code}"))
+                    } else {
+                        val jsonString = body.string()
+                        val jsonObject = gson.fromJson(jsonString, Map::class.java)
+
+                        if (jsonObject.containsKey("properties")) {
+                            val properties = jsonObject["properties"] as List<Map<*, *>>?
+
+                            if (properties != null) {
+                                Log.v("RankingAct1", "properties: $properties")
+                                val usersRankOutputList = mutableListOf<UsersRankOutput>()
+
+                                for (property in properties) {
+
+                                    for(p in property) {
+                                        val username = property["username"] as String
+                                        val wins = (property["vitorias"] as Double).toInt() // Ajuste para obter o inteiro
+                                       val rank = (property["ranking"] as Double).toInt() // Ajuste para obter o inteiro
+                                        val games = (property["jogos"] as Double).toInt() // Ajuste para obter o inteiro
+
+                                        val userRankOutput = UsersRankOutput(username, wins, rank, games)
+                                        usersRankOutputList.add(userRankOutput)
+                                        Log.v("RankingAct4", "userRankOutput: ${userRankOutput.wins}")
+                                    }
+                                }
+
+
+
+                                continuation.resume(usersRankOutputList)
+                            } else {
+                                continuation.resumeWithException(FetchGameException("Failed to parse properties"))
+                            }
+                        } else {
+                            continuation.resumeWithException(FetchGameException("Properties not found in response"))
+                        }
+                    }
                 }
             })
         }
     }
+
 }
 
 

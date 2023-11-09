@@ -32,6 +32,7 @@ class CreateGameActivity : ComponentActivity() {
             CreateGameScreen(
               onBackRequested = { finish() },
                 onFetchCreateGameRequest = { id, variante, openingRule -> createGameActivity.createGame(app.createGameService, id, variante, openingRule) },
+                onFetch = { createGameActivity.getGame(app.createGameService) },
             )
             Log.v("aaaa", "CreateGameActivity.onCreate() called ${createGameActivity.id}, ${createGameActivity.waitGame}, ${createGameActivity.openingRule}, ${createGameActivity.variante}")
 
