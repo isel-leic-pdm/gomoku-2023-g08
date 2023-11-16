@@ -1,7 +1,10 @@
-package Gomoku.CreateGame
+package Gomoku.WaitingRoom
 
-import Gomoku.NewGame.NewGameScreen
-import Gomoku.WaitingRoom.WaitingRoomActivity
+import Gomoku.CreateGame.WaitingRoomViewModel
+
+import Gomoku.PlayGame.PlayGameActivity
+
+
 import Gomoku.app.GomokuApplication
 
 
@@ -14,32 +17,27 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 
 
-class CreateGameActivity : ComponentActivity() {
+
+class WaitingRoomActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication }
-    val gameViewModel by viewModels<WaitingRoomViewModel>()
+    val newGameActivity by viewModels<WaitingRoomViewModel>()
 
     companion object {
         fun navigateTo(origin: ComponentActivity) {
-            val intent = Intent(origin, CreateGameActivity::class.java)
+            val intent = Intent(origin, WaitingRoomActivity::class.java)
             origin.startActivity(intent)
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.v(TAG, "CREATE.onCreate() called")
         setContent {
-            NewGameScreen(
-              onBackRequested = { finish() },
-                onFetchCreateGameRequest = {
-                       gameViewModel.createGame(app.createGameService) },
-
-                onFetch = { WaitingRoomActivity.navigateTo(this) },
-                setID = gameViewModel::setIDS,
-                setOpeningRule =  gameViewModel::SetOpeningRules,
-                setVariante =  gameViewModel::SetVariantes
-
+            WaitingRoomScreen(
+                onBackRequested = { finish() },
+                onGameCreated = {  },
+                onPlayCkick ={ PlayGameActivity.navigateTo(this)}
             )
-
         }
     }
 

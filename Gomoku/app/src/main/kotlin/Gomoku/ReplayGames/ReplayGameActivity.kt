@@ -1,7 +1,6 @@
-package Gomoku.CreateGame
+package Gomoku.ReplayGames
 
-import Gomoku.NewGame.NewGameScreen
-import Gomoku.WaitingRoom.WaitingRoomActivity
+import Gomoku.About.SocialInfo
 import Gomoku.app.GomokuApplication
 
 
@@ -14,36 +13,35 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 
 
-class CreateGameActivity : ComponentActivity() {
+
+class ReplayGameActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication }
-    val gameViewModel by viewModels<WaitingRoomViewModel>()
+    val viewModelReplayGame by viewModels<ReplayGameViewModel>()
 
     companion object {
         fun navigateTo(origin: ComponentActivity) {
-            val intent = Intent(origin, CreateGameActivity::class.java)
+            val intent = Intent(origin, ReplayGameActivity::class.java)
             origin.startActivity(intent)
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v(TAG, "CREATE.onCreate() called")
+        Log.v("REPLAYYYYYY", "ReplayGame.onCreate() called")
+
         setContent {
-            NewGameScreen(
-              onBackRequested = { finish() },
-                onFetchCreateGameRequest = {
-                       gameViewModel.createGame(app.createGameService) },
-
-                onFetch = { WaitingRoomActivity.navigateTo(this) },
-                setID = gameViewModel::setIDS,
-                setOpeningRule =  gameViewModel::SetOpeningRules,
-                setVariante =  gameViewModel::SetVariantes
-
+            ReplayGameScreen(
+                onBackRequested = { finish() },
+               fetchReplayGame = {
+                   viewModelReplayGame.idGame = it
+                   Log.v("IT123", "IT : "+ it.toString())
+                   viewModelReplayGame.getGameSaved(app.saveGame)
+                   ShowReplayGameActivity.navigateTo(ShowReplayGameActivity())
+                                 },
+            
             )
-
         }
     }
-
-
 
 
 
@@ -62,3 +60,4 @@ class CreateGameActivity : ComponentActivity() {
         Log.v(TAG, "AboutActivity.onDestroy() called")
     }
 }
+

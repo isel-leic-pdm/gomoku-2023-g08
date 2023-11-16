@@ -8,6 +8,7 @@ import Gomoku.Games.TAG
 import Gomoku.CreateGame.CreateGameActivity
 import Gomoku.Login.LoginActivity
 import Gomoku.Rankings.RankingActivity
+import Gomoku.ReplayGames.ReplayGameActivity
 import Gomoku.User.UserActivity
 import android.content.Intent
 import android.os.Build
@@ -53,18 +54,12 @@ class StartActivity : ComponentActivity() {
                     LoginActivity.navigateTo(this)
                 },
                 
-                /*
                 onReplayGameReq = {
                     ReplayGameActivity.navigateTo(this)
                 },
-                onRankingReq = {
-                    RankingActivity.navigateTo(this)
-                },
-                onAboutreq = {
-                    AboutActivity.navigateTo(this)
-                }
 
-                 */
+
+
 
             )
         }

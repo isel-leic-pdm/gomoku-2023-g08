@@ -5,7 +5,6 @@ import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.toOpeningRule
 import Gomoku.DomainModel.toVariante
 import Gomoku.DomainModel.variantes
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,16 +24,18 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateGameScreen(
+fun NewGameScreen(
     onBackRequested: () -> Unit = { },
-    onFetchCreateGameRequest: (Int, openingrule, variantes) -> Unit = { _, _, _ -> },
-    onFetch : () -> Unit = { }
-) {
+    onFetchCreateGameRequest: () -> Unit = {   },
+    onFetch : () -> Unit = { },
+    setID: (Int) -> Unit = { },
+    setOpeningRule: (String) -> Unit = { },
+    setVariante: (String) -> Unit = { },
 
-val gameViewModel = WaitingRoomViewModel()
-    val varianteInput = remember { mutableStateOf("") }
-    val openingRuleInput = remember { mutableStateOf("") }
+) {
     val idInput = remember { mutableStateOf("") }
+    val selectedVariante = remember { mutableStateOf("") }
+    val selectedOpeningRule = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -52,55 +53,86 @@ val gameViewModel = WaitingRoomViewModel()
         Text("Id")
         TextField(
             value = idInput.value,
-            onValueChange = { idInput.value = it },
+            onValueChange = {
+                idInput.value = it
+                setID(idInput.value.toInt())
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         )
 
         Text("Variante")
-        TextField(
-            value = varianteInput.value,
-            onValueChange = { varianteInput.value = it },
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-        )
+        ) {
+            Button(
+                onClick = {
+                    selectedVariante.value = "OMOK"
+                    setVariante(selectedVariante.value)
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
+            ) {
+                Text("OMOK")
+            }
+
+            Button(
+                onClick = {
+                    selectedVariante.value = "NORMAL"
+                    setVariante(selectedVariante.value)
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+            ) {
+                Text("NORMAL")
+            }
+        }
 
         Text("Opening Rule")
-        TextField(
-            value = openingRuleInput.value,
-            onValueChange = { openingRuleInput.value = it },
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-        )
+        ) {
+            Button(
+                onClick = {
+                    selectedOpeningRule.value = "PRO"
+                    setOpeningRule(selectedOpeningRule.value)
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
+            ) {
+                Text("PRO")
+            }
+
+            Button(
+                onClick = {
+                    selectedOpeningRule.value = "NORMAL"
+                    setOpeningRule(selectedOpeningRule.value)
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+            ) {
+                Text("NORMAL")
+            }
+        }
 
         Button(
             onClick = {
-                // Handle submit button click
-                //gameViewModel.id = idInput.value
-                gameViewModel.variante = varianteInput.value
-                gameViewModel.openingRule = openingRuleInput.value
-
-                onFetchCreateGameRequest(idInput.value.toInt(), gameViewModel.openingRule.toOpeningRule(), gameViewModel.variante.toVariante())
-
-                // Do something with username and password
+                onFetchCreateGameRequest()
+                onFetch()
             },
             modifier = Modifier.padding(16.dp)
         ) {
             Text("Create Game")
         }
     }
-}
-@Composable
-fun WaitingLobbyScreen() {
-    Log.v("WaitingLobbyScreen", "WaitingLobbyScreen called")
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceAround,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Waiting Lobby")
-    }
+
 }
