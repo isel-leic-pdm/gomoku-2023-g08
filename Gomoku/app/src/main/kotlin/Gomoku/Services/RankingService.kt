@@ -15,8 +15,13 @@ interface RankingService {
 interface CreateGameService {
 
 
+    suspend fun fetchCreateGame(id: Int?, openingrule: openingrule?, variantes: variantes, authToken: String): WaitingRoom
    suspend fun getGame(id: Int): Game?
-    suspend fun fetchCreateGame(id: Int?, openingrule: openingrule?, variantes: variantes?, authToken: String): WaitingRoom
+
+}
+interface PlayGameService {
+
+    suspend fun play(id: Int, line: Int, col: Int, authToken: String, idGame: Int): Game?
 }
 
 interface ReplayGameInterface {

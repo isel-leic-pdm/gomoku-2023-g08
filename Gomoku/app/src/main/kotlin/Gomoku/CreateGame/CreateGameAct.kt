@@ -10,7 +10,6 @@ import Gomoku.Services.CreateGameService
 import Gomoku.Services.FetchGameException
 import Gomoku.Services.FetchUser1Exception
 import Gomoku.app.LINK
-import android.util.Log
 
 import com.google.gson.Gson
 import okhttp3.Call
@@ -40,6 +39,7 @@ class CreateGameAct(
 
         return suspendCoroutine { continuation ->
             client.newCall(request).enqueue(object : Callback {
+
                 override fun onFailure(call: Call, e: IOException) {
                     continuation.resumeWithException(FetchUser1Exception("Failed to create", e))
                 }
@@ -70,13 +70,14 @@ class CreateGameAct(
     }
 
 
+
     override suspend fun fetchCreateGame(
-        idPlayer: Int?,
+        id: Int?,
         openingrule: openingrule?,
-        variantes: variantes?,
+        variantes: variantes,
         authToken: String
     ): WaitingRoom {
-        val requestBodyJson = gson.toJson(mapOf("player" to idPlayer, "openingRule" to openingrule, "variante" to variantes))
+        val requestBodyJson = gson.toJson(mapOf("player" to id, "openingRule" to openingrule, "variante" to variantes))
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), requestBodyJson)
         val request = Request.Builder()
             .url("$LINK/games/matchMaking")
@@ -107,6 +108,8 @@ class CreateGameAct(
             })
         }
     }
+
+
 
     private data class WaitingRoomDto(
         val id: Int,

@@ -1,11 +1,12 @@
 package Gomoku.ui
 
+import Gomoku.CreateGame.WaitingRoomViewModel
 import Gomoku.DomainModel.BOARD_DIM
 import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Cell
 import Gomoku.DomainModel.Player
-import Gomoku.DomainModel.moves
-import Gomoku.Games.GameScreenViewModel
+import Gomoku.AfterLogin.boardSize
+import Gomoku.AfterLogin.cellSize
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,8 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.gomoku.R
-import Gomoku.Games.boardSize
-import Gomoku.Games.cellSize
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BoardView(vm: GameScreenViewModel, board: Board?, onclick: (Cell) -> Unit,  ) {
+fun BoardView(vm: WaitingRoomViewModel, board: Board?, onclick: (Cell) -> Unit,  ) {
     if(board == null){
         Column(
             modifier = Modifier

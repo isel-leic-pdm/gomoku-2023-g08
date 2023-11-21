@@ -1,30 +1,27 @@
-package Gomoku.InitalScreen
+package Gomoku.Logout
+
+import Gomoku.Main.MainScreen
+
 
 import Gomoku.About.AboutActivity
 
-import Gomoku.Games.GameScreenViewModel
-import Gomoku.Games.TAG
 
-import Gomoku.CreateGame.CreateGameActivity
 import Gomoku.Login.LoginActivity
-import Gomoku.Rankings.RankingActivity
-import Gomoku.ReplayGames.ReplayGameActivity
 import Gomoku.User.UserActivity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 
-class StartActivity : ComponentActivity() {
-    private val viewModel by viewModels<GameScreenViewModel>()
-   // private val app by lazy { application as Application }
+
+class LogoutActivity : ComponentActivity() {
     companion object {
         fun navigateTo(activity: ComponentActivity) {
-            val intent = Intent(activity, StartActivity::class.java)
+            val intent = Intent(activity, LogoutActivity::class.java)
             activity.startActivity(intent)
         }
     }
@@ -35,35 +32,19 @@ class StartActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            InitialScreen(
+            MainScreen(
                 onCreateUserReq = {
-                 UserActivity.navigateTo(this)
+                    UserActivity.navigateTo(this)
                 },
-                onAboutreq = {
-                    AboutActivity.navigateTo(this)
-                },
-                onCreateGameReq = {
-                    CreateGameActivity.navigateTo(this)
-                                  },
-
-                onRankingReq = {
-                    RankingActivity.navigateTo(this)
-                },
-
                 onLoginReq = {
                     LoginActivity.navigateTo(this)
                 },
-                
-                onReplayGameReq = {
-                    ReplayGameActivity.navigateTo(this)
-                },
-
-
-
-
-            )
+                onAboutreq = {
+                    AboutActivity.navigateTo(this)
+                })
         }
     }
+
     override fun onStart() {
         super.onStart()
         Log.v(TAG, "MainActivity.onStart() called")

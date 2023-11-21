@@ -24,13 +24,14 @@ val UserButtonTest = "UserButton"
 @Composable
 fun UserScreen(
     onBackRequested: () -> Unit = { },
-    onfetchUsersRequested: (String, String) -> Unit = { _, _ ->  },
+    onfetchUsersRequested: () -> Unit = {  },
+    onfetch : () -> Unit = { },
+    SetUsername: (String) -> Unit = { },
+    SetPassword: (String) -> Unit = { },
 ) {
 
-    val nameInput = remember { mutableStateOf("") }
-    val passInput = remember { mutableStateOf("") }
-
-
+    val usernameInput = remember { mutableStateOf("") }
+    val passwordInput = remember { mutableStateOf("") }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceAround,
@@ -47,8 +48,9 @@ fun UserScreen(
 
         Text("Username")
         TextField(
-            value = nameInput.value,
-            onValueChange = { nameInput.value = it
+            value = usernameInput.value,
+            onValueChange = { usernameInput.value = it
+                SetUsername(usernameInput.value)
                                           },
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,8 +58,9 @@ fun UserScreen(
         )
        Text("Password")
         TextField(
-            value = passInput.value,
-            onValueChange = { passInput.value = it },
+            value = passwordInput.value,
+            onValueChange = { passwordInput.value = it
+                            SetPassword(passwordInput.value)},
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -66,7 +69,8 @@ fun UserScreen(
 
         Button(
             onClick = {
-                onfetchUsersRequested(nameInput.value, passInput.value)
+                onfetchUsersRequested()
+                onfetch()
 
             },
             modifier = Modifier.padding(16.dp).testTag(UserButtonTest)

@@ -14,23 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gomoku"
         tools:targetApi="34">
-        <activity
-            android:name="Gomoku.Games.GameActivity"
+        <activity android:name="Gomoku.Main.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Gomoku">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.Gomoku" />
+    <activity
+        android:name="Gomoku.AfterLogin.LoggedActivity"
+        android:exported="true"
+        android:theme="@style/Theme.Gomoku" />
         <activity
             android:name="Gomoku.About.AboutActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
+
         <activity
-            android:name="Gomoku.InitalScreen.StartActivity"
+            android:name="StartActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
         <activity android:name="Gomoku.User.UserActivity"
@@ -58,6 +55,7 @@
         <activity android:name="Gomoku.PlayGame.PlayGameActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
+
 
 
 

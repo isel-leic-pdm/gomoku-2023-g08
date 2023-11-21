@@ -1,6 +1,10 @@
 package Gomoku.User
 
 
+
+
+import Gomoku.AfterLogin.LoggedActivity
+import Gomoku.Main.MainActivity
 import Gomoku.app.GomokuApplication
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -28,13 +32,13 @@ class UserActivity : ComponentActivity() {
         Log.v(TAG, "UserActivity.onCreate() called")
 
         setContent {
-            Log.v("USERS", "AboutActivity.onCreate() called")
-            UserScreen(onBackRequested = { finish() },
-                onfetchUsersRequested = { username, password ->
-                    viewModel.createUser(username,password,app.usersService)
-
-
-                }
+            Log.v("USERS", "CreateUser.onCreate() called")
+            UserScreen(
+                onBackRequested = { finish() },
+                onfetchUsersRequested = { viewModel.createUser(app.usersService) },
+                onfetch = { MainActivity.navigateTo(this) },
+                SetUsername = viewModel::SetUser,
+                SetPassword = viewModel::setPass,
             )
         }
     }

@@ -27,10 +27,12 @@ val LoginButtonBackTestTag = "LoginButtonBack"
 @Composable
 fun LoginScreen(
     onBackRequested: () -> Unit = { },
-    loginFetch: (String, String) -> Unit = { _, _ -> }
+    onLoginFetchToken : () -> Unit = {  },
+    loginFetch: () -> Unit = {  },
+    setUsername: (String) -> Unit = {  } ,
+    setPassword: (String) -> Unit = {  }
 ) {
-
-    val nameInput = remember { mutableStateOf("") }
+val nameInput = remember { mutableStateOf("") }
     val passInput = remember { mutableStateOf("") }
 
     Column(
@@ -50,7 +52,8 @@ fun LoginScreen(
         Text("Username")
         TextField(
             value = nameInput.value,
-            onValueChange = { nameInput.value = it },
+            onValueChange = { nameInput.value = it
+                            setUsername(nameInput.value)},
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -58,8 +61,11 @@ fun LoginScreen(
 
         Text("Password")
         TextField(
-            value = passInput.value,
-            onValueChange = { passInput.value = it },
+            value =  passInput.value,
+            onValueChange = {
+                passInput.value = it
+                setPassword(passInput.value)
+                           },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -67,8 +73,8 @@ fun LoginScreen(
 
         Button(
             onClick = {
-               loginFetch(nameInput.value, passInput.value)
-                Log.v("LOGIN", "${nameInput.value}, ${passInput.value}")
+                onLoginFetchToken()
+                loginFetch()
 
 
             },

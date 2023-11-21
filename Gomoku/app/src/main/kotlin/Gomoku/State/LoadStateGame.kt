@@ -18,7 +18,7 @@ sealed class LoadStateUser
 
  object IdleUser : LoadStateUser()
  object LoadingUser : LoadStateUser()
-data class LoadedUser(val result: Result<Users>) : LoadStateUser()
+data class LoadedUser<T>(val result: Result<T>) : LoadStateUser()
 
 
 sealed class LoadStateUserRank

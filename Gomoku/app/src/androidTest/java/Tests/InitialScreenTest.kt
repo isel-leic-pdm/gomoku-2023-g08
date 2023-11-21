@@ -2,20 +2,16 @@ package Tests
 
 import Gomoku.About.AboutScreen
 import Gomoku.About.UserScreen
-import Gomoku.InitalScreen.AboutButtonTestTag
-import Gomoku.InitalScreen.CreateUserButtonTestTag
-import Gomoku.InitalScreen.NewGameButtonTestTag
-import Gomoku.InitalScreen.RankingButtonTestTag
-import Gomoku.InitalScreen.ReplayGameButtonTestTag
-import Gomoku.Login.LoginButtonBackTestTag
+import Gomoku.AfterLogin.AboutButtonTestTag
+import Gomoku.AfterLogin.CreateUserButtonTestTag
+import Gomoku.AfterLogin.NewGameButtonTestTag
+import Gomoku.AfterLogin.RankingButtonTestTag
 import Gomoku.Login.LoginButtonTestTag
 import Gomoku.Login.LoginScreen
 import Gomoku.NewGame.NewGameScreen
 import Gomoku.Rankings.RankingScreen
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
-import junit.framework.TestCase.assertTrue
 import org.junit.Rule
 import org.junit.Test
 

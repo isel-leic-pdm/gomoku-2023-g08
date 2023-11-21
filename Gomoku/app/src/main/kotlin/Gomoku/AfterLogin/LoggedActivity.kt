@@ -1,11 +1,15 @@
-package Gomoku.InitalScreen
-
-import Gomoku.About.AboutActivity
+package Gomoku.AfterLogin
+import Gomoku.CreateGame.CreateGameActivity
 import Gomoku.DomainModel.BOARD_DIM
-import Gomoku.Games.GameScreenViewModel
+import Gomoku.Logout.LogoutActivity
+import Gomoku.Main.MainActivity
+import Gomoku.Rankings.RankingActivity
+import Gomoku.ReplayGames.ReplayGameActivity
+import Gomoku.User.UsersViewModel
 
-import Gomoku.User.UserActivity
+
 import Gomoku.app.GomokuApplication
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -24,20 +28,31 @@ val boardSize = cellSize * BOARD_DIM + lineSize *(BOARD_DIM -1)
 
 const val TAG1 = "GOMOKU_APP_TAG"
 
-class InitialScreenActivity : ComponentActivity() {
+class LoggedActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<GameScreenViewModel>()
+    companion object {
+        fun navigateTo(origin: ComponentActivity) {
+            val intent = Intent(origin, LoggedActivity::class.java)
+            origin.startActivity(intent)
+        }
+    }
+  private val vm by viewModels<UsersViewModel>()
     private val app by lazy { application as GomokuApplication }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            InitialScreen(
-                 onCreateUserReq = { UserActivity.navigateTo(this) },
-                  onAboutreq = { AboutActivity.navigateTo(this) },
+            AfterLogged(
+                onCreateGameReq = { CreateGameActivity.navigateTo(this) },
+                onReplayGameReq = {ReplayGameActivity.navigateTo(this) },
+                onRankingReq = { RankingActivity.navigateTo(this) },
+                   onLogOutReq = { MainActivity.navigateTo(this) },
+                onFetchLogout = {vm.logout(app.usersService)},
+                )
 
-            )
+
         }
     }
 
@@ -56,5 +71,3 @@ class InitialScreenActivity : ComponentActivity() {
         Log.v(TAG1, "MainActivity.onDestroy() called")
     }
 }
-
-

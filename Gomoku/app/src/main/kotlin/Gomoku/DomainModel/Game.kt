@@ -22,7 +22,7 @@ fun String.toOpeningRule() = when (this) {
     "PRO" -> openingrule.PRO
     else -> throw IllegalArgumentException("Invalid opening rule.")
 }
-data class Game(val board: Board, val player1: Int?, val player2: Int?,val variante: variantes?, val openingrule: openingrule,  val winner: Int? = null, val turn: Int?, val url :URL? = null) {
+data class Game(val id : Int, val board: Board, val player1: Int?, val player2: Int?,val variante: variantes?, val openingrule: openingrule,  val winner: Int? = null, val turn: Int?, val url :URL? = null) {
     fun get(l: Row, c: Column) = board.get(l, c)
     companion object {
 

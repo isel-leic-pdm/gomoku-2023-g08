@@ -1,10 +1,14 @@
 package Gomoku.CreateGame
 
+import Gomoku.DomainModel.Board
+import Gomoku.DomainModel.Cell
+import Gomoku.DomainModel.Game
 import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.toOpeningRule
 import Gomoku.DomainModel.toVariante
 import Gomoku.DomainModel.variantes
 import Gomoku.Services.CreateGameService
+import Gomoku.Services.PlayGameService
 import Gomoku.State.IdleGameCreated
 import Gomoku.State.IdleGameWaiting
 import Gomoku.State.LoadStateGameCreated
@@ -29,6 +33,10 @@ class WaitingRoomViewModel() : ViewModel() {
     var game by mutableStateOf<LoadStateGameCreated>(IdleGameCreated)
         private set
 
+    val gamePlayed: Game? get() = (game as? LoadedGameCreated)?.result?.getOrNull()
+    val currentBoard : Board? get() = gamePlayed?.board ?: null
+
+
     var id: Int by mutableStateOf(0)
         private set
 
@@ -50,8 +58,19 @@ class WaitingRoomViewModel() : ViewModel() {
     }
     fun getToken(id: Int)=
         if(id == 1) "855039a4-226a-4ed1-ac5e-3a0814a231fc"
-        else "c6e9a3cf-b764-44cc-884d-8950d84053d6"
-
+    else if(id==2) "c6e9a3cf-b764-44cc-884d-8950d84053d6"
+    else if (id==3) "170cd3f2-8fe5-4387-8e0e-ac934db45e86"
+    else "19811766-57c8-4efa-9d42-acad75806867"
+fun play(service: PlayGameService, line: Int, col: Int): Unit {
+        viewModelScope.launch {
+            game = LoadingGameCreated
+            Log.v("PLAYINGggg", "$id, $line, $col, ${getToken(id)}, ${10}")
+            game = LoadedGameCreated(
+                runCatching {
+                    service.play(3, line, col, getToken(id), 14)
+                })
+        }
+    }
     fun getGame(service: CreateGameService, id:Int): Unit {
         viewModelScope.launch {
             game = LoadingGameCreated

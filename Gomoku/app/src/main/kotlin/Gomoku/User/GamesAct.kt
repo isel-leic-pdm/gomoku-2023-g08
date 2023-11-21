@@ -24,7 +24,7 @@ class GamesAct(
     private val client: OkHttpClient,
     private val gson: Gson
 ) : GamesService {
-    private data class GameDto(
+    private data class GameDto(val id: Int,
         val board: Board,
         val playerA: Int,
         val playerB: Int,
@@ -33,7 +33,7 @@ class GamesAct(
         val winner: Int,
         val turn: Int,
     ) {
-        fun toGame() = Game(board, playerA, playerB, variante, openingRule, winner, turn, url = URL("https://localhost:8080/games/matchMaking"))
+       fun toGame() = Game(id =id,  board, playerA, playerB, variante, openingRule, winner, turn, url = URL("https://localhost:8080/games/matchMaking"))
     }
 
 

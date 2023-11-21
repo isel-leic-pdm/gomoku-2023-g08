@@ -1,6 +1,9 @@
-package Gomoku.InitalScreen
+package Gomoku.AfterLogin
+
+
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,15 +22,15 @@ import androidx.compose.ui.unit.dp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun InitialScreen(
-    onCreateUserReq: () -> Unit = { },
-    onLoginReq: () -> Unit = { },
+fun AfterLogged(
     onCreateGameReq: () -> Unit = { },
     onReplayGameReq: () -> Unit = { },
     onRankingReq: () -> Unit = { },
-    onAboutreq: () -> Unit = { }
-) {
+    onLogOutReq : () -> Unit = { },
+    onFetchLogout: () -> Unit = { },
 
+    ) {
+    Log.v("AFTERLOGIN", "AfterLoginScreen called")
     Row {
         Text(text = "Gomoku", modifier = Modifier.padding(16.dp),)
     }
@@ -39,22 +42,8 @@ fun InitialScreen(
             .background(Color.White)
             .fillMaxSize()
     ) {
-        Button(
-            modifier = Modifier
-                .size(200.dp, 100.dp) // Define o tamanho do botão
-                .padding(16.dp), // Adiciona um espaçamento ao redor do botão
-            onClick = onCreateUserReq
-        ) {
-            Text("Create User")
-        }
-        Button(
-            modifier = Modifier
-                .size(200.dp, 100.dp) // Define o tamanho do botão
-                .padding(16.dp), // Adiciona um espaçamento ao redor do botão
-            onClick = onLoginReq
-        ) {
-            Text("Login User")
-        }
+
+
         Button(
             modifier = Modifier
                 .size(200.dp, 100.dp)
@@ -83,23 +72,15 @@ fun InitialScreen(
             modifier = Modifier
                 .size(200.dp, 100.dp)
                 .padding(16.dp),
-            onClick = onAboutreq
+            onClick = {
+
+                onFetchLogout()
+                onLogOutReq()
+
+            }
         ) {
-            Text("About")
+            Text("Log Out")
         }
+
     }
 }
-/*
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true, showSystemUi = true,
-    device = "spec:width=1080px,height=2340px,dpi=440"
-)
-@Composable
-fun appInitial() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        InitialScreen()
-    }
-
-
-}
- */
