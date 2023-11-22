@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 fun MainScreen(
     onCreateUserReq: () -> Unit = { },
     onLoginReq: () -> Unit = { },
-    onAboutreq: () -> Unit = { }
+    onAboutreq: () -> Unit = { },
+    onLoggedEnabled: Boolean = false,
+    onplayrequested: () -> Unit = { }
 ) {
     MaterialTheme {
         Column(
@@ -52,7 +54,11 @@ fun MainScreen(
                 modifier = Modifier
                     .size(200.dp, 100.dp)
                     .padding(16.dp),
-                onClick = onLoginReq
+                 enabled = onLoggedEnabled,
+                onClick = {
+                    onLoginReq()
+                    onplayrequested()
+                }
             ) {
                 Text("Login User")
             }
