@@ -25,11 +25,6 @@
             android:name="Gomoku.About.AboutActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
-
-        <activity
-            android:name="StartActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Gomoku" />
         <activity android:name="Gomoku.User.UserActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
@@ -53,6 +48,12 @@
            android:exported="true"
            android:theme="@style/Theme.Gomoku" />
         <activity android:name="Gomoku.PlayGame.PlayGameActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Gomoku" />
+        <activity android:name="Gomoku.AfterLogin.StartActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Gomoku" />
+        <activity android:name="Gomoku.Landing.LandingActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
 

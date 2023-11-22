@@ -126,9 +126,9 @@ private fun Author(onSendEmailRequested: () -> Unit = { }) {
 
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_author),
+                painter = painterResource(id = R.drawable.ic_goncalo),
                 contentDescription = null,
-                modifier = Modifier.sizeIn(100.dp, 100.dp, 200.dp, 200.dp)
+                modifier = Modifier.sizeIn(100.dp, 100.dp, 150.dp, 150.dp)
             )
             Text(text = "Goncalo Pinto", style = MaterialTheme.typography.bodyMedium)
             Row {

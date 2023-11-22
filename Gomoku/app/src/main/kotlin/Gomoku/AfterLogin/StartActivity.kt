@@ -1,3 +1,4 @@
+package Gomoku.AfterLogin
 import Gomoku.CreateGame.CreateGameActivity
 import Gomoku.AfterLogin.AfterLogged
 import Gomoku.Rankings.RankingActivity
