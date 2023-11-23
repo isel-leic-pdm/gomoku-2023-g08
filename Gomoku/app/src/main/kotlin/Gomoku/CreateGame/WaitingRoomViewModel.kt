@@ -9,6 +9,7 @@ import Gomoku.DomainModel.toVariante
 import Gomoku.DomainModel.variantes
 import Gomoku.Services.CreateGameService
 import Gomoku.Services.PlayGameService
+import Gomoku.Services.UsersService
 import Gomoku.State.IdleGameCreated
 import Gomoku.State.IdleGameWaiting
 import Gomoku.State.LoadStateGameCreated
@@ -17,6 +18,7 @@ import Gomoku.State.LoadedGameCreated
 import Gomoku.State.LoadedGameWait
 import Gomoku.State.LoadingGameCreated
 import Gomoku.State.LoadingGameWait
+import Gomoku.User.UsersViewModel
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +29,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class WaitingRoomViewModel() : ViewModel() {
-
     var lobby by mutableStateOf<LoadStateGameWaiting>(IdleGameWaiting)
         private set
     var game by mutableStateOf<LoadStateGameCreated>(IdleGameCreated)
@@ -46,28 +47,26 @@ class WaitingRoomViewModel() : ViewModel() {
     var variante: variantes by mutableStateOf(variantes.NORMAL)
         private set
 
-    fun createGame(service: CreateGameService): Unit {
-        Log.v("aaaa", "CreateGameActivity.onCreate() called ${id}, ${lobby}, ${openingRule}, ${variante}, $authToken1")
+    fun createGame(service: CreateGameService, users: UsersService): Unit {
+        Log.v("aaaa", "CreateGameActivity.onCreate() called ${id}, ${lobby}, ${openingRule}, ${variante}}")
         viewModelScope.launch {
             lobby = LoadingGameWait
             lobby = LoadedGameWait(
                 runCatching {
-                    service.fetchCreateGame(id, openingRule, variante, getToken(id))
+                    val token =   users.getAuthToken(id)
+                    Log.v("aaaa", "CreateGameActivity.onCreate() called ${id}, ${lobby}, ${openingRule}, ${variante}, $token")
+                    service.fetchCreateGame(id, openingRule, variante, token)
                 })
         }
     }
-    fun getToken(id: Int)=
-        if(id == 1) "855039a4-226a-4ed1-ac5e-3a0814a231fc"
-    else if(id==2) "c6e9a3cf-b764-44cc-884d-8950d84053d6"
-    else if (id==3) "170cd3f2-8fe5-4387-8e0e-ac934db45e86"
-    else "19811766-57c8-4efa-9d42-acad75806867"
-fun play(service: PlayGameService, line: Int, col: Int): Unit {
+
+fun play(service: PlayGameService, line: Int, col: Int, users: UsersService): Unit {
         viewModelScope.launch {
             game = LoadingGameCreated
-            Log.v("PLAYINGggg", "$id, $line, $col, ${getToken(id)}, ${10}")
             game = LoadedGameCreated(
                 runCatching {
-                    service.play(3, line, col, getToken(id), 14)
+                    val token =   users.getAuthToken(id)
+                    service.play(3, line, col, token, 14)
                 })
         }
     }

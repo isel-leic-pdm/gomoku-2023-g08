@@ -25,8 +25,7 @@ import okio.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-val authToken1 = "855039a4-226a-4ed1-ac5e-3a0814a231fc"
-val authToken2 = "855039a4-226a-4ed1-ac5e-3a0814a231fc"
+
 class CreateGameAct(
     val client: OkHttpClient,
     val gson: Gson

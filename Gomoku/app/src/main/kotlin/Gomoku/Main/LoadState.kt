@@ -1,7 +1,6 @@
 package Gomoku.Main
 
 
-
 /**
  * Sum type that represents the state of a load operation.
  */

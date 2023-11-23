@@ -4,7 +4,7 @@ package Gomoku.app
 import android.app.Application
 
 import Gomoku.CreateGame.CreateGameAct
-import Gomoku.DataStore.DependenciesContainer
+
 import Gomoku.DataStore.Domain.UserInfoRepository
 import Gomoku.DataStore.Storage.UserInfoDataStore
 import Gomoku.PlayGame.PlayGameAct
@@ -23,13 +23,13 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 
 import okhttp3.OkHttpClient
-const val LINK = "https://a65e-194-210-186-209.ngrok.io"
+const val LINK = "https://a76b-194-210-186-209.ngrok.io"
 
 interface DependenciesContainer {
     val userInfoRepository: UserInfoRepository
 }
 
-class GomokuApplication : Application(), DependenciesContainer{
+class GomokuApplication : Application(), DependenciesContainer {
 
     private val dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_info")
 

@@ -22,7 +22,7 @@ fun MainScreen(
     onCreateUserReq: () -> Unit = { },
     onLoginReq: () -> Unit = { },
     onAboutreq: () -> Unit = { },
-    onLoggedEnabled: Boolean = false,
+    onLoggedEnabled: Boolean = true,
     onplayrequested: () -> Unit = { }
 ) {
     MaterialTheme {

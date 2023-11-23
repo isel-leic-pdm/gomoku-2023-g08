@@ -62,9 +62,7 @@ class UsersToServer(
 
     override suspend fun getAuthToken(id: Int): String {
         val json = gson.toJson(mapOf("id" to id))
-
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), json)
-
         val request = Request.Builder()
             .url("$LINK/users/login")
             .addHeader("Accept", "application/vnd.siren+json")

@@ -18,26 +18,8 @@ class MainScreenViewModel(private val repository: UserInfoRepository) : ViewMode
     val userInfoFlow: Flow<LoadState<UserInfo?>>
         get() = _userInfoFlow.asStateFlow()
 
-    fun fetchUserInfo() {
-        if (_userInfoFlow.value is Idle) {
-            _userInfoFlow.value = loading()
-            viewModelScope.launch {
-                val result = runCatching { repository.getUserInfo() }
-                _userInfoFlow.value = loaded(result)
-            }
 
-        }
-        Log.v("MainScreenViewModel", "${_userInfoFlow.value}")
     }
 
 
-    fun resetToIdle() {
-        _userInfoFlow.value = idle()
-    }
 
-    companion object {
-        fun factory(repository: UserInfoRepository) = viewModelFactory {
-            initializer { MainScreenViewModel(repository) }
-        }
-    }
-}

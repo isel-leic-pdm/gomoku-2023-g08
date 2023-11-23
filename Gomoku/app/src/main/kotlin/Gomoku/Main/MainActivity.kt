@@ -2,12 +2,13 @@ package Gomoku.Main
 
 import Gomoku.About.AboutActivity
 import Gomoku.AfterLogin.LoggedActivity
-import Gomoku.DataStore.DependenciesContainer
+
 import Gomoku.DataStore.Domain.UserInfo
 import androidx.compose.runtime.collectAsState
 
 import Gomoku.Login.LoginActivity
 import Gomoku.User.UserActivity
+import Gomoku.app.DependenciesContainer
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Build
@@ -29,12 +30,9 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    private val vm by viewModels<MainScreenViewModel> {
-        MainScreenViewModel.factory((application as DependenciesContainer).userInfoRepository)
-    }
     private fun doNavigation(userInfo: UserInfo?) {
         if (userInfo == null)
-            MainActivity.navigateTo(this)
+            LoginActivity.navigateTo(this)
         else
             LoggedActivity.navigateTo(this)
     }
@@ -43,7 +41,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val currentUserInfo by vm.userInfoFlow.collectAsState(initial = idle())
+         //   val currentUserInfo by vm.userInfoFlow.collectAsState(initial = idle())
             MainScreen(
                 onCreateUserReq = {
                     UserActivity.navigateTo(this)
@@ -54,8 +52,8 @@ class MainActivity : ComponentActivity() {
                 onAboutreq = {
                     AboutActivity.navigateTo(this)
                 },
-                onLoggedEnabled = currentUserInfo is Idle,
-                onplayrequested = {vm.fetchUserInfo()}
+         //       onLoggedEnabled = currentUserInfo is Idle,
+               // onplayrequested = {vm.fetchUserInfo()}
                 )
         }
     }

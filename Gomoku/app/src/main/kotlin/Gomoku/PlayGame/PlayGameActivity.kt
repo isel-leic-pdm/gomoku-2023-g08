@@ -35,7 +35,7 @@ class PlayGameActivity : ComponentActivity() {
         setContent {
             PlayGameScreen(
                 onBackRequested = { finish() },
-                onPlayRequested = { viewModel.play(app.playGameService, it.rowIndex, it.colIndex) },
+                onPlayRequested = { viewModel.play(app.playGameService, it.rowIndex, it.colIndex, app.usersService) },
 
 
                 )

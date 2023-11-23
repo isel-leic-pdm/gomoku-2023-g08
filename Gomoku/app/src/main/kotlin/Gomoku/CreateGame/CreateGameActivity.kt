@@ -31,7 +31,7 @@ class CreateGameActivity : ComponentActivity() {
             NewGameScreen(
               onBackRequested = { finish() },
                 onFetchCreateGameRequest = {
-                       gameViewModel.createGame(app.createGameService) },
+                       gameViewModel.createGame(app.createGameService, app.usersService) },
 
                 onFetch = { WaitingRoomActivity.navigateTo(this) },
                 setID = gameViewModel::setIDS,
