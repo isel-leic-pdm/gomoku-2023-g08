@@ -59,6 +59,7 @@ class UsersViewModel(/*private val dataStore: DataStore<Preferences>*/) : ViewMo
             )
         }
     }
+
         fun logout(usersService: UsersService): Unit {
             viewModelScope.launch {
                 user = LoadingUser

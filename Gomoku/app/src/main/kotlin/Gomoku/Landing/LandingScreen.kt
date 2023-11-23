@@ -30,6 +30,7 @@ fun LandingScreen(
     val configuration = LocalConfiguration.current
     val isHorizontal = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
+
     if (isHorizontal) {
         LazyColumn(
             modifier = Modifier

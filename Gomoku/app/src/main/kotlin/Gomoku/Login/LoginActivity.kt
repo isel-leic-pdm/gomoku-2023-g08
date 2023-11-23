@@ -35,7 +35,7 @@ class LoginActivity : ComponentActivity() {
             LoginScreen(onBackRequested = { finish() },
                 onLoginFetchToken = { viewModel.loginuser(app.usersService) },
                 loginFetch = {
-                    //if login is successful, navigate to logged activity else stay on login activity
+                    //if login is successful, navigate to logged activity else stay on login activi
                     LoggedActivity.navigateTo(this) },
                 setUsername = viewModel::SetUser,
                 setPassword = viewModel::setPass,
