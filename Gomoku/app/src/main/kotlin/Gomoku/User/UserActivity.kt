@@ -5,6 +5,7 @@ package Gomoku.User
 
 import Gomoku.AfterLogin.LoggedActivity
 import Gomoku.Main.MainActivity
+import Gomoku.app.DependenciesContainer
 import Gomoku.app.GomokuApplication
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -17,7 +18,10 @@ import androidx.activity.viewModels
 
 class UserActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication}
-    val viewModel by viewModels<UsersViewModel>()
+ //   val viewModel by viewModels<UsersViewModel>()
+   private val vm by viewModels<UsersViewModel> {
+       UsersViewModel.factory((application as DependenciesContainer).userInfoRepository)
+   }
 
 
     companion object {
@@ -35,10 +39,10 @@ class UserActivity : ComponentActivity() {
             Log.v("USERS", "CreateUser.onCreate() called")
             UserScreen(
                 onBackRequested = { finish() },
-                onfetchUsersRequested = { viewModel.createUser(app.usersService) },
+                onfetchUsersRequested = { vm.createUser(app.usersService) },
                 onfetch = { MainActivity.navigateTo(this) },
-                SetUsername = viewModel::SetUser,
-                SetPassword = viewModel::setPass,
+                SetUsername = vm::SetUser,
+                SetPassword = vm::setPass,
             )
         }
     }

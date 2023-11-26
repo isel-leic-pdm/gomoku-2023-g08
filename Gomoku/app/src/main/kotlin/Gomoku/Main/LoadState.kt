@@ -11,6 +11,7 @@ sealed class LoadState<out T>
  */
  object Idle : LoadState<Nothing>()
 
+
 /**
  * The loading state, i.e. the state while the load operation is in progress.
  */

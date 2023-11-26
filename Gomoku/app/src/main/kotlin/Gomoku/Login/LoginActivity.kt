@@ -5,6 +5,7 @@ package Gomoku.Login
 
 
 import Gomoku.AfterLogin.LoggedActivity
+import Gomoku.AfterLogin.StartActivity
 
 import Gomoku.DataStore.Domain.UserInfo
 import Gomoku.Main.Loaded
@@ -17,6 +18,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -26,9 +28,7 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication }
-    val viewModel by viewModels<UsersViewModel>()
-
-    companion object {
+      companion object {
         fun navigateTo(origin: ComponentActivity) {
             val intent = Intent(origin, LoginActivity::class.java)
             origin.startActivity(intent)
@@ -41,23 +41,29 @@ class LoginActivity : ComponentActivity() {
         lifecycleScope.launch {
             vm.userInfoFlow.collect {
                 if (it is Loaded) {
-                    doNavigation(it.getOrNull())
+                    doNavigation(vm.loginSucess)
                     vm.resetToIdle()
                 }
+
+
+
             }
         }
             setContent {
                 Log.v("USERS", "AboutActivity.onCreate() called")
                 LoginScreen(
                     onBackRequested = { finish() },
-                    onLoginFetchToken = { viewModel.loginuser(app.usersService) },
+                    onLoginFetchToken = {
+                        vm.loginuser(app.usersService)
+                        doNavigation(vm.loginSucess)
+                                        },
                     loginFetch = {
-                        LoggedActivity.navigateTo(this)
-                        vm.rightUserInfo()
+                        doNavigation(vm.loginSucess)
+                        Log.v("doNAV", "loginFEtch: " + vm.loginSucess)
 
-                    },
-                    setUsername = viewModel::SetUser,
-                    setPassword = viewModel::setPass,
+                                    },
+                    setUsername = vm::SetUser,
+                    setPassword = vm::setPass,
                 )
             }
         }
@@ -73,14 +79,25 @@ class LoginActivity : ComponentActivity() {
         Log.v(TAG, "LoginActivity.onStop() called")
     }
 
-    private val vm by viewModels<UsersViewModel> {
-        UsersViewModel.factory((application as DependenciesContainer).userInfoRepository)
+
+
+    fun doNavigation(login: Boolean) {
+        Log.v("doNAV", "loginuser inside nav: " + login)
+       if(login){
+           LoggedActivity.navigateTo(this)
+       }
+        else {
+            Log.v("doNAV", "loginuser: " + vm.loginSucess)
+            StartActivity.navigateTo(this)
+              Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
+       }
     }
 
-    private fun doNavigation(userInfo: UserInfo?) {
-        if (userInfo == null)
-            LoginActivity.navigateTo(this)
-        else
-            LoggedActivity.navigateTo(this)
+    private fun showMessage(message: String) {
+        // Exemplo: exibir uma mensagem usando Toast
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+    private val vm by viewModels<UsersViewModel> {
+        UsersViewModel.factory((application as DependenciesContainer).userInfoRepository)
     }
 }

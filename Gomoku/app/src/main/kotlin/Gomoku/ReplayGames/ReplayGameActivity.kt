@@ -1,6 +1,5 @@
 package Gomoku.ReplayGames
 
-import Gomoku.About.SocialInfo
 import Gomoku.app.GomokuApplication
 
 
@@ -33,11 +32,10 @@ class ReplayGameActivity : ComponentActivity() {
             ReplayGameScreen(
                 onBackRequested = { finish() },
                fetchReplayGame = {
-                   viewModelReplayGame.idGame = it
-                   Log.v("IT123", "IT : "+ it.toString())
                    viewModelReplayGame.getGameSaved(app.saveGame)
-                   ShowReplayGameActivity.navigateTo(ShowReplayGameActivity())
                                  },
+                onfetch = { ShowReplayGameActivity.navigateTo(this) },
+                setIdGame = viewModelReplayGame::setIdGames,
             
             )
         }

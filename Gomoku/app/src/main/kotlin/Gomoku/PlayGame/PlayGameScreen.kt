@@ -2,6 +2,7 @@ package Gomoku.PlayGame
 
 import Gomoku.CreateGame.WaitingRoomViewModel
 import Gomoku.DomainModel.Cell
+import Gomoku.User.UsersViewModel
 import Gomoku.ui.BoardView
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +28,7 @@ fun PlayGameScreen(
     onBackRequested: () -> Unit,
     onPlayRequested: (Cell) -> Unit,
 ) {
-    // ... Restante do seu código ...
-    val viewModel = WaitingRoomViewModel()
+
 
 
     Column(
@@ -48,9 +48,7 @@ fun PlayGameScreen(
                 Icon(Icons.Default.ArrowBack, contentDescription = "Back")
             }
         }
-        BoardView(vm = viewModel, board =viewModel.currentBoard ){
-            onPlayRequested(it)
-        }
+
 
 
 

@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ReplayGameScreen(
     onBackRequested: () -> Unit = { },
-    fetchReplayGame: (Int) -> Unit = { },
+    fetchReplayGame: () -> Unit = { },
+    onfetch : () -> Unit = { },
+    setIdGame: (Int) -> Unit = { },
     game: loadSaveReplayGame = IdleSaveReplayGame) {
     Column(
         modifier = Modifier,
@@ -40,9 +42,7 @@ fun ReplayGameScreen(
 
         val gameInput = remember { mutableStateOf("") }
 
-
-
-        Log.v("SAVEGAME","game : "+ game.toString())
+        Log.v("SAVEGAME","game1 : "+ game.toString())
         Button(onClick = onBackRequested) {
             Text("Back")
         }
@@ -57,11 +57,10 @@ fun ReplayGameScreen(
         )
 
         Button(onClick = {
-
-            fetchReplayGame(gameInput.value.toInt())
-          ShowReplayGameActivity.navigateTo(ShowReplayGameActivity())
-
-        }) {
+            Log.v("SAVEGAME","gameInput : "+ gameInput.value)
+            setIdGame(gameInput.value.toInt())
+            fetchReplayGame()
+            onfetch() }) {
             Text("ReplayGame")
         }
 

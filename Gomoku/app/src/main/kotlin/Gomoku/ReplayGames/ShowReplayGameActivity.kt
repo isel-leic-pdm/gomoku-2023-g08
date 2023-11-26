@@ -50,7 +50,10 @@ class ShowReplayGameActivity() : ComponentActivity() {
                 games = viewModelReplayGame.gamedReplay
 
                 )
-            Log.v("SAVEGAME","game : "+ viewModelReplayGame.gamedReplay.toString())
+            if(viewModelReplayGame.gamedReplay is LoadedSaveReplayGame)
+                ShowView(game = (viewModelReplayGame.gamedReplay as LoadedSaveReplayGame).result.getOrThrow())
+
+            Log.v("EIU","game : "+ viewModelReplayGame.gamedReplay.toString())
         }
     }
 
@@ -75,20 +78,24 @@ class ShowReplayGameActivity() : ComponentActivity() {
 fun ShowReplayGameScreen(
     onBackRequested: () -> Unit = { },
     fetchReplayGame: () -> Unit = { },
-    games: loadSaveReplayGame = IdleSaveReplayGame) {
+    games: loadSaveReplayGame) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Log.v("SHOW", "ShowReplayGameScreen called")
+        Log.v("EIU-SHOW", "ShowReplayGameScreen called")
         Button(onClick = onBackRequested) {
             Text("Back")
         }
     }
-        if (games is LoadedSaveReplayGame) {
+    Log.v("EIU-SHOW", "fetch:" + games.toString())
+       if (games is LoadedSaveReplayGame) {
+            Log.v("EIU-SHOW", "fetch:" + games.toString())
+
             ShowView(game = games.result.getOrThrow())
         }
+
 
     }
 

@@ -7,7 +7,7 @@ package Gomoku.DataStore.Domain
  * @property [id] the user's nick name.
  * @property [password] the user's moto, if he has one.
  */
-data class UserInfo(val id: Int, val username: String?, val password: String?, val token: String? = null) {
+data class UserInfo(val id: Int?, val username: String?, val password: String?, val token: String? = null) {
     init {
         require(validateUserInfoParts(id, password))
     }
@@ -19,7 +19,7 @@ data class UserInfo(val id: Int, val username: String?, val password: String?, v
  * @param [pass] the user's moto, if he has one. If present, it cannot be blank.
  * @return true if the values are acceptable, false otherwise.
  */
-fun validateUserInfoParts(id: Int, pass: String?): Boolean {
+fun validateUserInfoParts(id: Int?, pass: String?): Boolean {
     if (id == 0) return false
     if (pass != null && pass.isBlank()) return false
     return true

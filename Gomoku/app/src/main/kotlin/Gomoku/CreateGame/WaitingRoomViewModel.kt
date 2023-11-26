@@ -1,5 +1,6 @@
 package Gomoku.CreateGame
 
+import Gomoku.DataStore.Domain.UserInfoRepository
 import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Cell
 import Gomoku.DomainModel.Game
@@ -25,10 +26,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class WaitingRoomViewModel() : ViewModel() {
+class WaitingRoomViewModel( repository: UserInfoRepository) : ViewModel() {
+    val usersViewModel by lazy { UsersViewModel(repository) }
+
     var lobby by mutableStateOf<LoadStateGameWaiting>(IdleGameWaiting)
         private set
     var game by mutableStateOf<LoadStateGameCreated>(IdleGameCreated)
@@ -47,15 +52,14 @@ class WaitingRoomViewModel() : ViewModel() {
     var variante: variantes by mutableStateOf(variantes.NORMAL)
         private set
 
-    fun createGame(service: CreateGameService, users: UsersService): Unit {
+    fun createGame(service: CreateGameService): Unit {
         Log.v("aaaa", "CreateGameActivity.onCreate() called ${id}, ${lobby}, ${openingRule}, ${variante}}")
         viewModelScope.launch {
             lobby = LoadingGameWait
             lobby = LoadedGameWait(
                 runCatching {
-                    val token =   users.getAuthToken(id)
-                    Log.v("aaaa", "CreateGameActivity.onCreate() called ${id}, ${lobby}, ${openingRule}, ${variante}, $token")
-                    service.fetchCreateGame(id, openingRule, variante, token)
+                    Log.v("aaaa", "CreateGameActivity.onCreate() called ${usersViewModel.id}, ${lobby}, ${openingRule}, ${variante}, ${usersViewModel.token}")
+                    service.fetchCreateGame(usersViewModel.id, openingRule, variante, usersViewModel.token)
                 })
         }
     }
@@ -94,23 +98,12 @@ fun play(service: PlayGameService, line: Int, col: Int, users: UsersService): Un
 
     private var gameCreatedListener: (() -> Unit)? = null
 
-    fun observeGameCreated(listener: () -> Unit) {
-        gameCreatedListener = listener
-        checkGameCreated()
-    }
-
-    private fun checkGameCreated() {
-        viewModelScope.launch {
-            while (true) {
-                val gameCreated = game
-
-                    if (game != null) {
-                        gameCreatedListener?.invoke()
-                        break
-                    }
-
-                delay(1000) // Aguarda 1 segundo antes de verificar novamente (ajuste conforme necessário)
-            }
+    companion object {
+        fun factory(repository: UserInfoRepository) = viewModelFactory {
+            initializer { WaitingRoomViewModel(repository) }
         }
     }
+
+
+
 }

@@ -20,7 +20,9 @@ import androidx.activity.viewModels
 
 class WaitingRoomActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication }
-    val newGameActivity by viewModels<WaitingRoomViewModel>()
+    val waitingroomvm by viewModels<WaitingRoomViewModel>()
+
+
 
     companion object {
         fun navigateTo(origin: ComponentActivity) {
@@ -35,7 +37,7 @@ class WaitingRoomActivity : ComponentActivity() {
         setContent {
             WaitingRoomScreen(
                 onBackRequested = { finish() },
-                onGameCreated = {  },
+                onGameCreated = { waitingroomvm.createGame(app.createGameService) },
                 onPlayCkick ={ PlayGameActivity.navigateTo(this)}
             )
         }

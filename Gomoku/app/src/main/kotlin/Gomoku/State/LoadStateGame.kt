@@ -4,6 +4,8 @@ import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Game
 import Gomoku.DomainModel.Models.WaitingRoom
 import Gomoku.DomainModel.Users
+import Gomoku.DomainModel.openingrule
+import Gomoku.DomainModel.variantes
 import Gomoku.Rankings.UsersRankOutput
 
 
@@ -33,7 +35,7 @@ object LoadingSaveReplayGame : loadSaveReplayGame()
 data class LoadedSaveReplayGame(val result: Result<List<ReplayGameModel>>) : loadSaveReplayGame()
 
 
-data class ReplayGameModel(val game_id: Int,val player: Int,val  turn: Int,val  line: Int,val  col: String,val  board: String)
+data class ReplayGameModel(val game_id: Int,val player: Int,val variantes: variantes, val openingrule: openingrule, val  turn: Int,val  line: Int,val  col: String,val  board: String)
 
 
 sealed class LoadStateGameWaiting

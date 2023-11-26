@@ -6,6 +6,7 @@ import Gomoku.Main.MainActivity
 import Gomoku.Rankings.RankingActivity
 import Gomoku.ReplayGames.ReplayGameActivity
 import Gomoku.User.UsersViewModel
+import Gomoku.app.DependenciesContainer
 
 
 import Gomoku.app.GomokuApplication
@@ -36,8 +37,12 @@ class LoggedActivity : ComponentActivity() {
             origin.startActivity(intent)
         }
     }
-  private val vm by viewModels<UsersViewModel>()
+ // private val vm by viewModels<UsersViewModel>()
     private val app by lazy { application as GomokuApplication }
+
+    private val vm by viewModels<UsersViewModel> {
+        UsersViewModel.factory((application as DependenciesContainer).userInfoRepository)
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)

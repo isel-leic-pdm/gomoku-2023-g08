@@ -10,6 +10,7 @@ import Gomoku.Services.CreateGameService
 import Gomoku.Services.FetchGameException
 import Gomoku.Services.FetchUser1Exception
 import Gomoku.app.LINK
+import android.util.Log
 
 import com.google.gson.Gson
 import okhttp3.Call
@@ -76,6 +77,7 @@ class CreateGameAct(
         variantes: variantes,
         authToken: String
     ): WaitingRoom {
+        Log.v("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaa", "CreateGameActivity.onCreate() called ${id}, ${openingrule}, ${variantes}}")
         val requestBodyJson = gson.toJson(mapOf("player" to id, "openingRule" to openingrule, "variante" to variantes))
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), requestBodyJson)
         val request = Request.Builder()

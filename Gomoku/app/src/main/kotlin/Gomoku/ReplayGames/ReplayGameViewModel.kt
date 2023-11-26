@@ -3,16 +3,12 @@ package Gomoku.ReplayGames
 
 
 
-import Gomoku.Services.RankingService
 import Gomoku.Services.ReplayGameInterface
 import Gomoku.State.IdleSaveReplayGame
-import Gomoku.State.IdleUserRank
-import Gomoku.State.LoadStateUserRank
 import Gomoku.State.LoadedSaveReplayGame
-import Gomoku.State.LoadedUserRank
 import Gomoku.State.LoadingSaveReplayGame
-import Gomoku.State.LoadingUserRank
 import Gomoku.State.loadSaveReplayGame
+import android.util.Log
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +19,14 @@ import kotlinx.coroutines.launch
 
 
 class ReplayGameViewModel() : ViewModel() {
-    var idGame = 1
+    var idGame by mutableStateOf(0)
+        private set
+    val idGameFlow: Int
+        get() = idGame
+    fun setIdGames(id: Int) {
+        Log.v("SAVEGAME","id-set : "+ id.toString())
+       this.idGame = id
+    }
     var gamedReplay by mutableStateOf<loadSaveReplayGame>(IdleSaveReplayGame)
         private set
    fun getGameSaved(serviceuser: ReplayGameInterface): Unit {
@@ -33,8 +36,9 @@ class ReplayGameViewModel() : ViewModel() {
                 runCatching {
                     serviceuser.fetchReplayGame(idGame)
                 }
-            )
 
+            )
+    Log.v("SAVEGAME","game : "+ gamedReplay.toString())
         }
     }
 
