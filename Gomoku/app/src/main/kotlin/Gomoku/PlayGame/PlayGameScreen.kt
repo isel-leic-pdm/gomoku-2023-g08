@@ -5,6 +5,7 @@ import Gomoku.DomainModel.Cell
 import Gomoku.User.UsersViewModel
 import Gomoku.ui.BoardView
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 fun PlayGameScreen(
     onBackRequested: () -> Unit,
     onPlayRequested: (Cell) -> Unit,
+    viewModel: WaitingRoomViewModel,
 ) {
 
 
@@ -47,6 +49,10 @@ fun PlayGameScreen(
             IconButton(onClick = onBackRequested) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Back")
             }
+            BoardView(vm = viewModel, board =viewModel.currentBoard , onclick = {
+                onPlayRequested(it)
+                Log.v("123456", "play = $it")
+            } )
         }
 
 

@@ -4,10 +4,8 @@ package Gomoku.User
 
 import Gomoku.DataStore.Domain.UserInfo
 import Gomoku.DataStore.Domain.UserInfoRepository
-import Gomoku.DomainModel.Users
 import Gomoku.Main.Idle
 import Gomoku.Main.LoadState
-import Gomoku.Main.getOrNull
 import Gomoku.Main.idle
 import Gomoku.Main.loaded
 import Gomoku.Main.loading
@@ -16,7 +14,6 @@ import Gomoku.State.IdleUser
 import Gomoku.State.LoadStateUser
 import Gomoku.State.LoadedUser
 import Gomoku.State.LoadingUser
-import android.annotation.SuppressLint
 import android.util.Log
 
 import androidx.compose.runtime.getValue
@@ -38,7 +35,10 @@ class UsersViewModel(private val repository: UserInfoRepository) : ViewModel() {
     var username by mutableStateOf("")
     var password by mutableStateOf("")
     var token by mutableStateOf("")
-    var loginSucess = true
+  var _loginSuccess: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val loginSucess: Boolean
+        get() = _loginSuccess.value
+
 
 
 
@@ -109,14 +109,17 @@ class UsersViewModel(private val repository: UserInfoRepository) : ViewModel() {
                 runCatching {
                     Log.v("doNav","before try log ")
                          val res =   usersService.loginuser(username, password)
+
                     Log.v("doNav","after try log "+ res.id)
                     if(res.id == null) {
-                        loginSucess = false
+                        _loginSuccess.value = false
                         Log.v("doNav","after try log "+ loginSucess)
                     }
                     else {
                         rightUserInfo(res.id, res.name, res.password, res.token)
+                        _loginSuccess.value = true
                     }
+
                     res
                 }
             )
@@ -131,7 +134,9 @@ class UsersViewModel(private val repository: UserInfoRepository) : ViewModel() {
                 user = LoadingUser
                 user = LoadedUser(
                     runCatching {
-                     //   usersService.logout(usersService.getUserID(username, password))
+                        val id = repository.getUserInfo()?.id
+                        Log.v("LOGOUT", "logout: " + id)
+                        usersService.logout(id)
                     }
                 )
 

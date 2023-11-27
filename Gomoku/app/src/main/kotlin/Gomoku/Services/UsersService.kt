@@ -11,7 +11,7 @@ interface UsersService {
 
     suspend fun createuser(username: String, password: String, usersService: UsersService): Users
     suspend fun loginuser(username: String,password: String): Users
-    suspend fun logout(id:Int): Unit
+    suspend fun logout(id: Int?): Unit
 }
 interface UsersServiceFake {
 

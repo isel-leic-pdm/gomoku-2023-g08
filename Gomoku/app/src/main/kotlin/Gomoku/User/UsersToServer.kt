@@ -1,7 +1,6 @@
 package Gomoku.User
 
 import Gomoku.DomainModel.Users
-import Gomoku.Rankings.UsersRankOutput
 
 import Gomoku.Services.FetchGameException
 import Gomoku.Services.FetchUser1Exception
@@ -144,7 +143,7 @@ class UsersToServer(
 
     }
 
-    override suspend fun logout(id:Int) {
+    override suspend fun logout(id: Int?): Unit {
         val json = gson.toJson(mapOf("id" to id))
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), json)
 

@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun BoardView(vm: WaitingRoomViewModel, board: Board?, onclick: (Cell) -> Unit,  ) {
     if(board == null){
+        Log.v("BoardView", "BoardView called with board null : $board")
         Column(
             modifier = Modifier
                 .size(boardSize)
@@ -64,6 +65,7 @@ fun BoardView(vm: WaitingRoomViewModel, board: Board?, onclick: (Cell) -> Unit, 
         }
     }
     else{
+        Log.v("BoardView", "BoardView called with board not null : $board")
         Column(
             modifier = Modifier
                 .size(boardSize)
@@ -103,7 +105,7 @@ fun CellView(player: Player?,
                  .background(Color.LightGray),
              onClick: () -> Unit) {
     if (player == null) {
-        Log.v( "CellView", "CellView called with player null : $player")
+     //   Log.v( "CellView", "CellView called with player null : $player")
         Box(modifier = modifier.clickable(onClick = onClick)){
         }
     } else {

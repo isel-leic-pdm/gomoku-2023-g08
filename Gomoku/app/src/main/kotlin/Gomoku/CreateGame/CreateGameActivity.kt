@@ -26,7 +26,7 @@ class CreateGameActivity : ComponentActivity() {
 
      */
     private val vm by viewModels<WaitingRoomViewModel> {
-        WaitingRoomViewModel.factory((application as DependenciesContainer).userInfoRepository)
+        WaitingRoomViewModel.factory((application as DependenciesContainer).userInfoRepository ,)
     }
 
 
@@ -50,7 +50,7 @@ class CreateGameActivity : ComponentActivity() {
                        vm.createGame(app.createGameService)
                                            },
                 onFetch = { WaitingRoomActivity.navigateTo(this) },
-                setID = vm::setIDS,
+
                 setOpeningRule =  vm::SetOpeningRules,
                 setVariante =  vm::SetVariantes
 

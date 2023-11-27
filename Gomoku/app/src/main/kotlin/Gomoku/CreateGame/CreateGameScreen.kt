@@ -28,7 +28,7 @@ fun NewGameScreen(
     onBackRequested: () -> Unit = { },
     onFetchCreateGameRequest: () -> Unit = {   },
     onFetch : () -> Unit = { },
-    setID: (Int) -> Unit = { },
+
     setOpeningRule: (String) -> Unit = { },
     setVariante: (String) -> Unit = { },
 
@@ -50,18 +50,6 @@ fun NewGameScreen(
                 Text("Back")
             }
         }
-        Text("Id")
-        TextField(
-            value = idInput.value,
-            onValueChange = {
-                idInput.value = it
-                setID(idInput.value.toInt())
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
-
         Text("Variante")
         Row(
             modifier = Modifier

@@ -1,9 +1,7 @@
 package Gomoku.State
 
-import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Game
 import Gomoku.DomainModel.Models.WaitingRoom
-import Gomoku.DomainModel.Users
 import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.variantes
 import Gomoku.Rankings.UsersRankOutput
@@ -42,7 +40,7 @@ sealed class LoadStateGameWaiting
 
 object IdleGameWaiting : LoadStateGameWaiting()
 object LoadingGameWait : LoadStateGameWaiting()
-data class LoadedGameWait(val result: Result<WaitingRoom>) : LoadStateGameWaiting()
+data class LoadedGameWait<T>(val result: Result<T>) : LoadStateGameWaiting()
 
 sealed class LoadStateGameCreated
 

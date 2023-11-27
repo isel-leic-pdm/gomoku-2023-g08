@@ -1,6 +1,7 @@
 package Gomoku.PlayGame
 
 import Gomoku.CreateGame.WaitingRoomViewModel
+import Gomoku.app.DependenciesContainer
 
 
 import Gomoku.app.GomokuApplication
@@ -19,7 +20,10 @@ const val TAG1 = "GOMOKU_APP_TAG"
 class PlayGameActivity : ComponentActivity() {
 
     val app by lazy { application as GomokuApplication }
-    val viewModel by viewModels<WaitingRoomViewModel>()
+    private val vm by viewModels<WaitingRoomViewModel> {
+        WaitingRoomViewModel.factory((application as DependenciesContainer).userInfoRepository ,)
+    }
+
 
 
     companion object {
@@ -35,10 +39,12 @@ class PlayGameActivity : ComponentActivity() {
         setContent {
             PlayGameScreen(
                 onBackRequested = { finish() },
-                onPlayRequested = { viewModel.play(app.playGameService, it.rowIndex, it.colIndex, app.usersService) },
-
-
-                )
+                onPlayRequested = {
+                    vm.play(app.playGameService, it.rowIndex, it.colIndex, app.usersService)
+                    Log.v("123456", "play = $it")
+                                  },
+                viewModel = vm
+            )
         }
     }
 

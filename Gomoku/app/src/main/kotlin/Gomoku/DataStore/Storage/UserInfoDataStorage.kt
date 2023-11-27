@@ -2,6 +2,7 @@
 
     import Gomoku.DataStore.Domain.UserInfo
     import Gomoku.DataStore.Domain.UserInfoRepository
+    import Gomoku.DomainModel.Models.WaitingRoom
     import android.util.Log
     import androidx.datastore.core.DataStore
     import androidx.datastore.preferences.core.Preferences
@@ -15,6 +16,7 @@
     private const val USER_NAME = "username"
     private const val USER_PASS = "password"
     private const val USER_TOKEN = "token"
+    private const val CURRENT_GAME = "current_game"
 
 
     class UserInfoDataStore(private val store: DataStore<Preferences>) : UserInfoRepository {
@@ -24,6 +26,7 @@
         val user_name = stringPreferencesKey(USER_NAME)
         private val user_pass = stringPreferencesKey(USER_PASS)
         private val user_token = stringPreferencesKey(USER_TOKEN)
+        private val current_game = stringPreferencesKey(CURRENT_GAME)
         override suspend fun getUserInfo():UserInfo {
 
 
@@ -55,6 +58,30 @@
             }
             Log.v("ENTREI", "editing: = ${store.data.first()}")
 
+        }
+
+        override suspend fun getWaitingRoom(): WaitingRoom? {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun updateWaitingRoom(waitingRoom: WaitingRoom) {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun getCurrentGame(): Int {
+            Log.v("ENTREI", "GetCurrGame = $current_game")
+            val preferences = store.data.first()
+            val storedId = preferences[current_game]?.toInt()
+            Log.v("ENTREI", "updateCurrGame = $storedId")
+
+            return storedId!!
+        }
+
+        override suspend fun updateCurrentGame(id: Int) {
+            Log.v("ENTREI", "updateCuurGame = $id")
+            store.edit { preferences ->
+                preferences[current_game] = id.toString()
+            }
         }
 
     }

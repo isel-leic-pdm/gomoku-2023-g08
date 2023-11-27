@@ -8,6 +8,7 @@ import Gomoku.AfterLogin.LoggedActivity
 import Gomoku.AfterLogin.StartActivity
 
 import Gomoku.DataStore.Domain.UserInfo
+import Gomoku.Landing.LandingActivity
 import Gomoku.Main.Loaded
 import Gomoku.Main.MainScreenViewModel
 import Gomoku.Main.getOrNull
@@ -41,7 +42,8 @@ class LoginActivity : ComponentActivity() {
         lifecycleScope.launch {
             vm.userInfoFlow.collect {
                 if (it is Loaded) {
-                    doNavigation(vm.loginSucess)
+                    Log.v("LOGINSUCESS", "onCreate: " + vm.loginSucess)
+                  doNavigation(vm.loginSucess)
                     vm.resetToIdle()
                 }
 
@@ -55,10 +57,10 @@ class LoginActivity : ComponentActivity() {
                     onBackRequested = { finish() },
                     onLoginFetchToken = {
                         vm.loginuser(app.usersService)
-                        doNavigation(vm.loginSucess)
+                       doNavigation(vm.loginSucess)
                                         },
                     loginFetch = {
-                        doNavigation(vm.loginSucess)
+
                         Log.v("doNAV", "loginFEtch: " + vm.loginSucess)
 
                                     },
@@ -88,7 +90,7 @@ class LoginActivity : ComponentActivity() {
        }
         else {
             Log.v("doNAV", "loginuser: " + vm.loginSucess)
-            StartActivity.navigateTo(this)
+            LandingActivity.navigateTo(this)
               Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
        }
     }

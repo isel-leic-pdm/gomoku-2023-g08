@@ -7,7 +7,7 @@ package Gomoku.DataStore.Domain
  * @property [id] the user's nick name.
  * @property [password] the user's moto, if he has one.
  */
-data class UserInfo(val id: Int?, val username: String?, val password: String?, val token: String? = null) {
+data class UserInfo(val id: Int?, val username: String?, val password: String?, val token: String? = null, val gamePlaying: Int? = null) {
     init {
         require(validateUserInfoParts(id, password))
     }

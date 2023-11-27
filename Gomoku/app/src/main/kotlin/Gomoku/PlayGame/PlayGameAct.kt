@@ -2,12 +2,9 @@ package Gomoku.PlayGame
 
 import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Game
-import Gomoku.DomainModel.Models.WaitingRoom
 import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.variantes
 
-import Gomoku.Services.CreateGameService
-import Gomoku.Services.FetchGameException
 import Gomoku.Services.FetchUser1Exception
 import Gomoku.Services.PlayGameService
 import Gomoku.app.LINK
@@ -34,7 +31,7 @@ class PlayGameAct(
     val gson: Gson
 ) : PlayGameService {
 
-    override suspend fun play(id: Int, line: Int, col: Int, authToken: String, idGame: Int): Game? {
+    override suspend fun play(id: Int?, line: Int, col: Int, authToken: String?, idGame: Int): Game? {
         val json = gson.toJson(mapOf("userId" to id, "l" to line, "c" to col))
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(), json)
 
@@ -47,20 +44,50 @@ class PlayGameAct(
                 .post(requestBody)
                 .build()
         }
+        Log.v("PLAY", "$request")
         return suspendCoroutine {
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
+                    Log.v("PLAY", "onfailure")
                     it.resumeWithException(FetchUser1Exception("Failed to fetch User", e))
                 }
 
                 override fun onResponse(call: Call, response: Response) {
                     val body = response.body
-                    if (!response.isSuccessful || body == null)
+                    if (!response.isSuccessful || body == null) {
+                        Log.v("PLAY", "onresponse-nao deu certo ")
                         it.resumeWithException(FetchUser1Exception("Failed to fetch User: ${response.code}"))
-                    else
+                    }   else {
                         it.resume(gson.fromJson(body.string(), GameDto::class.java).toGame())
-                    Log.v("aaaa", "PlayGameAct.onCreate() called ${it.resume(gson.fromJson(body?.string(), GameDto::class.java).toGame())}")
+                       Log.v("PLAY", "onresponse")
+                    } }
+            })
+        }
+    }
+
+    override suspend fun getGame(id: Int): Game? {
+        val request by lazy {
+            Request.Builder()
+                .url("$LINK/games/$id")
+                .addHeader("accept", "application/json")
+                .build()
+        }
+        return suspendCoroutine {
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.v("PLAY", "onfailure")
+                    it.resumeWithException(FetchUser1Exception("Failed to fetch User", e))
                 }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body
+                    if (!response.isSuccessful || body == null) {
+                        Log.v("PLAY", "onresponse-nao deu certo ")
+                        it.resumeWithException(FetchUser1Exception("Failed to fetch User: ${response.code}"))
+                    }   else {
+                        it.resume(gson.fromJson(body.string(), GameDto::class.java).toGame())
+                        Log.v("PLAY", "onresponse")
+                    } }
             })
         }
     }
