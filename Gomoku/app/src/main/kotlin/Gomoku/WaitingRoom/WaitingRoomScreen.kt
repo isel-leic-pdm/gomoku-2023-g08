@@ -36,6 +36,7 @@ fun WaitingRoomScreen(
 
         Button(onClick ={
            onPlayCkick()
+            onGameCreated()
         }) {
             Text("Play")
         }

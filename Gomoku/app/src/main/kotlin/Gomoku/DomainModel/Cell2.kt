@@ -1,8 +1,7 @@
 package Gomoku.DomainModel
 
 import Row
-import toRow
-import toRowOrNull
+
 import java.lang.IllegalArgumentException
 
 enum class Direction(val difRow: Int, val difCol: Int) {
@@ -27,46 +26,41 @@ class Cell  constructor(val row: Row, val col: Column) {
         return 31 * row.index + col.index
     }
     companion object{
-        val values = List(BOARD_DIM * BOARD_DIM) { Cell(Row.values[it / BOARD_DIM], Column.values[it % BOARD_DIM]) }
+        val valuesNormal = List(15 * 15){ Cell(Row.valuesNormal[it / 15], Column.valuesNormal[it % 15])}
+        val valuesOmok = List(19 * 19){ Cell(Row.valuesOmok[it / 19], Column.valuesOmok[it % 19])}
         val INVALID =  Cell(-1, -1)
-        operator fun invoke(row: Row, col: Column) = run {
-            require(row in Row.values && col in Column.values)
-            values[row.index * BOARD_DIM + col.index]
+     }
+
+}
+fun Cell(row: Int, col: Int): Cell {
+    if (BOARD_DIM == 15) {
+        if (row in Row.valuesNormal.indices && col in Column.valuesNormal.indices) {
+            return Cell.valuesNormal[row * BOARD_DIM + col]
+
+        } else {
+            return Cell.INVALID
+        }
+    } else {
+        if (BOARD_DIM == 19) {
+            if (row in Row.valuesOmok.indices && col in Column.valuesOmok.indices) {
+
+                return Cell.valuesOmok[row * BOARD_DIM + col]
+
+            } else {
+                return Cell.INVALID
+            }
         }
     }
-
-}
-fun Cell(row: Int, col: Int): Cell =
-    if (row in Row.values.indices && col in Column.values.indices) {
-        Cell.values[row * BOARD_DIM + col]
-
-    } else {
-        Cell.INVALID
-    }
-
-
-fun String.toCellOrNull(): Cell? = run{
-    if (this.length == 2){
-        val row = this[0].toString().toIntOrNull()?.toRowOrNull()
-        val col = this[1].toColumnOrNull()
-        if (row != null && col != null) Cell.values[row.index * BOARD_DIM + col.index] else null
-    } else null
+    return Cell.INVALID
 }
 
 
-fun String.toCell(): Cell = run{
-    require(this.length == 2){throw IllegalArgumentException("Cell must have row and column") }
-    val row = this[0].toString().toInt().toRow()
-    val col = this[1].toColumn()
-    Cell.values[row.index * BOARD_DIM + col.index]
-}
+
 
 operator fun Cell.plus(dir: Direction) = Cell(this.rowIndex + dir.difRow, this.colIndex + dir.difCol)
 
-fun Int.toCellOrNull(): Cell? = run{
-    if (this in Cell.values.indices) Cell.values[this] else null
-}
-fun Int.toCell() = checkNotNull(toCellOrNull())
+
+
 operator fun Cell.minus(other: Cell): Direction = Direction.values().first { it.difRow == other.rowIndex - rowIndex && it.difCol == other.colIndex - colIndex }
 
 operator fun Cell.minus(dir: Direction) = Cell(this.rowIndex - dir.difRow, this.colIndex - dir.difCol)

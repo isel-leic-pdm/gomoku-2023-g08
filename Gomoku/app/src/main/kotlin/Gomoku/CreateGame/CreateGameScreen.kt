@@ -27,13 +27,9 @@ import androidx.compose.ui.unit.dp
 fun NewGameScreen(
     onBackRequested: () -> Unit = { },
     onFetchCreateGameRequest: () -> Unit = {   },
-    onFetch : () -> Unit = { },
-
     setOpeningRule: (String) -> Unit = { },
     setVariante: (String) -> Unit = { },
-
 ) {
-    val idInput = remember { mutableStateOf("") }
     val selectedVariante = remember { mutableStateOf("") }
     val selectedOpeningRule = remember { mutableStateOf("") }
 
@@ -115,7 +111,7 @@ fun NewGameScreen(
         Button(
             onClick = {
                 onFetchCreateGameRequest()
-                onFetch()
+
             },
             modifier = Modifier.padding(16.dp)
         ) {

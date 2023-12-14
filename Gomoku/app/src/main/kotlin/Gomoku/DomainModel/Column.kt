@@ -27,19 +27,14 @@ class Column private constructor(val char: Char) {
             }
         }
 
-        val values = List(getColumnSize(variantes.OMOK)) { Column('A' + it) }
+        val valuesNormal = List(15) { Column('A' + it) }
+        val valuesOmok = List(19) { Column('A' + it) }
 
-        operator fun invoke(char: Char) = run {
-            require(char in 'A'..'A' + getColumnSize(variantes.OMOK)) { throw IllegalArgumentException("Invalid column $char") }
-            values[(char - 'A')]
-        }
+
+
     }
 }
 
-fun Char.toColumnOrNull(): Column? = if (this in 'A'..'H') Column.values[this - 'A'] else null
-fun Char.toColumn(): Column = run {
-   require(this in 'A'..'T') { throw Exception() }
-    Column.values[this - 'A']
-}
+
 
 

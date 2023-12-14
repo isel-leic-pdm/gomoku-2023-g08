@@ -3,9 +3,9 @@ package Gomoku.DomainModel
 import Row
 var BOARD_DIM = 15
 
+data class BoardShow(val moves: Map<Cell, Player>)
 
 data class Board(val moves: Map<Cell, Player>, var turn: Player?, val winner: Player? = null) {
-
     fun get(l: Row, c: Column) = moves[Cell(l, c)] ?: Player.EMPTY
     var lastMove: Pair<Cell, Player>? = null
 
@@ -59,125 +59,6 @@ data class Board(val moves: Map<Cell, Player>, var turn: Player?, val winner: Pl
             }
             append('\n')
         }
-
-    }
-    fun isWin(moves: Moves): Boolean {
-        val lastMove = this.lastMove ?: return false
-        val (lastCell, player) = lastMove
-        val directions = listOf(
-            Pair(1, 0),  // horizontal
-            Pair(0, 1),  // vertical
-            Pair(1, 1),  // diagonal (top-left to bottom-right)
-            Pair(1, -1)  // diagonal (top-right to bottom-left)
-        )
-
-        for ((dx, dy) in directions) {
-            var count = 1
-
-            // Check one direction
-            for (i in 1 until 5) {
-                val row = lastCell.rowIndex + i * dx
-                val col = lastCell.colIndex + i * dy
-
-                if (row < 0 || col < 0 || row >= BOARD_DIM || col >= BOARD_DIM) {
-                    break
-                }
-
-                val cell = Cell(row, col)
-
-                if (moves[cell] == player) {
-                    count++
-                    if (count == 5) {
-                        return true
-                    }
-                } else {
-                    break
-                }
-            }
-
-            // Check the opposite direction
-            for (i in 1 until 5) {
-                val row = lastCell.rowIndex - i * dx
-                val col = lastCell.colIndex - i * dy
-
-                if (row < 0 || col < 0 || row >= BOARD_DIM || col >= BOARD_DIM) {
-                    break
-                }
-
-                val cell = Cell(row, col)
-
-                if (moves[cell] == player) {
-                    count++
-                    if (count == 5) {
-                        return true
-                    }
-                } else {
-                    break
-                }
-            }
-        }
-
-        return false
-
-    }
-
-    fun isWinOMOK(moves: Moves): Boolean {
-        val lastMove = this.lastMove ?: return false
-        val (lastCell, player) = lastMove
-        val directions = listOf(
-            Pair(1, 0),  // horizontal
-            Pair(0, 1),  // vertical
-            Pair(1, 1),  // diagonal (top-left to bottom-right)
-            Pair(1, -1)  // diagonal (top-right to bottom-left)
-        )
-
-        for ((dx, dy) in directions) {
-            var count = 1
-
-            // Check one direction
-            for (i in 1 until 3) {
-                val row = lastCell.rowIndex + i * dx
-                val col = lastCell.colIndex + i * dy
-
-                if (row < 0 || col < 0 || row >= BOARD_DIM || col >= BOARD_DIM) {
-                    break
-                }
-
-                val cell = Cell(row, col)
-
-                if (moves[cell] == player) {
-                    count++
-                    if (count == 3) {
-                        return true
-                    }
-                } else {
-                    break
-                }
-            }
-
-            // Check the opposite direction
-            for (i in 1 until 3) {
-                val row = lastCell.rowIndex - i * dx
-                val col = lastCell.colIndex - i * dy
-
-                if (row < 0 || col < 0 || row >= BOARD_DIM || col >= BOARD_DIM) {
-                    break
-                }
-
-                val cell = Cell(row, col)
-
-                if (moves[cell] == player) {
-                    count++
-                    if (count == 3) {
-                        return true
-                    }
-                } else {
-                    break
-                }
-            }
-        }
-
-        return false
 
     }
 

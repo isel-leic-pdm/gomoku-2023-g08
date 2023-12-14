@@ -7,6 +7,8 @@ import Gomoku.DomainModel.Cell
 import Gomoku.DomainModel.Player
 import Gomoku.AfterLogin.boardSize
 import Gomoku.AfterLogin.cellSize
+import Gomoku.DomainModel.BoardShow
+import Gomoku.DomainModel.variantes
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,10 +38,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 
-
+/*
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BoardView(vm: WaitingRoomViewModel, board: Board?, onclick: (Cell) -> Unit,  ) {
+fun BoardView(vm: WaitingRoomViewModel, board: Board, onclick: (Cell) -> Unit,  ) {
     if(board == null){
         Log.v("BoardView", "BoardView called with board null : $board")
         Column(
@@ -93,10 +95,106 @@ fun BoardView(vm: WaitingRoomViewModel, board: Board?, onclick: (Cell) -> Unit, 
                 }
             }
         }
-        if(board.isWin(moves =board.moves )) ShowWinner(board)
+
 
     }
 }
+
+
+*/
+@Composable
+fun BoardView(board: Board?, onclick: (Cell) -> Unit, variante : variantes?) {
+
+    if (board == null) {
+        Log.v("BoardView", "BoardView called with board null : $board")
+        Column(
+            modifier = Modifier
+                .size(boardSize)
+                .background(Color.Black)
+                .border(5.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            repeat(BOARD_DIM) { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    repeat(BOARD_DIM) { col ->
+                        val pos = Cell(row, col)
+                        CellView(
+                            player = null,
+                            onClick = { onclick(pos) },
+                        )
+                    }
+                }
+            }
+        }
+    } else {
+        Log.v("BoardView", "BoardView called with board not null : $board")
+        Column(
+            modifier = Modifier
+                .size(boardSize)
+                .background(Color.Black)
+                .border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            repeat(BOARD_DIM) { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    repeat(BOARD_DIM) { col ->
+                        val pos = Cell(row, col)
+                        if (board.moves[pos] != null) {
+                            CellView(player = board.moves[pos]) { onclick(pos) }
+
+                        } else {
+                            CellView(
+                                player = null,
+                                onClick = { onclick(pos) },
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+   /*
+    var dim = BOARD_DIM
+    if(variante == variantes.OMOK){
+        dim = 19
+    }
+
+    Log.v("BoardView", "BoardView called with board not null : $board")
+    Column(
+        modifier = Modifier
+            .size(boardSize)
+            .background(Color.Black).border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
+        verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        repeat(dim) { row ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                repeat(dim) { col ->
+                    val pos = Cell(row, col)
+                    if (board.moves[pos] != null) {
+                        CellView(player = board.moves[pos]) { onclick(pos) }
+                    } else {
+                        CellView(
+                            player = null,
+                            onClick = { onclick(pos) },
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+    */
 
 @Composable
 fun CellView(player: Player?,
@@ -105,7 +203,7 @@ fun CellView(player: Player?,
                  .background(Color.LightGray),
              onClick: () -> Unit) {
     if (player == null) {
-     //   Log.v( "CellView", "CellView called with player null : $player")
+        //   Log.v( "CellView", "CellView called with player null : $player")
         Box(modifier = modifier.clickable(onClick = onClick)){
         }
     } else {
@@ -146,10 +244,10 @@ private fun ShowWinner(board: Board) {
 }
 @Composable
 fun chooseColor(winner: Player): Color {
-   if(winner == Player.PLAYER_X)
-       return Color.Red
+    if(winner == Player.PLAYER_X)
+        return Color.Red
     else
-       return Color.Yellow
+        return Color.Yellow
 }
 
 

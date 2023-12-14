@@ -37,7 +37,7 @@ class WaitingRoomActivity : ComponentActivity() {
         setContent {
             WaitingRoomScreen(
                 onBackRequested = { finish() },
-                onGameCreated = { waitingroomvm.createGame(app.createGameService) },
+                onGameCreated = { PlayGameActivity.navigateTo(this) },
                 onPlayCkick ={ PlayGameActivity.navigateTo(this)}
             )
         }

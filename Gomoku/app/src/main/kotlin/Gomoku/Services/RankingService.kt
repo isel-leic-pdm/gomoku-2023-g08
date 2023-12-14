@@ -16,9 +16,10 @@ interface CreateGameService {
 
 
     suspend fun fetchCreateGame(id: Int?, openingrule: openingrule?, variantes: variantes, authToken: String): WaitingRoom
-   suspend fun getGame(playerA: Int, playerB: Int): Game?
+   suspend fun getGame(gameID: Int?): Game?
    suspend fun fetchWaitingRoom(idplayer: Int?): WaitingRoom?
-   suspend fun searchGame(id: Int?): Game?
+   suspend fun getGameString(id: Int): Game?
+
 
 }
 interface PlayGameService {

@@ -74,11 +74,7 @@ val nameInput = remember { mutableStateOf("") }
         Button(
             onClick = {
                 onLoginFetchToken()
-                loginFetch()
-
-
-
-            },
+                      },
             modifier = Modifier.padding(16.dp).testTag(LoginButtonTestTag)
         ) {
             Text("Login")

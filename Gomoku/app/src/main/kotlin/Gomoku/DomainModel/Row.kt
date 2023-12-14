@@ -63,19 +63,10 @@ class Row private constructor(val n: Int) {
             }
         }
 
-        val values = List(getBoardSize(variantes.OMOK)) { Row(it + 1) }
+        val valuesNormal = List(15) { Row(it + 1) }
+        val valuesOmok = List(19) { Row(it + 1) }
 
-        operator fun invoke(n: Int) = run {
-            require(n in 1..getBoardSize(variantes.OMOK)) { throw IllegalArgumentException("Invalid row $n") }
-            values[n - 1]
-        }
     }
-}
-
-fun Int.toRowOrNull(): Row? = if (this in 1..Row.getBoardSize(variantes.OMOK)) Row.values[this - 1] else null
-fun Int.toRow(): Row = run {
-    require(this in 1..Row.getBoardSize(variantes.OMOK)) { throw Exception() }
-    Row.values[this - 1]
 }
 
 

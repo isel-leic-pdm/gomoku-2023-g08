@@ -2,8 +2,10 @@ package Gomoku.User
 
 
 
+import Gomoku.AfterLogin.LoggedActivity
 import Gomoku.DataStore.Domain.UserInfo
 import Gomoku.DataStore.Domain.UserInfoRepository
+import Gomoku.DomainModel.Users
 import Gomoku.Main.Idle
 import Gomoku.Main.LoadState
 import Gomoku.Main.idle
@@ -14,6 +16,8 @@ import Gomoku.State.IdleUser
 import Gomoku.State.LoadStateUser
 import Gomoku.State.LoadedUser
 import Gomoku.State.LoadingUser
+import Gomoku.State.UserFailure
+import Gomoku.State.UserSucess
 import android.util.Log
 
 import androidx.compose.runtime.getValue
@@ -29,15 +33,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class UsersViewModel(private val repository: UserInfoRepository) : ViewModel() {
-    var user by mutableStateOf<LoadStateUser>(IdleUser)
-        private set
+   var _user : MutableStateFlow<LoadStateUser> = MutableStateFlow(IdleUser)
+    var user: LoadStateUser
+        get() = _user.value
+        set(value) {
+            _user.value = value
+        }
+
     var id by mutableStateOf(0)
     var username by mutableStateOf("")
     var password by mutableStateOf("")
     var token by mutableStateOf("")
-  var _loginSuccess: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val loginSucess: Boolean
-        get() = _loginSuccess.value
+
 
 
 
@@ -102,34 +109,32 @@ class UsersViewModel(private val repository: UserInfoRepository) : ViewModel() {
 }
 
     fun loginuser(usersService: UsersService) {
-        Log.v("USERS", username + password +"aqui")
+        Log.v("USERS", "$username $password aqui")
         viewModelScope.launch {
             user = LoadingUser
-            user = LoadedUser(
-                runCatching {
-                    Log.v("doNav","before try log ")
-                         val res =   usersService.loginuser(username, password)
+            try {
+                val res = usersService.loginuser(username, password)
+                Log.v("doNav", "after try log ${res.id}")
+                if (res.id == null) {
+                    user = UserFailure
+                    return@launch
 
-                    Log.v("doNav","after try log "+ res.id)
-                    if(res.id == null) {
-                        _loginSuccess.value = false
-                        Log.v("doNav","after try log "+ loginSucess)
-                    }
-                    else {
-                        rightUserInfo(res.id, res.name, res.password, res.token)
-                        _loginSuccess.value = true
-                    }
 
-                    res
+                } else {
+                    Log.v("LOGIN", "user = userSucess")
+                    user= UserSucess
+                    rightUserInfo(res.id, res.name, res.password, res.token)
+                    return@launch
                 }
-            )
-
-
+            } catch (e: Exception) {
+                // Tratar exceções, se necessário
+                user = UserFailure
+                Log.e("doNav", "Exception: ${e.message}")
+            }
         }
-
     }
 
-        fun logout(usersService: UsersService): Unit {
+fun logout(usersService: UsersService): Unit {
             viewModelScope.launch {
                 user = LoadingUser
                 user = LoadedUser(

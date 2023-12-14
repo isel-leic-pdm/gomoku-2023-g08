@@ -1,6 +1,8 @@
 package Gomoku.PlayGame
 
 import Gomoku.CreateGame.WaitingRoomViewModel
+import Gomoku.State.LoadedGameCreated
+import Gomoku.WaitingRoom.WaitingRoomActivity
 import Gomoku.app.DependenciesContainer
 
 
@@ -13,6 +15,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 
 const val TAG1 = "GOMOKU_APP_TAG"
@@ -32,7 +36,7 @@ class PlayGameActivity : ComponentActivity() {
             origin.startActivity(intent)
         }
     }
-
+/*
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +52,32 @@ class PlayGameActivity : ComponentActivity() {
         }
     }
 
+ */
+
+
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    lifecycleScope.launch {
+        vm._game.collect { game ->
+            if (game is LoadedGameCreated) {
+                PlayGameActivity.navigateTo(this@PlayGameActivity)
+            }
+            setContent() {
+                PlayGameScreen(
+                    onBackRequested = { finish() },
+                    onPlayRequested = {
+                        vm.play(app.playGameService, it.rowIndex, it.colIndex, app.usersService)
+                        Log.v("123456", "play = $it")
+                    },
+                    viewModel = vm
+                )
+
+
+            }
+        }
+    }
+}
     override fun onStart() {
         super.onStart()
         Log.v(TAG1, "MainActivity.onStart() called")

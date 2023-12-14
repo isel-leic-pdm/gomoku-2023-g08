@@ -125,6 +125,7 @@ class UsersToServer(
                     val body = response.body
                     if (!response.isSuccessful || body == null) {
                    continuation.resume(Users(null,"","","",  url = URL("$LINK/users/login")))
+
                         Log.v("USERNAME","erro no Login" + response.code )
                     }  else {
                         val jsonString = body.string()

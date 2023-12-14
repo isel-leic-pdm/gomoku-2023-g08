@@ -30,9 +30,6 @@ fun PlayGameScreen(
     onPlayRequested: (Cell) -> Unit,
     viewModel: WaitingRoomViewModel,
 ) {
-
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,10 +46,8 @@ fun PlayGameScreen(
             IconButton(onClick = onBackRequested) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Back")
             }
-            BoardView(vm = viewModel, board =viewModel.currentBoard , onclick = {
-                onPlayRequested(it)
-                Log.v("123456", "play = $it")
-            } )
+         BoardView(board = viewModel.currentGame?.result?.getOrNull()?.board, variante =viewModel.variante, onclick = onPlayRequested)
+
         }
 
 

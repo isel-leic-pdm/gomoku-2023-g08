@@ -1,16 +1,15 @@
 package Gomoku.ReplayGames
 
 
+
 import Gomoku.DomainModel.BOARD_DIM
-import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Cell
-import Gomoku.DomainModel.Moves
+
 import Gomoku.DomainModel.Player
 import Gomoku.DomainModel.moves
 import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.variantes
 import Gomoku.Services.FetchGameException
-import Gomoku.Services.RankingService
 import Gomoku.Services.ReplayGameInterface
 import Gomoku.State.ReplayGameModel
 import Gomoku.app.LINK
@@ -23,7 +22,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
 
-import java.net.URL
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -109,6 +107,7 @@ class ReplayGameAct(
             Log.v("EIU", "properties : $properties")
 
             properties?.forEach { property ->
+                Log.v("EIU", "property : $property")
                 val game_id = property["game_id"]
                 val player = property["player"]
                 val variantes = property["variantes"]
@@ -119,6 +118,7 @@ class ReplayGameAct(
                 val board = property["board"]
                 Log.v("EIU-board", "board : $board")
 
+
                 if (game_id != null && player != null && turn != null && line != null && col != null) {
                     val replayGameModel = ReplayGameModel(
                         (game_id as Double).toInt(),
@@ -128,7 +128,7 @@ class ReplayGameAct(
                         (turn as Double).toInt(),
                         (line as Double).toInt(),
                         col.toString(),
-                        board.toString()
+                        transformBoard(board, variantes)
                     )
                     Log.v("EIU-BoardToString", "ReplayGameModel : $replayGameModel")
                     listToReturn.add(replayGameModel)
@@ -139,20 +139,37 @@ class ReplayGameAct(
         return listToReturn
     }
 
-    fun boardToString(board: List<List<Char>>): String {
-        val stringBuilder = StringBuilder()
-
-        for (row in board) {
-            for (char in row) {
-                stringBuilder.append(char)
-            }
-            stringBuilder.append("\n") // Adiciona uma quebra de linha após cada linha do tabuleiro
-        }
-
-        return stringBuilder.toString()
+    fun transformBoard(board: Any?, variante: variantes?): String {
+        val boardMoves = board as Map<Cell, Player>
+        Log.v("EIU-BoardToString", "boardMoves : $boardMoves")
+        val bts = BoardToString(variante, boardMoves)
+        Log.v("EIU-BoardToString", "bts : $bts")
+        return BoardToString(variante, boardMoves)
     }
 
+
+    fun BoardToString(variante: variantes? = null, moves: Map<Cell,Player>): String = buildString {
+        if (variante == variantes.NORMAL) BOARD_DIM = 15 else BOARD_DIM = 19
+        for (row in 0 until BOARD_DIM) {
+            for (col in 0 until BOARD_DIM) {
+                val cell = Cell(row, col)
+                println(cell)
+                val player = moves[cell] ?: Player.EMPTY
+                println("player: $player")
+                append(player.toChar())
+
+                // Adicione um espaço ou quebra de linha para melhorar a legibilidade
+
+            }
+            append('\n')
+        }
+
+    }
 }
+
+
+
+
 
 /*
 fun Board.BoardToString(variante: variantes? = null): String = buildString {

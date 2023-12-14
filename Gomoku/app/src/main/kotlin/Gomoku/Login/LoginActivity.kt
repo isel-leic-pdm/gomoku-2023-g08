@@ -5,13 +5,15 @@ package Gomoku.Login
 
 
 import Gomoku.AfterLogin.LoggedActivity
-import Gomoku.AfterLogin.StartActivity
 
-import Gomoku.DataStore.Domain.UserInfo
 import Gomoku.Landing.LandingActivity
+import Gomoku.Main.Idle
 import Gomoku.Main.Loaded
-import Gomoku.Main.MainScreenViewModel
-import Gomoku.Main.getOrNull
+import Gomoku.State.IdleUser
+import Gomoku.State.LoadedUser
+import Gomoku.State.LoadingUser
+import Gomoku.State.UserFailure
+import Gomoku.State.UserSucess
 import Gomoku.User.UsersViewModel
 import Gomoku.app.DependenciesContainer
 import Gomoku.app.GomokuApplication
@@ -38,38 +40,93 @@ class LoginActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v(TAG, "UserActivity.onCreate() called")
         lifecycleScope.launch {
-            vm.userInfoFlow.collect {
-                if (it is Loaded) {
-                    Log.v("LOGINSUCESS", "onCreate: " + vm.loginSucess)
-                  doNavigation(vm.loginSucess)
-                    vm.resetToIdle()
+            vm._user.collect { userState ->
+                if (userState is UserSucess) {
+                    Log.v("LOGIN", "LOGIN SUCCESS: $userState")
+                    LoggedActivity.navigateTo(this@LoginActivity)
+                } else {
+                    if (userState is UserFailure) {
+                        Log.v("LOGIN", "LOGIN FAILED: $userState")
+                        // Lógica para lidar com a falha no login
+                        Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT)
+                            .show()
+                        LoginActivity.navigateTo(this@LoginActivity)
+                    }
                 }
 
-
-
             }
+
         }
-            setContent {
-                Log.v("USERS", "AboutActivity.onCreate() called")
-                LoginScreen(
-                    onBackRequested = { finish() },
-                    onLoginFetchToken = {
-                        vm.loginuser(app.usersService)
-                       doNavigation(vm.loginSucess)
-                                        },
-                    loginFetch = {
-
-                        Log.v("doNAV", "loginFEtch: " + vm.loginSucess)
-
-                                    },
-                    setUsername = vm::SetUser,
-                    setPassword = vm::setPass,
-                )
+        setContent() {
+            LoginScreen(
+                onBackRequested = { finish() },
+                onLoginFetchToken = {
+                    vm.loginuser(app.usersService)
+                },
+                setUsername = vm::SetUser,
+                setPassword = vm::setPass,
+            )
+            vm._user.let {
+                if(it.value is UserSucess){
+                    Log.v("LOGIN", "LOGIN SUCCESS: $it")
+                    LoggedActivity.navigateTo(this@LoginActivity)
+                }
+                else{
+                    if(it.value is UserFailure) {
+                        Log.v("LOGIN", "LOGIN FAILED: $it")
+                        // Lógica para lidar com a falha no login
+                        Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT)
+                            .show()
+                        LoginActivity.navigateTo(this@LoginActivity)
+                    }
+                }
             }
-        }
 
+        }
+    }
+
+
+    /**
+    override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    Log.v(TAG, "UserActivity.onCreate() called")
+
+    lifecycleScope.launchWhenStarted {
+    vm.user.collect { userState ->
+    when (userState) {
+    is LoadingUser -> {
+    Log.v("LOGIN", "LOGIN LOADING: $userState")
+    // Lógica para lidar com o estado de carregamento
+    }
+    is UserSuccess -> {
+    Log.v("LOGIN", "LOGIN SUCCESS: $userState")
+    // Lógica para lidar com o sucesso do login
+    LoggedActivity.navigateTo(this@YourActivity)
+    }
+    is UserFailure -> {
+    Log.v("LOGIN", "LOGIN FAILED: $userState")
+    // Lógica para lidar com a falha no login
+    Toast.makeText(this@YourActivity, "Login Failed", Toast.LENGTH_SHORT).show()
+    LoginActivity.navigateTo(this@YourActivity)
+    }
+    }
+    }
+    }
+
+    setContent {
+    LoginScreen(
+    onBackRequested = { finish() },
+    onLoginFetchToken = {
+    vm.loginUser(app.usersService)
+    },
+    setUsername = vm::setUser,
+    setPassword = vm::setPass,
+    )
+    }
+    }
+
+     */
 
     override fun onStart() {
         super.onStart()
@@ -82,7 +139,7 @@ class LoginActivity : ComponentActivity() {
     }
 
 
-
+/*
     fun doNavigation(login: Boolean) {
         Log.v("doNAV", "loginuser inside nav: " + login)
        if(login){
@@ -94,7 +151,7 @@ class LoginActivity : ComponentActivity() {
               Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
        }
     }
-
+*/
     private fun showMessage(message: String) {
         // Exemplo: exibir uma mensagem usando Toast
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

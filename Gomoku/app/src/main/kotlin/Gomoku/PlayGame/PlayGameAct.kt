@@ -1,6 +1,7 @@
 package Gomoku.PlayGame
 
 import Gomoku.DomainModel.Board
+import Gomoku.DomainModel.BoardShow
 import Gomoku.DomainModel.Game
 import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.variantes
@@ -103,7 +104,7 @@ class PlayGameAct(
         val winner: Int,
         val turn: Int,
     ) {
-        fun toGame() = Game(id= 12,board, playerA, playerB, variante, openingRule, winner, turn, url = URL("https://localhost:8080/games/matchMaking"))
+        fun toGame() = Game(id, board, playerA, playerB, variante, openingRule, winner, turn)
     }
 }
 
