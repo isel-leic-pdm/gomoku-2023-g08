@@ -4,6 +4,8 @@ package Gomoku.app
 import android.app.Application
 
 import Gomoku.CreateGame.CreateGameAct
+import Gomoku.DataStore.Domain.GameInfoDataStorage
+import Gomoku.DataStore.Domain.GameInfoRepository
 
 import Gomoku.DataStore.Domain.UserInfoRepository
 import Gomoku.DataStore.Storage.UserInfoDataStore
@@ -12,6 +14,7 @@ import Gomoku.User.GamesAct
 import Gomoku.User.UsersToServer
 import Gomoku.Rankings.RankingAct
 import Gomoku.ReplayGames.ReplayGameAct
+import Gomoku.Services.CreateGameService
 import Gomoku.Services.GamesService
 import Gomoku.Services.PlayGameService
 import Gomoku.Services.UsersService
@@ -24,24 +27,29 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 
 import okhttp3.OkHttpClient
-const val LINK = "https://7c87-194-210-186-209.ngrok.io"
+const val LINK = "https://8773-87-196-72-136.ngrok-free.app"
 
 interface DependenciesContainer {
     val userInfoRepository: UserInfoRepository
+    val gameService: CreateGameService
+    val playGameService: PlayGameService
 }
 
-class GomokuApplication : Application(), DependenciesContainer {
+class GomokuApplication() : Application(), DependenciesContainer {
 
     private val dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_info")
-
-
     override val userInfoRepository: UserInfoRepository
         get() = UserInfoDataStore(dataStore)
+
+    override val gameService: CreateGameService
+        get() = CreateGameAct(httpClient, gson)
+    override val playGameService: PlayGameService
+        get() = PlayGameAct(httpClient, gson)
+
 
     val httpClient: OkHttpClient = OkHttpClient.Builder().build()
     val gson: Gson = Gson()
  //   val gamesService: GamesService = GamesAct(httpClient, gson)
-    val playGameService: PlayGameService = PlayGameAct(httpClient, gson)
     val usersService: UsersService = UsersToServer(httpClient, gson, )
     val rankingService= RankingAct(httpClient, gson)
     val createGameService= CreateGameAct(httpClient, gson)

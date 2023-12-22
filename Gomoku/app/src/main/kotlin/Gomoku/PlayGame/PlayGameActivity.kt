@@ -2,19 +2,17 @@ package Gomoku.PlayGame
 
 import Gomoku.CreateGame.WaitingRoomViewModel
 import Gomoku.State.LoadedGameCreated
-import Gomoku.WaitingRoom.WaitingRoomActivity
 import Gomoku.app.DependenciesContainer
 
 
 import Gomoku.app.GomokuApplication
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
@@ -25,8 +23,9 @@ class PlayGameActivity : ComponentActivity() {
 
     val app by lazy { application as GomokuApplication }
     private val vm by viewModels<WaitingRoomViewModel> {
-        WaitingRoomViewModel.factory((application as DependenciesContainer).userInfoRepository ,)
+        WaitingRoomViewModel.factory((application as DependenciesContainer).userInfoRepository,(application as DependenciesContainer).gameService, (application as DependenciesContainer).playGameService )
     }
+
 
 
 
@@ -36,48 +35,22 @@ class PlayGameActivity : ComponentActivity() {
             origin.startActivity(intent)
         }
     }
-/*
-    @RequiresApi(Build.VERSION_CODES.O)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+        Log.v("ID", "id = ${vm.id}")
+        vm.getGame()
+        setContent() {
             PlayGameScreen(
                 onBackRequested = { finish() },
-                onPlayRequested = {
-                    vm.play(app.playGameService, it.rowIndex, it.colIndex, app.usersService)
-                    Log.v("123456", "play = $it")
-                                  },
-                viewModel = vm
+                onPlayRequested =
+                  //  vm.play(it.rowIndex, it.colIndex)
+                    vm::play,
+                game = vm.gameMT.value
             )
         }
     }
-
- */
-
-
-
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    lifecycleScope.launch {
-        vm._game.collect { game ->
-            if (game is LoadedGameCreated) {
-                PlayGameActivity.navigateTo(this@PlayGameActivity)
-            }
-            setContent() {
-                PlayGameScreen(
-                    onBackRequested = { finish() },
-                    onPlayRequested = {
-                        vm.play(app.playGameService, it.rowIndex, it.colIndex, app.usersService)
-                        Log.v("123456", "play = $it")
-                    },
-                    viewModel = vm
-                )
-
-
-            }
-        }
-    }
-}
     override fun onStart() {
         super.onStart()
         Log.v(TAG1, "MainActivity.onStart() called")

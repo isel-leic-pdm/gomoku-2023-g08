@@ -1,7 +1,7 @@
 package Gomoku.User
 
 import Gomoku.DomainModel.Board
-import Gomoku.DomainModel.BoardShow
+
 import Gomoku.DomainModel.Game
 import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.variantes

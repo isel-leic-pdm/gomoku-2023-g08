@@ -4,16 +4,21 @@ package Gomoku.ReplayGames
 
 import Gomoku.DomainModel.BOARD_DIM
 import Gomoku.DomainModel.Cell
+import Gomoku.DomainModel.Column
 
 import Gomoku.DomainModel.Player
 import Gomoku.DomainModel.moves
 import Gomoku.DomainModel.openingrule
+import Gomoku.DomainModel.toColumn
+import Gomoku.DomainModel.toRow
 import Gomoku.DomainModel.variantes
 import Gomoku.Services.FetchGameException
 import Gomoku.Services.ReplayGameInterface
 import Gomoku.State.ReplayGameModel
 import Gomoku.app.LINK
+import Row
 import android.util.Log
+import androidx.core.graphics.toColor
 
 
 import com.google.gson.Gson
@@ -152,7 +157,7 @@ class ReplayGameAct(
         if (variante == variantes.NORMAL) BOARD_DIM = 15 else BOARD_DIM = 19
         for (row in 0 until BOARD_DIM) {
             for (col in 0 until BOARD_DIM) {
-                val cell = Cell(row, col)
+                val cell = Cell(row.toRow(), col.toColumn())
                 println(cell)
                 val player = moves[cell] ?: Player.EMPTY
                 println("player: $player")
@@ -166,8 +171,6 @@ class ReplayGameAct(
 
     }
 }
-
-
 
 
 

@@ -5,6 +5,7 @@ import Gomoku.DomainModel.Models.WaitingRoom
 interface UserInfoRepository {
 
     suspend fun getUserInfo(): UserInfo?
+    suspend fun clearCurrentGame()
     suspend fun updateUserInfo(userInfo: UserInfo)
 
     suspend fun getWaitingRoom(): WaitingRoom?

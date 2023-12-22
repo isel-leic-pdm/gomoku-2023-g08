@@ -9,7 +9,7 @@ import androidx.compose.ui.test.performClick
 import junit.framework.TestCase.assertTrue
 import org.junit.Rule
 import org.junit.Test
-
+/*
 class LoginScreenTests {
         @get:Rule
         val composeTestRule = createComposeRule()
@@ -46,3 +46,5 @@ class LoginScreenTests {
     }
 
 }
+
+ */

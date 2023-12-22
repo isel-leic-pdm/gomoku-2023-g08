@@ -1,6 +1,8 @@
 package Gomoku.CreateGame
 
 
+import Gomoku.DataStore.Domain.GameInfoDataStorage
+import Gomoku.DataStore.Storage.UserInfoDataStore
 import Gomoku.DomainModel.BOARD_DIM
 import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Cell
@@ -18,6 +20,7 @@ import Gomoku.Services.FetchGameException
 import Gomoku.Services.FetchUser1Exception
 import Gomoku.app.LINK
 import android.util.Log
+import com.google.android.material.color.utilities.Variant
 
 import com.google.gson.Gson
 import okhttp3.Call
@@ -36,7 +39,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class CreateGameAct(
     val client: OkHttpClient,
-    val gson: Gson
+    val gson: Gson,
 ) : CreateGameService {
 
     override suspend fun fetchWaitingRoom(idplayer: Int?): WaitingRoom? {
@@ -72,7 +75,32 @@ class CreateGameAct(
 
 
     override suspend fun getGameString(id: Int): Game? {
-        TODO()
+        val request = Request.Builder().url("$LINK/games/get/$id")
+            .addHeader("accept", "application/vnd.siren+json")
+            .get()
+            .build()
+        return suspendCoroutine { continuation ->
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    continuation.resumeWithException(FetchUser1Exception("Failed to create", e))
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body
+                    if (!response.isSuccessful || body == null) {
+                        Log.v("GETGAME", "getGame erro  = ${response.code}")
+                        continuation.resumeWithException(FetchGameException("Failed to try to create a game : ${response.code}"))
+                    } else {
+                        val jsonString = body.string()
+                        val jsonObject = gson.fromJson(jsonString, Map::class.java)
+                        val values = transformGameString(jsonObject)
+                        Log.v("GETGAME", "getGame = $values")
+                        continuation.resume(values)
+
+                    }
+                }
+            })
+        }
     }
 
 
@@ -111,6 +139,7 @@ class CreateGameAct(
     }
 
     override suspend fun getGame(gameID: Int?): Game? {
+
         val request = Request.Builder().url("$LINK/games/get/$gameID")
             .addHeader("accept", "application/vnd.siren+json")
             .get()
@@ -147,8 +176,26 @@ class CreateGameAct(
             val finalBoard = transformBoard(board)
             val variante = properties?.get("variante") as? String
             val openingRule = properties?.get("openingRule") as? String
-            val playera = properties?.get("playera") as? Double
-            val playerb = properties?.get("playerb") as? Double
+            val playera = properties?.get("player1") as? Double
+            val playerb = properties?.get("player2") as? Double
+            val winner = properties?.get("winner") as? Double
+            val turn = properties?.get("turn") as? Double
+            if (id != null || finalBoard != null || playera != null || playerb != null || winner != null || turn != null) {
+                return Game(id?.toInt(), finalBoard, playera?.toInt(), playerb?.toInt(), variante!!.toVariante(), openingRule!!.toOpeningRule(), winner?.toInt(), turn?.toInt())
+            }
+        }
+        return null
+    }
+    fun transformGameString(jsonObject: Map<*, *>): Game? {
+        if (jsonObject.containsKey("properties")) {
+            val properties = jsonObject["properties"] as? Map<*, *>
+            val id = properties?.get("id") as? Double
+            val board = properties?.get("board") as? String
+            val variante = properties?.get("variante") as? String
+            val finalBoard = transformBoardString(board, variante!!.toVariante())
+            val openingRule = properties?.get("openingRule") as? String
+            val playera = properties?.get("player1") as? Double
+            val playerb = properties?.get("player2") as? Double
             val winner = properties?.get("winner") as? Double
             val turn = properties?.get("turn") as? Double
             if (id != null || finalBoard != null || playera != null || playerb != null || winner != null || turn != null) {
@@ -175,37 +222,6 @@ class CreateGameAct(
         return null
     }
 
-    fun StringToBoard(boardString: String?, variante: variantes, openingRule: openingrule): Board {
-        if (boardString == null) {
-            return Board(emptyMap(), null, null)
-        }
-        if (variante == variantes.NORMAL) BOARD_DIM = 15 else BOARD_DIM = 19
-        val stringaux = boardString.replace("\n", "")
-        val boardCells = mutableMapOf<Cell, Player>()
-        if (variante == variantes.OMOK) {
-            for (row in 0 until BOARD_DIM) {
-                for (col in 0 until BOARD_DIM) {
-                    val player = Player.fromChar(stringaux[row * BOARD_DIM + col])
-                    boardCells[Cell(row, col)] = player
-                }
-            }
-        } else {
-            for (row in 0 until BOARD_DIM) {
-
-                for (col in 0 until BOARD_DIM) {
-                    val s = stringaux[row * (BOARD_DIM) + col]
-
-                    if (stringaux[row * (BOARD_DIM) + col] != ' ') {
-                        val player = Player.fromChar(stringaux[row * BOARD_DIM + col])
-                        boardCells[Cell(row, col)] = player
-                    }
-
-
-                }
-            }
-        }
-        return Board(boardCells, turn = Player.PLAYER_X)
-    }
 
     private data class WaitingRoomDto(
         val id: Int,
@@ -237,6 +253,37 @@ class CreateGameAct(
 
         return Board(board, turn = Player.PLAYER_X)
     }
-}
+    fun transformBoardString(string: String?, variante: variantes): Board {
+        if(variante == variantes.NORMAL) BOARD_DIM = 15 else BOARD_DIM = 19
+            val stringaux = string?.replace("\n", "")
+            val boardCells = mutableMapOf<Cell, Player>()
+            if(variante == variantes.OMOK) {
+                for (row in 0 until BOARD_DIM) {
+                    for (col in 0 until BOARD_DIM) {
+                        val player = Player.fromChar(stringaux?.get(row * BOARD_DIM + col) ?: ' ')
+                        boardCells[Cell(row, col)] = player
+                    }
+                }
+            } // esta correto
+            else {
+                for (row in 0 until BOARD_DIM ) {
+                    for (col in 0 until BOARD_DIM ) {
+                        val s = stringaux?.get(row * (BOARD_DIM) + col)
+
+                        //     if(stringaux[row * (BOARD_DIM) + col] != '') {
+                        val player = Player.fromChar(stringaux?.get(row * BOARD_DIM + col) ?:' ' )
+                        boardCells[Cell(row, col)] = player
+                        //   }
+
+
+                    }
+                }
+            }
+
+            Log.v("PLAYGAME", "boardCells = $boardCells")
+            return Board(boardCells, turn = Player.PLAYER_X, null)
+        }
+    }
+
 
 

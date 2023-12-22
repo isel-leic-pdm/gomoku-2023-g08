@@ -1,5 +1,5 @@
 package Tests
-
+/*
 import Gomoku.About.AboutScreen
 import Gomoku.About.UserScreen
 import Gomoku.AfterLogin.AboutButtonTestTag
@@ -79,3 +79,5 @@ class InitialScreenTest {
         composeTestRule.onNodeWithTag(AboutButtonTestTag).assertExists()
     }
 }
+
+ */

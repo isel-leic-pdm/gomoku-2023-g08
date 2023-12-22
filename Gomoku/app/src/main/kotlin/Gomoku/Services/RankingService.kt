@@ -25,7 +25,7 @@ interface CreateGameService {
 interface PlayGameService {
 
     suspend fun play(id: Int?, line: Int, col: Int, authToken: String?, idGame: Int): Game?
-    suspend fun getGame(id: Int): Game?
+    suspend fun getGame(gameID: Int?): Game?
 }
 
 interface ReplayGameInterface {

@@ -42,6 +42,12 @@
             return UserInfo(storedId!!, storedUsername, storedPassword, storedToken)
         }
 
+        override suspend fun clearCurrentGame() {
+            store.edit { preferences ->
+                preferences[current_game] = 0.toString()
+            }
+        }
+
         override suspend fun updateUserInfo(userInfo: UserInfo) {
             Log.v("ENTREI", "update = $userInfo")
 

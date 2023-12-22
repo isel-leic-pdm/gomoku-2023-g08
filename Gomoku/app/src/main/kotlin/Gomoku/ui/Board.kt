@@ -1,13 +1,12 @@
 package Gomoku.ui
 
-import Gomoku.CreateGame.WaitingRoomViewModel
-import Gomoku.DomainModel.BOARD_DIM
 import Gomoku.DomainModel.Board
 import Gomoku.DomainModel.Cell
 import Gomoku.DomainModel.Player
-import Gomoku.AfterLogin.boardSize
 import Gomoku.AfterLogin.cellSize
-import Gomoku.DomainModel.BoardShow
+import Gomoku.AfterLogin.lineSize
+import Gomoku.DomainModel.BOARD_DIM
+
 import Gomoku.DomainModel.variantes
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -16,9 +15,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,186 +29,116 @@ import com.example.gomoku.R
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 
 
+@Composable
+fun BoardView(board: Board, onclick: (Int, Int) -> Unit, variante : variantes?) {
+    val gameMoves = board.moves
+    Log.v("BoardView", "Board size  : ${board.moves.size}")
+    val dim = if(board.moves.size == 225)15 else 19
+    val boardSize = cellSize * dim + lineSize *(dim -1)
+    Log.v("BoardView", "BoardView called with board  : $board")
+    Log.v("BoardView", "BoardView called with board  : ${board.moves}")
+        Column(
+            modifier = Modifier
+                .size(boardSize)
+                .background(Color.Black)
+               .border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            repeat(dim) { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    repeat(dim) { col ->
+                        val pos = Cell(row, col)
+                        val player = board.moves[pos]
+                      //  Log.v("MOVESKEYS", "${board.moves.keys}")
+                     //   Log.v("MOVESVALUES", "${board.moves.values}")
+                        Log.v("COMPARE", "${gameMoves.keys.contains(pos)}")
+                        Log.v("POS", "pos : $pos, player =${gameMoves[pos]}")
+
+                        CellView(player = gameMoves[pos] ?: Player.EMPTY) { onclick(pos.rowIndex, pos.colIndex) }
+                    }
+                }
+            }
+        }
+    }
+
+
 /*
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BoardView(vm: WaitingRoomViewModel, board: Board, onclick: (Cell) -> Unit,  ) {
-    if(board == null){
-        Log.v("BoardView", "BoardView called with board null : $board")
-        Column(
-            modifier = Modifier
-                .size(boardSize)
-                .background(Color.Black).border(5.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            repeat(BOARD_DIM) { row ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    repeat(BOARD_DIM) { col ->
-                        val pos = Cell(row, col)
-                        CellView(
-                                player = null,
-                                onClick = { onclick(pos) },
-                            )
-                    }
-                }
-            }
-        }
-    }
-    else{
-        Log.v("BoardView", "BoardView called with board not null : $board")
-        Column(
-            modifier = Modifier
-                .size(boardSize)
-                .background(Color.Black).border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            repeat(BOARD_DIM) { row ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    repeat(BOARD_DIM) { col ->
-                        val pos = Cell(row, col)
-                        if(board.moves[pos] != null) {
-                            CellView(player = board.moves[pos]) { onclick(pos) }
-
-                        }
-                        else {
-                            CellView(
-                                player = null,
-                                onClick = { onclick(pos) },
-                                )
-                        }
-                    }
-                }
-            }
-        }
-
-
-    }
-}
-
-
-*/
-@Composable
-fun BoardView(board: Board?, onclick: (Cell) -> Unit, variante : variantes?) {
-
-    if (board == null) {
-        Log.v("BoardView", "BoardView called with board null : $board")
-        Column(
-            modifier = Modifier
-                .size(boardSize)
-                .background(Color.Black)
-                .border(5.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            repeat(BOARD_DIM) { row ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    repeat(BOARD_DIM) { col ->
-                        val pos = Cell(row, col)
-                        CellView(
-                            player = null,
-                            onClick = { onclick(pos) },
-                        )
-                    }
-                }
-            }
-        }
-    } else {
-        Log.v("BoardView", "BoardView called with board not null : $board")
-        Column(
-            modifier = Modifier
-                .size(boardSize)
-                .background(Color.Black)
-                .border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            repeat(BOARD_DIM) { row ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    repeat(BOARD_DIM) { col ->
-                        val pos = Cell(row, col)
-                        if (board.moves[pos] != null) {
-                            CellView(player = board.moves[pos]) { onclick(pos) }
-
-                        } else {
-                            CellView(
-                                player = null,
-                                onClick = { onclick(pos) },
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-   /*
-    var dim = BOARD_DIM
-    if(variante == variantes.OMOK){
-        dim = 19
-    }
-
-    Log.v("BoardView", "BoardView called with board not null : $board")
+fun BoardView(board: Board, onclick: (Cell) -> Unit, variante : variantes?) {
+    val moves = board.moves
+    Log.v("BoardView", "Board size  : ${board.moves.size}")
+    val dim = if(board.moves.size == 225)15 else 19
+    val boardSize = cellSize * dim + lineSize *(dim -1)
+    Log.v("BoardView", "BoardView called with board  : $board")
     Column(
         modifier = Modifier
             .size(boardSize)
-            .background(Color.Black).border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
+            .background(Color.Black)
+            .border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        repeat(dim) { row ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                repeat(dim) { col ->
-                    val pos = Cell(row, col)
-                    if (board.moves[pos] != null) {
-                        CellView(player = board.moves[pos]) { onclick(pos) }
-                    } else {
-                        CellView(
-                            player = null,
-                            onClick = { onclick(pos) },
-                        )
-                    }
-                }
-            }
-        }
+      for (cell in moves){
+          val player = cell.value
+            val pos = cell.key
+          if(player == Player.EMPTY){
+              CellView(player = null, onClick = { onclick(pos) })
+          }
+          else
+              CellView(player = player, onClick = { onclick(pos) })
+      }
+
     }
 }
 
-    */
+
+ */
+/*
+@Preview
+@Composable
+fun BoardViewPreview() {
+    BoardView(Board(Allmoves(), null, null), onclick = {}, variante = variantes.OMOK)
+}
+
+ */
+fun Allmoves(): Map<Cell, Player> {
+    BOARD_DIM = 15
+    val moves = mutableMapOf<Cell, Player>()
+    for (row in 1 ..  15) {
+        for (col in 1 .. 15) {
+           moves.keys.add(Cell(row, col))
+            moves.values.add(Player.EMPTY)
+        }
+    }
+    Log.v("BoardView", "BoardView called with board  moves in allmoves : $moves")
+    return moves
+}
+
+
 
 @Composable
-fun CellView(player: Player?,
-             modifier: Modifier = Modifier
-                 .size(cellSize)
-                 .background(Color.LightGray),
-             onClick: () -> Unit) {
-    if (player == null) {
-        //   Log.v( "CellView", "CellView called with player null : $player")
+fun CellView(player: Player?, modifier: Modifier = Modifier.size(cellSize).background(Color.LightGray), onClick: () -> Unit) {
+    Log.v("CellView_PLAYER", "CellView called with player : $player")
+    if (player == Player.EMPTY) {
         Box(modifier = modifier.clickable(onClick = onClick)){
         }
     } else {
+       // Log.v( "CellView", "CellView called with player not null : $player")
         Box(
             modifier = modifier,
             contentAlignment = Alignment.Center
         ) {
-
             DrawPiece(player, modifier = modifier)
         }
     }
@@ -263,7 +190,7 @@ fun DrawPiece(player: Player?, modifier: Modifier ){
             contentAlignment = Alignment.Center,
             content = {
                 Image(
-                    painter = painterResource(id = R.drawable.yellow),
+                    painter = painterResource(id = R.drawable.red),
                     contentDescription = R.string.app_name.toString(),
                     modifier = modifier.size(10.dp))
             }
@@ -275,7 +202,7 @@ fun DrawPiece(player: Player?, modifier: Modifier ){
             contentAlignment = Alignment.Center,
             content = {
                 Image(
-                    painter = painterResource(id = R.drawable.red),
+                    painter = painterResource(id = R.drawable.yellow),
                     contentDescription = R.string.app_name.toString(),
                     modifier = modifier.size(10.dp))
             }

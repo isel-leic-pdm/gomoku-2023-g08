@@ -42,7 +42,6 @@ object LobbyFulled : LoadLobby()
 data class LoadedLobbyWaited<T>(val result: Result<T>) : LoadLobby()
 
 sealed class LoadStateGameCreated
-
 object IdleGameCreated : LoadStateGameCreated()
 object LoadingGameCreated : LoadStateGameCreated()
 object GameCreated : LoadStateGameCreated()

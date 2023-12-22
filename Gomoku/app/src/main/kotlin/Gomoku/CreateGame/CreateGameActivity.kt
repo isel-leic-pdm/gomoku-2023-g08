@@ -27,13 +27,8 @@ import kotlinx.coroutines.launch
 class CreateGameActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication }
 
-    /*
-    val vm by viewModels<WaitingRoomViewModel>()
-
-
-     */
     private val vm by viewModels<WaitingRoomViewModel> {
-        WaitingRoomViewModel.factory((application as DependenciesContainer).userInfoRepository,)
+        WaitingRoomViewModel.factory((application as DependenciesContainer).userInfoRepository,(application as DependenciesContainer).gameService, (application as DependenciesContainer).playGameService )
     }
 
 

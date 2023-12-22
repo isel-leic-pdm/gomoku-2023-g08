@@ -21,8 +21,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.unit.dp
 
 
-val cellSize = 20.dp
-val lineSize = 2.dp
+val cellSize = 15.dp
+val lineSize = 1.dp
 val boardSize = cellSize * BOARD_DIM + lineSize *(BOARD_DIM -1)
 
 

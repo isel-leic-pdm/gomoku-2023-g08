@@ -33,6 +33,12 @@ class Column private constructor(val char: Char) {
 
 
     }
+    fun toInt(): Int {
+        return this.index
+    }
+    fun toChar(): Char {
+        return this.char
+    }
 }
 
 
