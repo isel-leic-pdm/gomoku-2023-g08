@@ -39,14 +39,11 @@ class PlayGameActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v("ID", "id = ${vm.id}")
         vm.getGame()
         setContent() {
             PlayGameScreen(
                 onBackRequested = { finish() },
-                onPlayRequested =
-                  //  vm.play(it.rowIndex, it.colIndex)
-                    vm::play,
+                onPlayRequested = vm::play,
                 game = vm.gameMT.value
             )
         }

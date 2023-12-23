@@ -59,8 +59,13 @@ fun PlayGameScreen(
                 },
 
             )
-
-            // Game Board
+            if(game.result.getOrNull()?.winner != null){
+                Text(
+                    text = "Winner: ${game.result.getOrNull()?.winner}",
+                    modifier = Modifier.padding(end = 16.dp),
+                    fontWeight = FontWeight.Bold
+                )
+            }
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -72,14 +77,12 @@ fun PlayGameScreen(
                 if (gameRes != null) {
                     BoardView(
                         board = gameRes.board,
-                        variante = game.result.getOrNull()?.variante,
                         onclick = onPlayRequested
                     )
                 }
             }
         }
     } else {
-        // Loading State
         Box(
             modifier = Modifier
                 .fillMaxSize()

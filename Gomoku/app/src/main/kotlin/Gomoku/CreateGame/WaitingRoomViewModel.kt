@@ -59,20 +59,31 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
         private set
 
 
+    @SuppressLint("SuspiciousIndentation")
     fun createGame(service: CreateGameService): Unit {
         viewModelScope.launch {
             waitingRoom = LoadedLobbyWaited(
                 runCatching {
                     val currentUser = repository.getUserInfo()
-                    var waiting = service.fetchCreateGame(2, openingRule, variante,currentUser?.token ?: "")
-                    Log.v("MATCHMAKING", "ESTOU AQUI  depois de ter feito um fetch game = $waiting, ainda nao entrei no if ")
+                    var waiting = service.fetchCreateGame(currentUser?.id, openingRule, variante,currentUser?.token ?: "")
                     if(waiting.gameID != null){
-                        Log.v("MATCHMAKING", "ESTOU AQUI  depois de ter feito um fetch game = $waiting")
+                        val currentGameID = waiting.gameID ?: 0
+                        repository.updateCurrentGame(currentGameID)
+                        while(repository.getCurrentGame() != waiting.gameID){ delay(1000) }
                     waitingRoom = LobbyFulled
+                        async { getGame()  }.await()
+                        if(gameMT.value is LoadedGameCreated){
+                            val loadedGame = gameMT.value as LoadedGameCreated
+                            val game = loadedGame.result.getOrNull()
+                            Log.v("POLLIING", "ESTOU AQUI se nao for a minha vez")
+                            if(game?.turn != currentUser?.id){
+                                Log.v("POLLIING", "ESTOU AQUI")
+                                startPolling()
+                            }
+                        }
                     }
                     else {
                         if(waiting.gameID == null){
-                            Log.v("MATCHMAKING", "ESTOU AQUI  depois de ter feito um fetch game = $waiting, GAMEID = ${waiting.gameID}")
                             viewModelScope.launch {
                                 while(waiting.gameID == null){
                                     Log.v("MATCHMAKING", "ESTOU PRESO NO WHILE = $waiting")
@@ -81,11 +92,8 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
                                     waiting = updatedWaiting
                                     val gameID = waiting.gameID
                                     if(gameID != null){
-                                        // repository.clearCurrentGame()
                                         repository.updateCurrentGame(gameID)
-                                        while(repository.getCurrentGame() != gameID){
-                                            delay(1000)
-                                        }
+                                        while(repository.getCurrentGame() != gameID){ delay(1000) }
                                         waitingRoom = LobbyFulled
                                         async { getGame()  }.await()
                                         if(gameMT.value is LoadedGameCreated){
@@ -110,10 +118,10 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
         viewModelScope.launch {
             val currentUser = repository.getUserInfo()
             var currentGame = repository.getCurrentGame()
-            var game= service.getGame(currentGame)
+            var game= service.getGameString(currentGame)
             Log.v("PLAYGAME", "Polling game")
             while (game?.turn != currentUser?.id) {
-                game = service.getGame(currentGame)
+                game = service.getGameString(currentGame)
                 if(game?.turn == currentUser?.id){
                     Log.v("POLLING", "GAMEMT ANTES DO POLLING = ${gameMT.value}")
                     gameMT.value = LoadedGameCreated(runCatching { game })

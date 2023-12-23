@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun BoardView(board: Board, onclick: (Int, Int) -> Unit, variante : variantes?) {
+fun BoardView(board: Board, onclick: (Int, Int) -> Unit) {
     val gameMoves = board.moves
     Log.v("BoardView", "Board size  : ${board.moves.size}")
     val dim = if(board.moves.size == 225)15 else 19
@@ -60,12 +60,6 @@ fun BoardView(board: Board, onclick: (Int, Int) -> Unit, variante : variantes?) 
                 ) {
                     repeat(dim) { col ->
                         val pos = Cell(row, col)
-                        val player = board.moves[pos]
-                      //  Log.v("MOVESKEYS", "${board.moves.keys}")
-                     //   Log.v("MOVESVALUES", "${board.moves.values}")
-                        Log.v("COMPARE", "${gameMoves.keys.contains(pos)}")
-                        Log.v("POS", "pos : $pos, player =${gameMoves[pos]}")
-
                         CellView(player = gameMoves[pos] ?: Player.EMPTY) { onclick(pos.rowIndex, pos.colIndex) }
                     }
                 }

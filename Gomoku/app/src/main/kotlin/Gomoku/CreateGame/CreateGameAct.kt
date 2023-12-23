@@ -19,10 +19,12 @@ import Gomoku.Services.CreateGameService
 import Gomoku.Services.FetchGameException
 import Gomoku.Services.FetchUser1Exception
 import Gomoku.app.LINK
+import android.annotation.SuppressLint
 import android.util.Log
 import com.google.android.material.color.utilities.Variant
 
 import com.google.gson.Gson
+import com.google.gson.internal.LinkedTreeMap
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -75,7 +77,7 @@ class CreateGameAct(
 
 
     override suspend fun getGameString(id: Int): Game? {
-        val request = Request.Builder().url("$LINK/games/get/$id")
+        val request = Request.Builder().url("$LINK/games/getGame/$id")
             .addHeader("accept", "application/vnd.siren+json")
             .get()
             .build()
@@ -253,14 +255,16 @@ class CreateGameAct(
 
         return Board(board, turn = Player.PLAYER_X)
     }
+    @SuppressLint("SuspiciousIndentation")
     fun transformBoardString(string: String?, variante: variantes): Board {
-        if(variante == variantes.NORMAL) BOARD_DIM = 15 else BOARD_DIM = 19
+        if(variante == variantes.NORMAL)
+            BOARD_DIM = 15 else BOARD_DIM = 19
             val stringaux = string?.replace("\n", "")
             val boardCells = mutableMapOf<Cell, Player>()
             if(variante == variantes.OMOK) {
                 for (row in 0 until BOARD_DIM) {
                     for (col in 0 until BOARD_DIM) {
-                        val player = Player.fromChar(stringaux?.get(row * BOARD_DIM + col) ?: ' ')
+                        val player = Player.fromChar(stringaux?.get(row * BOARD_DIM + col) ?: Player.EMPTY.toChar())
                         boardCells[Cell(row, col)] = player
                     }
                 }
@@ -268,12 +272,10 @@ class CreateGameAct(
             else {
                 for (row in 0 until BOARD_DIM ) {
                     for (col in 0 until BOARD_DIM ) {
-                        val s = stringaux?.get(row * (BOARD_DIM) + col)
-
-                        //     if(stringaux[row * (BOARD_DIM) + col] != '') {
-                        val player = Player.fromChar(stringaux?.get(row * BOARD_DIM + col) ?:' ' )
+                        val player = Player.fromChar(stringaux?.get(row * BOARD_DIM + col) ?: Player.EMPTY.toChar() )
+                        Log.v("GAMESTRING", "board after poll = $stringaux")
+                        Log.v("PLAYGAME", "player = $player")
                         boardCells[Cell(row, col)] = player
-                        //   }
 
 
                     }

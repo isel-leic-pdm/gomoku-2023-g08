@@ -153,23 +153,15 @@ class PlayGameAct(
                     boardCells[Cell(row, col)] = player
                 }
             }
-        } // esta correto
+        }
         else {
             for (row in 0 until BOARD_DIM ) {
                 for (col in 0 until BOARD_DIM ) {
-                    val s = stringaux[row * (BOARD_DIM) + col]
-
-                    //     if(stringaux[row * (BOARD_DIM) + col] != '') {
                     val player = Player.fromChar(stringaux[row * BOARD_DIM + col])
                     boardCells[Cell(row, col)] = player
-                    //   }
-
-
                 }
             }
         }
-
-     Log.v("PLAYGAME", "boardCells = $boardCells")
         return Board(boardCells, turn = Player.PLAYER_X, null)
     }
 }
