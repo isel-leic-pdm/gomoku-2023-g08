@@ -20,9 +20,6 @@ import androidx.activity.viewModels
 
 class WaitingRoomActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication }
-    val waitingroomvm by viewModels<WaitingRoomViewModel>()
-
-
 
     companion object {
         fun navigateTo(origin: ComponentActivity) {

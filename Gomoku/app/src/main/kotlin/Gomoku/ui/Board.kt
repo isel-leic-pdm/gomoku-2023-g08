@@ -41,12 +41,10 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun BoardView(board: Board, onclick: (Int, Int) -> Unit) {
     val gameMoves = board.moves
-    Log.v("BoardView", "Board size  : ${board.moves.size}")
+    Log.v("BoardView", "BoardView called with board  moves : $gameMoves")
     val dim = if(board.moves.size == 225)15 else 19
     val boardSize = cellSize * dim + lineSize *(dim -1)
-    Log.v("BoardView", "BoardView called with board  : $board")
-    Log.v("BoardView", "BoardView called with board  : ${board.moves}")
-        Column(
+    Column(
             modifier = Modifier
                 .size(boardSize)
                 .background(Color.Black)
@@ -66,59 +64,6 @@ fun BoardView(board: Board, onclick: (Int, Int) -> Unit) {
             }
         }
     }
-
-
-/*
-@Composable
-fun BoardView(board: Board, onclick: (Cell) -> Unit, variante : variantes?) {
-    val moves = board.moves
-    Log.v("BoardView", "Board size  : ${board.moves.size}")
-    val dim = if(board.moves.size == 225)15 else 19
-    val boardSize = cellSize * dim + lineSize *(dim -1)
-    Log.v("BoardView", "BoardView called with board  : $board")
-    Column(
-        modifier = Modifier
-            .size(boardSize)
-            .background(Color.Black)
-            .border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
-        verticalArrangement = Arrangement.SpaceBetween,
-    ) {
-      for (cell in moves){
-          val player = cell.value
-            val pos = cell.key
-          if(player == Player.EMPTY){
-              CellView(player = null, onClick = { onclick(pos) })
-          }
-          else
-              CellView(player = player, onClick = { onclick(pos) })
-      }
-
-    }
-}
-
-
- */
-/*
-@Preview
-@Composable
-fun BoardViewPreview() {
-    BoardView(Board(Allmoves(), null, null), onclick = {}, variante = variantes.OMOK)
-}
-
- */
-fun Allmoves(): Map<Cell, Player> {
-    BOARD_DIM = 15
-    val moves = mutableMapOf<Cell, Player>()
-    for (row in 1 ..  15) {
-        for (col in 1 .. 15) {
-           moves.keys.add(Cell(row, col))
-            moves.values.add(Player.EMPTY)
-        }
-    }
-    Log.v("BoardView", "BoardView called with board  moves in allmoves : $moves")
-    return moves
-}
-
 
 
 @Composable

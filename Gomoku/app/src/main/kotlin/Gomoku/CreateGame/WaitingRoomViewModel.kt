@@ -41,17 +41,11 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
         set(value) {
             _waitingRoom.value = value
         }
-    var _game : MutableStateFlow<LoadStateGameCreated> = MutableStateFlow(IdleGameCreated)
-    var gameMT : MutableState<LoadStateGameCreated> = mutableStateOf(IdleGameCreated)
+   var gameMT : LoadStateGameCreated by mutableStateOf(IdleGameCreated)
+       private set
 
-    var game get() = _game.value
-        set(value) {
-            _game.value = value
-        }
 
-    var id: Int? by mutableStateOf(null)
-        private set
-
+    var gamecheck : MutableState<Game?> = mutableStateOf(null)
     var openingRule: openingrule by mutableStateOf(openingrule.NORMAL)
         private set
 
@@ -70,14 +64,19 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
                         val currentGameID = waiting.gameID ?: 0
                         repository.updateCurrentGame(currentGameID)
                         while(repository.getCurrentGame() != waiting.gameID){ delay(1000) }
-                    waitingRoom = LobbyFulled
-                        async { getGame()  }.await()
-                        if(gameMT.value is LoadedGameCreated){
-                            val loadedGame = gameMT.value as LoadedGameCreated
+                        waitingRoom = LobbyFulled
+                       val g =  async { getGameG()  }.await()
+                        Log.v("ONDE ESTOU", "ESTOU AQUI-0, gameCheck = ${gamecheck.value?.turn}, currentUser = ${currentUser?.id}")
+                        if(gamecheck.value?.turn != currentUser?.id){
+                            Log.v("ONDE ESTOU", "ESTOU AQUI-1")
+                            startPolling()
+                        }
+                        if(gameMT is LoadedGameCreated){
+                            val loadedGame = gameMT as LoadedGameCreated
                             val game = loadedGame.result.getOrNull()
                             Log.v("POLLIING", "ESTOU AQUI se nao for a minha vez")
                             if(game?.turn != currentUser?.id){
-                                Log.v("POLLIING", "ESTOU AQUI")
+                                Log.v("ONDE ESTOU", "ESTOU AQUI-2")
                                 startPolling()
                             }
                         }
@@ -93,14 +92,18 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
                                     val gameID = waiting.gameID
                                     if(gameID != null){
                                         repository.updateCurrentGame(gameID)
-                                        while(repository.getCurrentGame() != gameID){ delay(1000) }
+                                        while(repository.getCurrentGame() != gameID){ delay(1000) } //
                                         waitingRoom = LobbyFulled
-                                        async { getGame()  }.await()
-                                        if(gameMT.value is LoadedGameCreated){
-                                            val loadedGame = gameMT.value as LoadedGameCreated
+                                       async { getGame()  }.await()
+                                        while (gameMT !is LoadedGameCreated){ delay(1000) } //
+                                        // buscar jogo atual e verificar a vez
+                                        if(gameMT is LoadedGameCreated) {
+                                            val loadedGame = gameMT as LoadedGameCreated
                                             val game = loadedGame.result.getOrNull()
-                                            if(game?.turn != currentUser?.id){
+                                            if (game?.turn != currentUser?.id) {
+                                                Log.v("ONDE ESTOU", "ESTOU AQUI-4")
                                                 startPolling()
+
                                             }
                                         }
 
@@ -114,78 +117,92 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
             )
         }
     }
+
+    fun play(line: Int, col: Int): Unit {
+        viewModelScope.launch {
+            val currentGameBoard = getGameG()
+            Log.v("PLAYGAME", "currentGameBoard = $currentGameBoard , turn = ${currentGameBoard?.turn}")
+            val currentUser = repository.getUserInfo()
+            Log.v("PLAYGAME", "currentGameBoard = $currentGameBoard , turn = ${currentGameBoard?.turn}, currentUser = ${currentUser?.id}")
+            if(currentGameBoard?.turn == currentUser?.id){
+                Log.v("PLAYGAME", "mesma turn = ${repository.getCurrentGame()}, ${currentUser?.id}")
+                gameMT = LoadingGameCreated
+                gameMT = LoadedGameCreated(
+                    runCatching {
+                        val currentGame = repository.getCurrentGame()
+                        playGameService.play(currentUser?.id, line, col, currentUser?.token, currentGame)
+
+                    })
+                startPolling()
+            } else {
+                val gameNotUpdated = service.getGameString(repository.getCurrentGame())
+                gameMT = LoadedGameCreated(
+                    runCatching {
+                        gameNotUpdated
+                    }
+                )
+            }
+
+        }
+    }
+    @SuppressLint("SuspiciousIndentation")
     fun startPolling() {
         viewModelScope.launch {
             val currentUser = repository.getUserInfo()
             var currentGame = repository.getCurrentGame()
             var game= service.getGameString(currentGame)
             Log.v("PLAYGAME", "Polling game")
-            while (game?.turn != currentUser?.id) {
+            while (game?.turn != currentUser?.id && game?.winner == 0) {
                 game = service.getGameString(currentGame)
                 if(game?.turn == currentUser?.id){
-                    Log.v("POLLING", "GAMEMT ANTES DO POLLING = ${gameMT.value}")
-                    gameMT.value = LoadedGameCreated(runCatching { game })
-                    Log.v("POLLING", "GAMEMT DEPOIS DO POLLING = ${gameMT.value}")
+                    Log.v("POLLING", "GAMEMT ANTES DO POLLING = ${gameMT}")
+                    gameMT = LoadedGameCreated(runCatching { game })
+
+                    Log.v("POLLING", "GAMEMT DEPOIS DO POLLING = ${gameMT}")
+                    break
+                }
+                    // toUpdate Winner
+                if(game?.winner != 0){
+                    Log.v("POLLING", "GAMEMT ANTES DE WINNer = ${gameMT}")
+                    gameMT = LoadedGameCreated(runCatching { game })
+
+                    Log.v("POLLING", "GAMEMT DEPOIS DO WINNER = ${gameMT}")
                     break
                 }
                 delay(1000)
             }
-        }
-    }
 
+                   }
+    }
 
     fun getGame() {
         viewModelScope.launch {
-            gameMT.value = LoadingGameCreated
+            gameMT = LoadingGameCreated
             Log.v("PLAYGAME", "getGame = ${repository.getCurrentGame()}")
-            gameMT.value = LoadedGameCreated(
-                runCatching { service.getGame(repository.getCurrentGame()) })}
+            gameMT = LoadedGameCreated(
+                runCatching { service.getGameString(repository.getCurrentGame()) })}
     }
 
     fun getGameG(): Game? {
         var game : Game? = null
         viewModelScope.launch {
-            gameMT.value = LoadingGameCreated
+            gameMT = LoadingGameCreated
             val gameID = repository.getCurrentGame()
             Log.v("PLAYGAME", "getGame = ${repository.getCurrentGame()}")
-            gameMT.value = LoadedGameCreated(
+            gameMT = LoadedGameCreated(
                 runCatching {
-                 game =  service.getGame(gameID)
-                    Log.v("PLAYGAME", "game after Fetch = $game")
+                 game =  service.getGameString(gameID)
                     game
                 })
         }
-        if(gameMT.value is LoadedGameCreated){
-           val loadedGame = gameMT.value as LoadedGameCreated
+        if(gameMT is LoadedGameCreated){
+           val loadedGame = gameMT as LoadedGameCreated
             game = loadedGame.result.getOrNull()
         }
-    //    Log.v("PLAYGAME", "game after Fetch = $game")
-     //   Log.v("PLAYGAME", "game turn  after Fetch = ${game?.turn}")
-     //   Log.v("PLAYGAME", "gameMT after Fetch = ${gameMT.value}")
         return game
     }
 
-fun play(line: Int, col: Int): Unit {
-    viewModelScope.launch {
-        val currentGameBoard = getGameG()
 
-        Log.v("PLAYGAME", "currentGameBoard = $currentGameBoard , turn = ${currentGameBoard?.turn}")
-        val currentUser = repository.getUserInfo()
-        Log.v("PLAYGAME", "currentGameBoard = $currentGameBoard , turn = ${currentGameBoard?.turn}, currentUser = ${currentUser?.id}")
-        if(currentGameBoard?.turn == currentUser?.id){
-            Log.v("PLAYGAME", "mesma turn = ${repository.getCurrentGame()}, ${currentUser?.id}")
-            gameMT.value = LoadingGameCreated
-            gameMT.value = LoadedGameCreated(
-                runCatching {
-                    val currentGame = repository.getCurrentGame()
-                   playGameService.play(currentUser?.id, line, col, currentUser?.token, currentGame)
-
-                })
-            startPolling()
-        }
-
-    }
-    }
 
     fun SetOpeningRules(openingRule: String) {
         this.openingRule = openingRule.toOpeningRule()

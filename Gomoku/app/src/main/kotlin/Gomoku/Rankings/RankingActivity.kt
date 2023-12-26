@@ -11,13 +11,15 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 
 class RankingActivity : ComponentActivity() {
     val app by lazy { application as GomokuApplication }
     val viewModelRank by viewModels<RankingViewModel>()
-
     companion object {
         fun navigateTo(origin: ComponentActivity) {
             val intent = Intent(origin, RankingActivity::class.java)
@@ -30,13 +32,19 @@ class RankingActivity : ComponentActivity() {
         Log.v(TAG, "AboutActivity.onCreate() called")
 
         setContent {
+            val username = remember { mutableStateOf("") }
+
             RankingScreen(
                 onBackRequested = { finish() },
-               onFetchRankingRequest = {
-                   viewModelRank.getRanking(app.rankingService)
-                   Log.v("RANKING", "viewMOdel : "+viewModelRank.ranking.toString())
-                                       },
+                onFetchRankingRequest = {
+                    viewModelRank.getRanking(app.rankingService)
+                    Log.v("RANKING", "viewMOdel : "+viewModelRank.ranking.toString())
+                },
                 rank = viewModelRank.ranking,
+                onUserSearchRequest = { enteredUsername ->
+                    username.value = enteredUsername
+                    viewModelRank.searchUserByUsername(enteredUsername)
+                }
             )
         }
     }

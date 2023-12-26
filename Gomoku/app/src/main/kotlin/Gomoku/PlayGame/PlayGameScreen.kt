@@ -28,13 +28,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("NewApi", "StateFlowValueCalledInComposition")
 @Composable
 fun PlayGameScreen(
     onBackRequested: () -> Unit,
     onPlayRequested: (Int, Int) -> Unit,
     game: LoadStateGameCreated,
 ) {
+    Log.v("TESTE", "PlayGameScreen called")
     if (game is LoadedGameCreated) {
         Column(
             modifier = Modifier
@@ -42,7 +42,6 @@ fun PlayGameScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
-            // Top Bar
             TopAppBar(
                 title = { Text(text = "Gomoku Game", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
@@ -57,11 +56,18 @@ fun PlayGameScreen(
                         fontWeight = FontWeight.Bold
                     )
                 },
-
             )
-            if(game.result.getOrNull()?.winner != null){
+            if(game.result.getOrNull()?.winner != 0){
+                Log.v("GOMOKU_APP_TAG", "winner: ${game.result.getOrNull()?.winner}")
                 Text(
                     text = "Winner: ${game.result.getOrNull()?.winner}",
+                    modifier = Modifier.padding(end = 16.dp),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            else {
+                Text(
+                    text = "Winner: None",
                     modifier = Modifier.padding(end = 16.dp),
                     fontWeight = FontWeight.Bold
                 )
@@ -74,6 +80,8 @@ fun PlayGameScreen(
                 contentAlignment = Alignment.Center
             ) {
                 val gameRes = game.result.getOrNull()
+                Log.v("GAMERES", "gameRes: $gameRes")
+
                 if (gameRes != null) {
                     BoardView(
                         board = gameRes.board,

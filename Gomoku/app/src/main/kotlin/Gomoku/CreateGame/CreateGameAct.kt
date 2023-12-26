@@ -139,55 +139,6 @@ class CreateGameAct(
             })
         }
     }
-
-    override suspend fun getGame(gameID: Int?): Game? {
-
-        val request = Request.Builder().url("$LINK/games/get/$gameID")
-            .addHeader("accept", "application/vnd.siren+json")
-            .get()
-            .build()
-        return suspendCoroutine { continuation ->
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    continuation.resumeWithException(FetchUser1Exception("Failed to create", e))
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    val body = response.body
-                    if (!response.isSuccessful || body == null) {
-                        Log.v("GETGAME", "getGame erro  = ${response.code}")
-                        continuation.resumeWithException(FetchGameException("Failed to try to create a game : ${response.code}"))
-                    } else {
-                        val jsonString = body.string()
-                        val jsonObject = gson.fromJson(jsonString, Map::class.java)
-                        val values = transformGame(jsonObject)
-                        Log.v("GETGAME", "getGame = $values")
-                        continuation.resume(values)
-
-                    }
-                }
-            })
-        }
-    }
-
-    fun transformGame(jsonObject: Map<*, *>): Game? {
-        if (jsonObject.containsKey("properties")) {
-            val properties = jsonObject["properties"] as? Map<*, *>
-            val id = properties?.get("id") as? Double
-            val board = properties?.get("board") as? Map<*, *>
-            val finalBoard = transformBoard(board)
-            val variante = properties?.get("variante") as? String
-            val openingRule = properties?.get("openingRule") as? String
-            val playera = properties?.get("player1") as? Double
-            val playerb = properties?.get("player2") as? Double
-            val winner = properties?.get("winner") as? Double
-            val turn = properties?.get("turn") as? Double
-            if (id != null || finalBoard != null || playera != null || playerb != null || winner != null || turn != null) {
-                return Game(id?.toInt(), finalBoard, playera?.toInt(), playerb?.toInt(), variante!!.toVariante(), openingRule!!.toOpeningRule(), winner?.toInt(), turn?.toInt())
-            }
-        }
-        return null
-    }
     fun transformGameString(jsonObject: Map<*, *>): Game? {
         if (jsonObject.containsKey("properties")) {
             val properties = jsonObject["properties"] as? Map<*, *>
@@ -198,10 +149,11 @@ class CreateGameAct(
             val openingRule = properties?.get("openingRule") as? String
             val playera = properties?.get("player1") as? Double
             val playerb = properties?.get("player2") as? Double
-            val winner = properties?.get("winner") as? Double
+            val winner = properties?.get("winner") as Double
             val turn = properties?.get("turn") as? Double
+            Log.v("INSIDE_TF", "INSIDE_TF, winner  = $winner")
             if (id != null || finalBoard != null || playera != null || playerb != null || winner != null || turn != null) {
-                return Game(id?.toInt(), finalBoard, playera?.toInt(), playerb?.toInt(), variante!!.toVariante(), openingRule!!.toOpeningRule(), winner?.toInt(), turn?.toInt())
+                return Game(id?.toInt(), finalBoard, playera?.toInt(), playerb?.toInt(), variante!!.toVariante(), openingRule!!.toOpeningRule(), winner.toInt(), turn?.toInt())
             }
         }
         return null

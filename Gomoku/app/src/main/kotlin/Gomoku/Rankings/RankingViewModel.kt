@@ -2,7 +2,6 @@ package Gomoku.Rankings
 
 
 
-
 import Gomoku.DomainModel.Users
 import Gomoku.Services.RankingService
 import Gomoku.Services.UsersService
@@ -38,7 +37,7 @@ class RankingViewModel() : ViewModel() {
         private set
     var ranking by mutableStateOf<LoadStateUserRank>(IdleUserRank)
         private set
-   fun getRanking(serviceuser: RankingService): Unit {
+    fun getRanking(serviceuser: RankingService): Unit {
         viewModelScope.launch {
             ranking = LoadingUserRank
             ranking = LoadedUserRank(
@@ -49,18 +48,12 @@ class RankingViewModel() : ViewModel() {
         }
     }
 
+    fun searchUserByUsername(username: String) {
+        if (ranking is LoadedUserRank) {
+            val filteredRanking = (ranking as LoadedUserRank).result.getOrThrow()
+                .filter { it.username.contains(username, ignoreCase = true) }
+            ranking = LoadedUserRank(runCatching { filteredRanking })
+        }
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

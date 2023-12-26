@@ -21,14 +21,9 @@ const val TAG1 = "GOMOKU_APP_TAG"
 
 class PlayGameActivity : ComponentActivity() {
 
-    val app by lazy { application as GomokuApplication }
     private val vm by viewModels<WaitingRoomViewModel> {
         WaitingRoomViewModel.factory((application as DependenciesContainer).userInfoRepository,(application as DependenciesContainer).gameService, (application as DependenciesContainer).playGameService )
     }
-
-
-
-
     companion object {
         fun navigateTo(origin: ComponentActivity) {
             val intent = Intent(origin, PlayGameActivity::class.java)
@@ -44,13 +39,13 @@ class PlayGameActivity : ComponentActivity() {
             PlayGameScreen(
                 onBackRequested = { finish() },
                 onPlayRequested = vm::play,
-                game = vm.gameMT.value
+                game = vm.gameMT
             )
         }
     }
     override fun onStart() {
         super.onStart()
-        Log.v(TAG1, "MainActivity.onStart() called")
+        Log.v(TAG1, " playGame activity called")
     }
 
     override fun onStop() {
