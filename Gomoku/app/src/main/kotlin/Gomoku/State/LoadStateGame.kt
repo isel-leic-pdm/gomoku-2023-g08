@@ -45,5 +45,7 @@ sealed class LoadStateGameCreated
 object IdleGameCreated : LoadStateGameCreated()
 object LoadingGameCreated : LoadStateGameCreated()
 object GameCreated : LoadStateGameCreated()
+
 data class LoadedGameCreated(val result: Result<Game?>) : LoadStateGameCreated()
+
 

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class ReplayGameViewModel() : ViewModel() {
     var idGame by mutableStateOf(0)
         private set
-    val idGameFlow: Int
+    val idgameFlow: Int
         get() = idGame
     fun setIdGames(id: Int) {
         Log.v("SAVEGAME","id-set : "+ id.toString())

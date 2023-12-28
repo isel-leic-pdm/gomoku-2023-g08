@@ -73,7 +73,6 @@ fun CellView(player: Player?, modifier: Modifier = Modifier.size(cellSize).backg
         Box(modifier = modifier.clickable(onClick = onClick)){
         }
     } else {
-       // Log.v( "CellView", "CellView called with player not null : $player")
         Box(
             modifier = modifier,
             contentAlignment = Alignment.Center

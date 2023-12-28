@@ -23,9 +23,9 @@ fun String.toOpeningRule() = when (this) {
 }
 data class Game(
     val id: Int?, val board: Board, val player1: Int?, val player2: Int?,
-    val variante: variantes?, val openingrule: openingrule, val winner: Int? = null, val turn: Int?, val url:URL? = null) {
+    val variante: variantes?, val openingrule: openingrule, val winner: Int? = null, val turn: Int?)
 
-}
+
 
 
 typealias moves = Map<Cell,Player>

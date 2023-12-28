@@ -77,7 +77,6 @@ class GameInfoDataStorage(private val store: DataStore<Preferences>) : GameInfoR
             preferences[openingrule] = game.openingrule.toString()
             preferences[winner] = game.winner.toString()
             preferences[turn] = game.turn.toString()
-            preferences[url] = game.url.toString()
 
         }
 

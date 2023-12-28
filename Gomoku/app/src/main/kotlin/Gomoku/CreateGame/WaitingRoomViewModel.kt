@@ -17,6 +17,7 @@ import Gomoku.State.LoadedGameCreated
 import Gomoku.State.LoadedLobbyWaited
 import Gomoku.State.LoadingGameCreated
 import Gomoku.State.LobbyFulled
+
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.MutableState
@@ -43,7 +44,7 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
         }
    var gameMT : LoadStateGameCreated by mutableStateOf(IdleGameCreated)
        private set
-
+    var gameFlow : MutableStateFlow<LoadStateGameCreated> =  MutableStateFlow(IdleGameCreated)
 
     var gamecheck : MutableState<Game?> = mutableStateOf(null)
     var openingRule: openingrule by mutableStateOf(openingrule.NORMAL)
@@ -71,8 +72,8 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
                             Log.v("ONDE ESTOU", "ESTOU AQUI-1")
                             startPolling()
                         }
-                        if(gameMT is LoadedGameCreated){
-                            val loadedGame = gameMT as LoadedGameCreated
+                        if(gameFlow.value is LoadedGameCreated){
+                            val loadedGame = gameFlow.value as LoadedGameCreated
                             val game = loadedGame.result.getOrNull()
                             Log.v("POLLIING", "ESTOU AQUI se nao for a minha vez")
                             if(game?.turn != currentUser?.id){
@@ -95,10 +96,10 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
                                         while(repository.getCurrentGame() != gameID){ delay(1000) } //
                                         waitingRoom = LobbyFulled
                                        async { getGame()  }.await()
-                                        while (gameMT !is LoadedGameCreated){ delay(1000) } //
+                                        while (gameFlow.value !is LoadedGameCreated){ delay(1000) } //
                                         // buscar jogo atual e verificar a vez
-                                        if(gameMT is LoadedGameCreated) {
-                                            val loadedGame = gameMT as LoadedGameCreated
+                                        if(gameFlow.value is LoadedGameCreated) {
+                                            val loadedGame = gameFlow.value as LoadedGameCreated
                                             val game = loadedGame.result.getOrNull()
                                             if (game?.turn != currentUser?.id) {
                                                 Log.v("ONDE ESTOU", "ESTOU AQUI-4")
@@ -118,6 +119,8 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
         }
     }
 
+
+
     fun play(line: Int, col: Int): Unit {
         viewModelScope.launch {
             val currentGameBoard = getGameG()
@@ -126,8 +129,7 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
             Log.v("PLAYGAME", "currentGameBoard = $currentGameBoard , turn = ${currentGameBoard?.turn}, currentUser = ${currentUser?.id}")
             if(currentGameBoard?.turn == currentUser?.id){
                 Log.v("PLAYGAME", "mesma turn = ${repository.getCurrentGame()}, ${currentUser?.id}")
-                gameMT = LoadingGameCreated
-                gameMT = LoadedGameCreated(
+                gameFlow.value = LoadedGameCreated(
                     runCatching {
                         val currentGame = repository.getCurrentGame()
                         playGameService.play(currentUser?.id, line, col, currentUser?.token, currentGame)
@@ -136,7 +138,7 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
                 startPolling()
             } else {
                 val gameNotUpdated = service.getGameString(repository.getCurrentGame())
-                gameMT = LoadedGameCreated(
+                gameFlow.value = LoadedGameCreated(
                     runCatching {
                         gameNotUpdated
                     }
@@ -145,7 +147,7 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
 
         }
     }
-    @SuppressLint("SuspiciousIndentation")
+
     fun startPolling() {
         viewModelScope.launch {
             val currentUser = repository.getUserInfo()
@@ -155,18 +157,20 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
             while (game?.turn != currentUser?.id && game?.winner == 0) {
                 game = service.getGameString(currentGame)
                 if(game?.turn == currentUser?.id){
-                    Log.v("POLLING", "GAMEMT ANTES DO POLLING = ${gameMT}")
-                    gameMT = LoadedGameCreated(runCatching { game })
+                    Log.v("POLLING", "gameFlow.value ANTES DO POLLING = ${gameFlow.value}")
+                    gameFlow.value = LoadedGameCreated(runCatching { game })
 
-                    Log.v("POLLING", "GAMEMT DEPOIS DO POLLING = ${gameMT}")
+
+
+                    Log.v("POLLING", "gameFlow.value DEPOIS DO POLLING = ${gameFlow.value}")
                     break
                 }
                     // toUpdate Winner
                 if(game?.winner != 0){
-                    Log.v("POLLING", "GAMEMT ANTES DE WINNer = ${gameMT}")
-                    gameMT = LoadedGameCreated(runCatching { game })
+                    Log.v("POLLING", "gameFlow.value ANTES DE WINNer = ${gameFlow.value}")
+                    gameFlow.value = LoadedGameCreated(runCatching { game })
 
-                    Log.v("POLLING", "GAMEMT DEPOIS DO WINNER = ${gameMT}")
+                    Log.v("POLLING", "gameFlow.value DEPOIS DO WINNER = ${gameFlow.value}")
                     break
                 }
                 delay(1000)
@@ -177,26 +181,28 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
 
     fun getGame() {
         viewModelScope.launch {
-            gameMT = LoadingGameCreated
+          //  gameFlow.value = LoadingGameCreated
             Log.v("PLAYGAME", "getGame = ${repository.getCurrentGame()}")
-            gameMT = LoadedGameCreated(
-                runCatching { service.getGameString(repository.getCurrentGame()) })}
+            gameFlow.value = LoadedGameCreated(
+                runCatching { service.getGameString(repository.getCurrentGame()) })
+
+        }
     }
 
     fun getGameG(): Game? {
         var game : Game? = null
         viewModelScope.launch {
-            gameMT = LoadingGameCreated
+          //  gameFlow.value = LoadingGameCreated
             val gameID = repository.getCurrentGame()
             Log.v("PLAYGAME", "getGame = ${repository.getCurrentGame()}")
-            gameMT = LoadedGameCreated(
+            gameFlow.value = LoadedGameCreated(
                 runCatching {
                  game =  service.getGameString(gameID)
                     game
                 })
         }
-        if(gameMT is LoadedGameCreated){
-           val loadedGame = gameMT as LoadedGameCreated
+        if(gameFlow.value is LoadedGameCreated){
+           val loadedGame = gameFlow.value as LoadedGameCreated
             game = loadedGame.result.getOrNull()
         }
         return game
@@ -221,3 +227,4 @@ class WaitingRoomViewModel(private val  repository: UserInfoRepository,private v
 
 
 }
+
