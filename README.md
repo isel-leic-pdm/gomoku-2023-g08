@@ -1,1 +1,7 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/REvBSC4c)
+# Projeto de PDM - Gomoku
+
+O grupo 8 de **Programação em Dispositivos Móveis** é constituído por:
+
+- [Ricardo Oliveira](https://www.github.com/RicardoOliveira-5), nº 49436
+
+- [Gonçalo Pinto](https://www.github.com/goncalogpinto), nº 49476
