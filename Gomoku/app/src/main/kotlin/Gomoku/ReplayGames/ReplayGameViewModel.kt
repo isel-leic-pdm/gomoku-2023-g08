@@ -37,12 +37,23 @@ class ReplayGameViewModel(val service: ReplayGameService,val  repository: Replay
 
     // Function to increment the moveIndex
     fun incrementMoveIndex() {
-      moveIndex += 1
+        if (moveIndex < sizeMoves - 1) {
+            moveIndex += 1
+        }
+        else {
+            moveIndex = 0
+        }
     }
 
     // Function to decrement the moveIndex
     fun decrementMoveIndex() {
-       moveIndex -= 1
+        if (moveIndex > 0) {
+            moveIndex -= 1
+        }
+        else {
+            moveIndex = sizeMoves - 1
+        }
+
     }
     fun setIdGames(id: Int) {
 
@@ -51,28 +62,7 @@ class ReplayGameViewModel(val service: ReplayGameService,val  repository: Replay
     var gamedReplay by mutableStateOf<loadSaveReplayGame>(IdleSaveReplayGame)
         private set
 
-    var gamedReplayFlow : MutableStateFlow<loadSaveReplayGame> =  MutableStateFlow(IdleSaveReplayGame)
 
-  /* fun getGameSaved(): Unit {
-        viewModelScope.launch {
-            gamedReplay.value = LoadingSaveReplayGame
-            runCatching {
-                val rep = service.fetchReplayGame(idGame)
-                if (rep != null) {
-                    gamedReplay.value = SaveReplayGameSuccess
-
-                    return@launch
-                } else {
-                    gamedReplay.value = SaveReplayGameFailure
-                    return@launch
-                }
-
-
-            }
-        }
-    }
-
-   */
   fun getGameSaved(): Unit {
       viewModelScope.launch {
           gamedReplay = LoadingSaveReplayGame
@@ -83,6 +73,7 @@ class ReplayGameViewModel(val service: ReplayGameService,val  repository: Replay
               }
               Log.v("RESULt", "result = ${result.getOrNull()?.size}")
               gamedReplay = LoadedSaveReplayGame(result)
+                sizeMoves = result.getOrNull()?.size ?: 0
               return@launch
           } catch (e: Exception) {
               // Handle errors here, if needed

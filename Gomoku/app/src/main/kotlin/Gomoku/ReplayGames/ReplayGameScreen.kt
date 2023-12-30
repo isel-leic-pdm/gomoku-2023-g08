@@ -34,64 +34,81 @@ fun ReplayGameScreen(
     setIdGame: (Int) -> Unit = { },
 ) {
     Column(
-        modifier = Modifier,
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Input for entering game ID
         val gameInput = remember { mutableStateOf("") }
-
-
-        Button(onClick = onBackRequested) {
-            Text("Back")
-        }
-
         TextField(
             value = gameInput.value,
             onValueChange = { gameInput.value = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Enter Game ID") }
         )
 
-        Button(onClick = {
-            setIdGame(gameInput.value.toInt())
-            fetchReplayGame()
-        }) {
-            Text("ReplayGame")
+        // Button to fetch and replay the game
+        Button(
+            onClick = {
+                setIdGame(gameInput.value.toInt())
+                fetchReplayGame()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Text("Replay Game")
         }
 
-
+        // Back button
+        Button(
+            onClick = onBackRequested,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Text("Back")
+        }
 
         // Check if the state is LoadedSaveReplayGame
         if (game is LoadedSaveReplayGame) {
             val allgames = game.result.getOrNull()
             val loadedGame = allgames?.get(index)
-            //allMoves = allgames?.size ?: 0
 
-            // Log o valor de loadedGame
+            // Log the value of loadedGame
             Log.v("ReplayGameScreen", "Loaded Game: $loadedGame")
 
-            // Exibe BoardView com os dados do jogo carregado
+            // BoardView to display the game board
             BoardView(board = loadedGame!!.board, onclick = { _, _ -> })
-            Row {
+
+            // Game details
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
                 Text("Turn: ${loadedGame.turn}")
                 Text("Variante: ${loadedGame.variant}")
                 Text("Regra de abertura: ${loadedGame.openingRule}")
-               if(index == allgames.size-1){
-                 Text()
-               }
+                if (index == allgames.size - 1) {
+                    Text("Winner: ${loadedGame.turn}")
+                }
             }
 
-            Row {
+            // Previous and Next buttons
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Button(onClick = onPreviousRequested) {
-                    Text("Anterior")
+                    Text("Previous")
                 }
                 Button(onClick = onNextRequested) {
-                    Text("Próximo")
+                    Text("Next")
                 }
             }
         }
-
-
     }
 }
