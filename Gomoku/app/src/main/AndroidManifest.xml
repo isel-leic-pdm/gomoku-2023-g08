@@ -44,9 +44,7 @@
         <activity android:name="Gomoku.ReplayGames.ReplayGameActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />
-       <activity android:name="Gomoku.ReplayGames.ShowReplayGameActivity"
-           android:exported="true"
-           android:theme="@style/Theme.Gomoku" />
+
         <activity android:name="Gomoku.PlayGame.PlayGameActivity"
             android:exported="true"
             android:theme="@style/Theme.Gomoku" />

@@ -80,7 +80,7 @@
             val storedId = preferences[current_game]?.toInt()
             Log.v("ENTREI", "updateCurrGame = $storedId")
 
-            return storedId!!
+            return storedId ?: 0
         }
 
         override suspend fun updateCurrentGame(id: Int) {

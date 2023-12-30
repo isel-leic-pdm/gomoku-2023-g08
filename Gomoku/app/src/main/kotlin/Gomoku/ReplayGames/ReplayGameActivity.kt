@@ -15,7 +15,7 @@ import androidx.activity.viewModels
 class ReplayGameActivity: ComponentActivity() {
     val app by lazy { application as GomokuApplication }
     private val vm by viewModels<ReplayGameViewModel> {
-        ReplayGameViewModel.factory((application as DependenciesContainer).replayGameService, (application as DependenciesContainer).replayInfoRepository)
+        ReplayGameViewModel.factory((application as DependenciesContainer).replayGameService, (application as DependenciesContainer).replayInfoRepository, (application as DependenciesContainer).userInfoRepository)
     }
 
     companion object {
@@ -36,11 +36,15 @@ class ReplayGameActivity: ComponentActivity() {
                     vm.getGameSaved()
                 },
                 index = vm.moveIndex,
-                allMoves = vm.sizeMoves,
+                fetchGamesPlayed = {
+                    vm.fetchListIds()
+                },
+
                 setIdGame = vm::setIdGames,
                 onPreviousRequested = { vm.decrementMoveIndex() },
                 onNextRequested = { vm.incrementMoveIndex() },
-                game = vm.gamedReplay
+                game = vm.gamedReplay,
+                listIds = vm.ListIds,
             )
         }    }
 }

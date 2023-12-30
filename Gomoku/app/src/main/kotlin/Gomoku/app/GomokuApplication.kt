@@ -29,7 +29,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 
 import okhttp3.OkHttpClient
-const val LINK = "https://55dc-2a01-14-130-a420-e5f8-4351-b802-706e.ngrok-free.app"
+const val LINK = "https://f656-2a01-14-130-a420-e5f8-4351-b802-706e.ngrok-free.app"
 
 interface DependenciesContainer {
     val userInfoRepository: UserInfoRepository

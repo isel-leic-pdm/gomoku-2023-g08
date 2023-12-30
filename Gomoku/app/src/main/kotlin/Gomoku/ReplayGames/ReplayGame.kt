@@ -68,28 +68,76 @@ class ReplayGameAct(
             })
         }
     }
+
+    override suspend fun fetchListIds(id: Int?): List<Int> {
+        val request by lazy {
+            Request.Builder()
+                .url("$LINK/games/getGamesReplayIds/$id")
+                .addHeader("accept", "application/vnd.siren+json")
+                .build()
+        }
+        return suspendCoroutine { continuation ->
+            client.newCall(request).enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: IOException) {
+                    Log.v("EIU", "error : " + e.toString())
+                    continuation.resumeWithException(FetchGameException("Failed to create", e))
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body
+                    if (!response.isSuccessful || body == null) {
+                        Log.v("GETGAME", "getGame erro  = ${response.code}")
+                        continuation.resumeWithException(FetchGameException("Failed to try to create a game : ${response.code}"))
+                    } else {
+                        val jsonString = body.string()
+                        val jsonObject = gson.fromJson(jsonString, Map::class.java)
+                        val values = transformListIds(jsonObject)
+                        Log.v("LISTIDS", "getGame = $values")
+                        continuation.resume(values)
+
+                    }
+
+                }
+            })
+        }
+    }
+    fun transformListIds(jsonObject: Map<*, *>): List<Int>{
+        if (jsonObject.containsKey("properties")) {
+            val properties = jsonObject["properties"] as List<Int>
+            val listToReturn = mutableListOf<Int>()
+            for (i in properties.indices) {
+                val id = properties[i]
+                listToReturn.add(id)
+            }
+            Log.v("LISTS", "listToReturn = ${listToReturn.size}")
+            return listToReturn
+
+        }
+        return emptyList()
+    }
+
     fun transformListGameString(jsonObject: Map<*, *>): List<GameReplayShowModel>{
         if (jsonObject.containsKey("properties")) {
             val properties = jsonObject["properties"] as List<Map<*, *>>
             val listToReturn = mutableListOf<GameReplayShowModel>()
             for (i in properties.indices) {
-                val id = properties[i]["game_id"] as? Double
-                val player = properties[i]["player"] as? Double
-                val turn = properties[i]["turn"] as? Double
+                val id = properties[i]["game_id"] as Double
+                val player = properties[i]["player"] as Double
+                val turn = properties[i]["turn"] as Double
                 val variant = properties[i]["variant"] as String
-                val openingRule = properties[i]["openingRule"] as? String
-                val line = properties[i]["line"] as? Double
-                val col = properties[i]["col"] as? String
-                val board = properties[i]["board"] as? String
+                val openingRule = properties[i]["openingRule"] as String
+                val line = properties[i]["line"] as Double
+                val col = properties[i]["col"] as String
+                val board = properties[i]["board"] as String
                 val finalBoard = transformBoardString(board, variant.toVariante())
                 val game = GameReplayShowModel(
-                    id?.toInt()!!,
-                    player?.toInt()!!,
-                    turn?.toInt()!!,
+                    id.toInt(),
+                    player.toInt(),
+                    turn.toInt(),
                     variant.toVariante(),
-                    openingRule!!.toOpeningRule(),
-                    line?.toInt()!!,
-                    col?.get(0) ?: 'A',
+                    openingRule.toOpeningRule(),
+                    line.toInt(),
+                    col.get(0) ?: 'A',
                     finalBoard
                 )
                 listToReturn.add(game)

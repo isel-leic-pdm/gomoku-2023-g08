@@ -3,13 +3,16 @@ package Gomoku.ReplayGames
 
 
 
-import Gomoku.DataStore.Domain.GameInfoRepository
 import Gomoku.DataStore.Domain.ReplayInfoRepository
-import Gomoku.Services.PlayGameService
+import Gomoku.DataStore.Domain.UserInfoRepository
 import Gomoku.Services.ReplayGameService
+import Gomoku.State.IdleListIds
 import Gomoku.State.IdleSaveReplayGame
+import Gomoku.State.LoadedListIds
 import Gomoku.State.LoadedSaveReplayGame
+import Gomoku.State.LoadingListIds
 import Gomoku.State.LoadingSaveReplayGame
+import Gomoku.State.loadListIds
 
 import Gomoku.State.loadSaveReplayGame
 import android.util.Log
@@ -21,20 +24,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlin.math.max
-import kotlin.math.min
 
 
-class ReplayGameViewModel(val service: ReplayGameService,val  repository: ReplayInfoRepository) : ViewModel() {
+class ReplayGameViewModel(val service: ReplayGameService,val  repository: ReplayInfoRepository, val userRepo: UserInfoRepository) : ViewModel() {
     var idGame by mutableStateOf(0)
         private set
 
     var sizeMoves by mutableStateOf(0)
     var moveIndex by mutableStateOf(0)
-    private var totalMoves by mutableStateOf(0)
-
     // Function to increment the moveIndex
     fun incrementMoveIndex() {
         if (moveIndex < sizeMoves - 1) {
@@ -61,8 +59,28 @@ class ReplayGameViewModel(val service: ReplayGameService,val  repository: Replay
     }
     var gamedReplay by mutableStateOf<loadSaveReplayGame>(IdleSaveReplayGame)
         private set
+    var ListIds by mutableStateOf<loadListIds>(IdleListIds)
+        private set
 
 
+    fun fetchListIds(): Unit {
+        viewModelScope.launch {
+            ListIds = LoadingListIds
+            try {
+                val idUser = userRepo.getUserInfo()?.id
+                Log.v("USERID", "id = ${idUser}")
+                val result = runCatching {
+                    service.fetchListIds(idUser)
+                }
+                ListIds = LoadedListIds(result)
+
+                return@launch
+            } catch (e: Exception) {
+                // Handle errors here, if needed
+                //  gamedReplay.value = ErrorSaveReplayGame(e.message)
+            }
+        }
+    }
   fun getGameSaved(): Unit {
       viewModelScope.launch {
           gamedReplay = LoadingSaveReplayGame
@@ -83,8 +101,8 @@ class ReplayGameViewModel(val service: ReplayGameService,val  repository: Replay
   }
 
     companion object {
-        fun factory(service: ReplayGameService, repository: ReplayInfoRepository) = viewModelFactory {
-            initializer { ReplayGameViewModel(service, repository) }
+        fun factory(service: ReplayGameService, repository: ReplayInfoRepository, userRepo: UserInfoRepository) = viewModelFactory {
+            initializer { ReplayGameViewModel(service, repository, userRepo) }
         }
     }
 

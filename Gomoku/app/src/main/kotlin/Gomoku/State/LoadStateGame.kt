@@ -29,10 +29,13 @@ data class LoadedUserRank(val result: Result<List<UsersRankOutput>>) : LoadState
 sealed class loadSaveReplayGame
 object IdleSaveReplayGame : loadSaveReplayGame()
 object LoadingSaveReplayGame : loadSaveReplayGame()
-object SaveReplayGameSuccess : loadSaveReplayGame()
-object SaveReplayGameFailure : loadSaveReplayGame()
-
 data class LoadedSaveReplayGame(val result: Result<List<GameReplayShowModel>>) : loadSaveReplayGame()
+sealed class loadListIds
+object IdleListIds : loadListIds()
+object LoadingListIds : loadListIds()
+data class LoadedListIds(val result: Result<List<Int>>) : loadListIds()
+
+
 sealed class LoadLobby
 object LobbyLoading : LoadLobby()
 

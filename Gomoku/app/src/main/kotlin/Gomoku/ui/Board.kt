@@ -81,42 +81,6 @@ fun CellView(player: Player?, modifier: Modifier = Modifier.size(cellSize).backg
         }
     }
 }
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-private fun ShowWinner(board: Board) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(200.dp)
-                .background(chooseColor(board.winner!!))
-                .border(5.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Winner: ${board.winner}",
-                style = TextStyle(
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-            )
-        }
-    }
-}
-@Composable
-fun chooseColor(winner: Player): Color {
-    if(winner == Player.PLAYER_X)
-        return Color.Red
-    else
-        return Color.Yellow
-}
-
-
-
 @Composable
 fun DrawPiece(player: Player?, modifier: Modifier ){
     Log.d("DrawPiece", "DrawPiece called for player: $player")

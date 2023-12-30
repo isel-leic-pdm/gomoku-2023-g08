@@ -13,5 +13,6 @@ interface RankingService {
 interface ReplayGameService {
 
     suspend fun fetchReplayGame(id: Int): List<GameReplayShowModel>
+    suspend fun fetchListIds(id: Int?): List<Int>
 }
 

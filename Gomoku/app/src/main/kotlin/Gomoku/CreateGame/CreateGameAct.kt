@@ -132,8 +132,10 @@ class CreateGameAct(
                         val jsonString = body.string()
                         val jsonObject = gson.fromJson(jsonString, Map::class.java)
                         val values = transformToWaitingRoom(jsonObject)
-                        Log.v("GETGAME", "getGame = $values")
-                        continuation.resume(values!!)
+                        if(values != null) {
+                            Log.v("GETGAME", "getGame = $values")
+                            continuation.resume(values)
+                        }
                     }
                 }
             })
@@ -142,18 +144,18 @@ class CreateGameAct(
     fun transformGameString(jsonObject: Map<*, *>): Game? {
         if (jsonObject.containsKey("properties")) {
             val properties = jsonObject["properties"] as? Map<*, *>
-            val id = properties?.get("id") as? Double
-            val board = properties?.get("board") as? String
-            val variante = properties?.get("variante") as? String
-            val finalBoard = transformBoardString(board, variante!!.toVariante())
-            val openingRule = properties?.get("openingRule") as? String
-            val playera = properties?.get("player1") as? Double
-            val playerb = properties?.get("player2") as? Double
-            val winner = properties?.get("winner") as Double
-            val turn = properties?.get("turn") as? Double
+            val id = properties?.get("id") as Double
+            val board = properties.get("board") as String
+            val variante = properties.get("variante") as String
+            val finalBoard = transformBoardString(board, variante.toVariante())
+            val openingRule = properties.get("openingRule") as String
+            val playera = properties.get("player1") as Double
+            val playerb = properties.get("player2") as Double
+            val winner = properties.get("winner") as Double
+            val turn = properties.get("turn") as Double
             Log.v("INSIDE_TF", "INSIDE_TF, winner  = $winner")
             if (id != null || finalBoard != null || playera != null || playerb != null || winner != null || turn != null) {
-                return Game(id?.toInt(), finalBoard, playera?.toInt(), playerb?.toInt(), variante!!.toVariante(), openingRule!!.toOpeningRule(), winner.toInt(), turn?.toInt())
+                return Game(id.toInt(), finalBoard, playera.toInt(), playerb.toInt(), variante.toVariante(), openingRule.toOpeningRule(), winner.toInt(), turn.toInt())
             }
         }
         return null
@@ -165,12 +167,12 @@ class CreateGameAct(
             val id = properties?.get("id") as Double
             val player1 = properties?.get("player1") as Double
             val player2 = properties?.get("player2") as? Double
-            val variante = properties?.get("variante") as? String
-            val openingRule = properties?.get("openingRule") as? String
+            val variante = properties?.get("variante") as String
+            val openingRule = properties?.get("openingRule") as String
             val gameID = properties?.get("gameID") as? Double
             if ( player2 != null || variante != null || openingRule != null) {
                 Log.v("WAITING, ", "waiting inside transform = $id")
-                return WaitingRoom(id.toInt(), player1.toInt(), player2?.toInt(), variante!!.toVariante(), openingRule!!.toOpeningRule(), gameID?.toInt())
+                return WaitingRoom(id.toInt(), player1.toInt(), player2?.toInt(), variante.toVariante(), openingRule.toOpeningRule(), gameID?.toInt())
             }
         }
         return null
@@ -198,16 +200,6 @@ class CreateGameAct(
                 )
         }
     }
-
-
-    fun transformBoard(mapa: Map<*, *>?): Board {
-
-        val board = mapa?.get("moves") as moves
-        val boardCells = mutableMapOf<Cell, Player>()
-
-        return Board(board, turn = Player.PLAYER_X)
-    }
-    @SuppressLint("SuspiciousIndentation")
     fun transformBoardString(string: String?, variante: variantes): Board {
         if(variante == variantes.NORMAL)
             BOARD_DIM = 15 else BOARD_DIM = 19

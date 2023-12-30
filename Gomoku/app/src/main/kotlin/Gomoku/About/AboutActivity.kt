@@ -65,16 +65,7 @@ class AboutActivity : ComponentActivity() {
         }
         catch (e: ActivityNotFoundException) {
             Log.e(TAG, "Failed to send email", e)
-            /*
-            Toast
-                .makeText(
-                    this,
-                    R.string.activity_info_no_suitable_app,
-                    Toast.LENGTH_LONG
-                )
-                .show()
 
-             */
         }
     }
 

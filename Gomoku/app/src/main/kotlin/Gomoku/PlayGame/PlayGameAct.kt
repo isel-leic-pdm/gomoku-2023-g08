@@ -114,17 +114,17 @@ class PlayGameAct(
     fun transformGame(jsonObject: Map<*, *>): Game? {
         if (jsonObject.containsKey("properties")) {
             val properties = jsonObject["properties"] as? Map<*, *>
-            val id = properties?.get("id") as? Double
+            val id = properties?.get("id") as Double
             val board = properties?.get("board") as String
-            val variante = properties?.get("variante") as? String
-            val finalBoard = transformBoard(board, variante!!.toVariante())
-            val openingRule = properties?.get("openingRule") as? String
-            val playera = properties?.get("player1") as? Double
-            val playerb = properties?.get("player2") as? Double
-            val winner = properties?.get("winner") as? Double
-            val turn = properties?.get("turn") as? Double
+            val variante = properties?.get("variante") as String
+            val finalBoard = transformBoard(board, variante.toVariante())
+            val openingRule = properties?.get("openingRule") as String
+            val playera = properties?.get("player1") as Double
+            val playerb = properties?.get("player2") as Double
+            val winner = properties?.get("winner") as Double
+            val turn = properties?.get("turn") as Double
             if (id != null || finalBoard != null || playera != null || playerb != null || winner != null || turn != null) {
-                return Game(id?.toInt(), finalBoard, playera?.toInt(), playerb?.toInt(), variante!!.toVariante(), openingRule!!.toOpeningRule(), winner?.toInt(), turn?.toInt())
+                return Game(id.toInt(), finalBoard, playera.toInt(), playerb.toInt(), variante.toVariante(), openingRule.toOpeningRule(), winner.toInt(), turn.toInt())
             }
         }
         return null
