@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,6 +61,7 @@ fun NewGameScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp)
+                    .testTag("OMOK")
             ) {
                 Text("OMOK")
             }
@@ -72,6 +74,7 @@ fun NewGameScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp)
+                    .testTag("NORMAL")
             ) {
                 Text("NORMAL")
             }
@@ -91,6 +94,7 @@ fun NewGameScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp)
+                    .testTag("PRO")
             ) {
                 Text("PRO")
             }
@@ -103,6 +107,7 @@ fun NewGameScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp)
+                    .testTag("NORMALL")
             ) {
                 Text("NORMAL")
             }
@@ -113,7 +118,7 @@ fun NewGameScreen(
                 onFetchCreateGameRequest()
 
             },
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp).testTag("CreateGameButton")
         ) {
             Text("Create Game")
         }

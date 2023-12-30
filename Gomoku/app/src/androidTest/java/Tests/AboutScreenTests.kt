@@ -2,14 +2,10 @@ package Tests
 
 
 import Gomoku.About.AboutScreen
-import Gomoku.About.SocialInfo
 import Gomoku.ui.NavigateBackTestTag
-import android.net.Uri
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test

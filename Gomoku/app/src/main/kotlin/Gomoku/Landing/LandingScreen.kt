@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.gomoku.R
@@ -46,6 +47,7 @@ fun LandingScreen(
                         modifier = Modifier
                             .size(200.dp)
                             .padding(top = 8.dp)
+                            .testTag("gomoku_logo_tag")
                     )
                 }
                 item {
