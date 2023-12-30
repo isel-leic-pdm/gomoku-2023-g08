@@ -92,7 +92,7 @@ fun DrawPiece(player: Player?, modifier: Modifier ){
             contentAlignment = Alignment.Center,
             content = {
                 Image(
-                    painter = painterResource(id = R.drawable.red),
+                    painter = painterResource(id = R.drawable.brancas),
                     contentDescription = R.string.app_name.toString(),
                     modifier = modifier.size(10.dp))
             }
@@ -104,7 +104,7 @@ fun DrawPiece(player: Player?, modifier: Modifier ){
             contentAlignment = Alignment.Center,
             content = {
                 Image(
-                    painter = painterResource(id = R.drawable.yellow),
+                    painter = painterResource(id = R.drawable.preta),
                     contentDescription = R.string.app_name.toString(),
                     modifier = modifier.size(10.dp))
             }

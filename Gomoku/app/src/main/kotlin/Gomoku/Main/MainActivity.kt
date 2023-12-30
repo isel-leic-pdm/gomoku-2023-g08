@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-         //   val currentUserInfo by vm.userInfoFlow.collectAsState(initial = idle())
+
             MainScreen(
                 onCreateUserReq = {
                     UserActivity.navigateTo(this)
@@ -52,8 +52,7 @@ class MainActivity : ComponentActivity() {
                 onAboutreq = {
                     AboutActivity.navigateTo(this)
                 },
-         //       onLoggedEnabled = currentUserInfo is Idle,
-               // onplayrequested = {vm.fetchUserInfo()}
+
                 )
         }
     }

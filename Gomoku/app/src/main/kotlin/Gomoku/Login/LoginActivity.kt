@@ -7,8 +7,7 @@ package Gomoku.Login
 import Gomoku.AfterLogin.LoggedActivity
 
 import Gomoku.Landing.LandingActivity
-import Gomoku.Main.Idle
-import Gomoku.Main.Loaded
+
 import Gomoku.State.IdleUser
 import Gomoku.State.LoadedUser
 import Gomoku.State.LoadingUser
