@@ -1,7 +1,6 @@
 package Gomoku.AfterLogin
 import Gomoku.CreateGame.CreateGameActivity
 import Gomoku.DomainModel.BOARD_DIM
-import Gomoku.Logout.LogoutActivity
 import Gomoku.Main.MainActivity
 import Gomoku.Rankings.RankingActivity
 import Gomoku.ReplayGames.ReplayGameActivity
@@ -23,9 +22,6 @@ import androidx.compose.ui.unit.dp
 
 val cellSize = 15.dp
 val lineSize = 1.dp
-val boardSize = cellSize * BOARD_DIM + lineSize *(BOARD_DIM -1)
-
-
 
 const val TAG1 = "GOMOKU_APP_TAG"
 
@@ -51,7 +47,7 @@ class LoggedActivity : ComponentActivity() {
         setContent {
             AfterLogged(
                 onCreateGameReq = { CreateGameActivity.navigateTo(this) },
-                onReplayGameReq = {ReplayGameActivity.navigateTo(this) },
+                onReplayGameReq = { ReplayGameActivity.navigateTo(this) },
                 onRankingReq = { RankingActivity.navigateTo(this) },
                    onLogOutReq = { MainActivity.navigateTo(this) },
                 onFetchLogout = {vm.logout(app.usersService)},

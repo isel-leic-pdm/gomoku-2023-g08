@@ -8,3 +8,8 @@ interface GameInfoRepository {
     suspend fun rightCurrentGame(Game: Game)
 
 }
+
+interface ReplayInfoRepository {
+    suspend fun getReplayId(): Int
+    suspend fun rightReplayId(id: Int)
+}

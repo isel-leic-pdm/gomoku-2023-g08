@@ -25,6 +25,18 @@ data class Game(
     val id: Int?, val board: Board, val player1: Int?, val player2: Int?,
     val variante: variantes?, val openingrule: openingrule, val winner: Int? = null, val turn: Int?)
 
+data class GameReplayShowModel(
+    val game_id: Int,
+    val player: Int,
+    val turn: Int,
+    val variant: variantes,
+    val openingRule: openingrule,
+    val line: Int,
+    val col: Char,
+    val board: Board,
+
+    )
+
 
 
 

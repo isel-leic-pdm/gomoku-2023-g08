@@ -50,8 +50,6 @@ fun RankingScreen(
     val configuration = LocalConfiguration.current
     val isHorizontal = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     val lazyColumnListState = rememberLazyListState()
-    val corroutineScope = rememberCoroutineScope()
-
     Column(
         modifier = Modifier
             .fillMaxSize()

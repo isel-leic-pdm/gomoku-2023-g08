@@ -87,46 +87,7 @@ class LoginActivity : ComponentActivity() {
     }
 
 
-    /**
-    override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    Log.v(TAG, "UserActivity.onCreate() called")
 
-    lifecycleScope.launchWhenStarted {
-    vm.user.collect { userState ->
-    when (userState) {
-    is LoadingUser -> {
-    Log.v("LOGIN", "LOGIN LOADING: $userState")
-    // Lógica para lidar com o estado de carregamento
-    }
-    is UserSuccess -> {
-    Log.v("LOGIN", "LOGIN SUCCESS: $userState")
-    // Lógica para lidar com o sucesso do login
-    LoggedActivity.navigateTo(this@YourActivity)
-    }
-    is UserFailure -> {
-    Log.v("LOGIN", "LOGIN FAILED: $userState")
-    // Lógica para lidar com a falha no login
-    Toast.makeText(this@YourActivity, "Login Failed", Toast.LENGTH_SHORT).show()
-    LoginActivity.navigateTo(this@YourActivity)
-    }
-    }
-    }
-    }
-
-    setContent {
-    LoginScreen(
-    onBackRequested = { finish() },
-    onLoginFetchToken = {
-    vm.loginUser(app.usersService)
-    },
-    setUsername = vm::setUser,
-    setPassword = vm::setPass,
-    )
-    }
-    }
-
-     */
 
     override fun onStart() {
         super.onStart()

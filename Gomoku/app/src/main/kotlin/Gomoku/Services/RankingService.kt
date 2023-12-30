@@ -1,11 +1,7 @@
 package Gomoku.Services
 
-import Gomoku.DomainModel.Game
-import Gomoku.DomainModel.Models.WaitingRoom
-import Gomoku.DomainModel.openingrule
-import Gomoku.DomainModel.variantes
+import Gomoku.DomainModel.GameReplayShowModel
 import Gomoku.Rankings.UsersRankOutput
-import Gomoku.State.ReplayGameModel
 
 interface RankingService {
 
@@ -14,8 +10,8 @@ interface RankingService {
 
 
 
-interface ReplayGameInterface {
+interface ReplayGameService {
 
-    suspend fun fetchReplayGame(id: Int): List<ReplayGameModel>
+    suspend fun fetchReplayGame(id: Int): List<GameReplayShowModel>
 }
 

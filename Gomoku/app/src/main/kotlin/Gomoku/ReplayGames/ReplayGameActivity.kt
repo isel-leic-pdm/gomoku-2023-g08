@@ -1,21 +1,22 @@
 package Gomoku.ReplayGames
 
+
+import Gomoku.app.DependenciesContainer
 import Gomoku.app.GomokuApplication
+import android.annotation.SuppressLint
 
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 
-
-
-class ReplayGameActivity : ComponentActivity() {
+class ReplayGameActivity: ComponentActivity() {
     val app by lazy { application as GomokuApplication }
-    val viewModelReplayGame by viewModels<ReplayGameViewModel>()
+    private val vm by viewModels<ReplayGameViewModel> {
+        ReplayGameViewModel.factory((application as DependenciesContainer).replayGameService, (application as DependenciesContainer).replayInfoRepository)
+    }
 
     companion object {
         fun navigateTo(origin: ComponentActivity) {
@@ -24,38 +25,22 @@ class ReplayGameActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("StateFlowValueCalledInComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.v("REPLAYYYYYY", "ReplayGame.onCreate() called")
-
         setContent {
             ReplayGameScreen(
                 onBackRequested = { finish() },
-               fetchReplayGame = {
-                   viewModelReplayGame.getGameSaved(app.saveGame)
-                                 },
-                onfetch = { ShowReplayGameActivity.navigateTo(this) },
-                setIdGame = viewModelReplayGame::setIdGames,
-            
+                fetchReplayGame = {
+                    // Agora, você pode chamar vm.getGameSaved diretamente
+                    vm.getGameSaved()
+                },
+                index = vm.moveIndex,
+                allMoves = vm.sizeMoves,
+                setIdGame = vm::setIdGames,
+                onPreviousRequested = { vm.decrementMoveIndex() },
+                onNextRequested = { vm.incrementMoveIndex() },
+                game = vm.gamedReplay
             )
-        }
-    }
-
-
-
-    override fun onStart() {
-        super.onStart()
-        Log.v(TAG, "AboutActivity.onStart() called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.v(TAG, "AboutActivity.onStop() called")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.v(TAG, "AboutActivity.onDestroy() called")
-    }
+        }    }
 }
-

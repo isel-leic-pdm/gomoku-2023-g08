@@ -1,6 +1,7 @@
 package Gomoku.State
 
 import Gomoku.DomainModel.Game
+import Gomoku.DomainModel.GameReplayShowModel
 import Gomoku.DomainModel.openingrule
 import Gomoku.DomainModel.variantes
 import Gomoku.Rankings.UsersRankOutput
@@ -28,12 +29,10 @@ data class LoadedUserRank(val result: Result<List<UsersRankOutput>>) : LoadState
 sealed class loadSaveReplayGame
 object IdleSaveReplayGame : loadSaveReplayGame()
 object LoadingSaveReplayGame : loadSaveReplayGame()
-data class LoadedSaveReplayGame(val result: Result<List<ReplayGameModel>>) : loadSaveReplayGame()
+object SaveReplayGameSuccess : loadSaveReplayGame()
+object SaveReplayGameFailure : loadSaveReplayGame()
 
-
-data class ReplayGameModel(val game_id: Int,val player: Int,val variantes: variantes, val openingrule: openingrule, val  turn: Int,val  line: Int,val  col: String,val  board: String)
-
-
+data class LoadedSaveReplayGame(val result: Result<List<GameReplayShowModel>>) : loadSaveReplayGame()
 sealed class LoadLobby
 object LobbyLoading : LoadLobby()
 
